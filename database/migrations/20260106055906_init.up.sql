@@ -7,5 +7,5 @@ CREATE TABLE user_account
 
     PRIMARY KEY (id),
     CONSTRAINT user_account_name_length CHECK (length(name) < 31),
-    CONSTRAINT user_account_email_length CHECK (length(email) < 31),
+    CONSTRAINT user_account_email_length CHECK (length(email) < 81)
 );

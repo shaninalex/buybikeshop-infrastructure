@@ -16,3 +16,13 @@ migrate_down:
 		-path ./database/migrations/ \
 		-database "postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable" \
 		-verbose down $(N)
+
+start:
+	docker compose \
+	    -f ./docker/local/docker-compose.base.yaml \
+		up -d --build
+
+clear:
+	docker compose \
+        -f ./docker/local/docker-compose.base.yaml \
+		down -v
