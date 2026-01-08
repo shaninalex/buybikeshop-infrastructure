@@ -5,14 +5,14 @@ CREATE TABLE IF NOT EXISTS applications
     active          bool        DEFAULT False,
     client_id       text        NOT NULL,
     client_secret   text        NOT NULL,
-    url_home_page   text        NOT NULL,
+    home_url        text        NOT NULL,
     created_at      timestamp   DEFAULT now(),
 
     PRIMARY KEY (id),
 
     CONSTRAINT applications_name_length CHECK (length(app_name) < 31),
     CONSTRAINT applications_name_unique UNIQUE (app_name),
-    CONSTRAINT applications_url_home_page_unique UNIQUE (url_home_page)
+    CONSTRAINT applications_home_url_unique UNIQUE (home_url)
 );
 
 
