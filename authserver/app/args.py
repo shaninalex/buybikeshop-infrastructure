@@ -33,4 +33,12 @@ def get_parser() -> argparse.ArgumentParser:
     delete = id_sub.add_parser("delete", help="Delete identity")
     delete.add_argument("--id", type=int, required=True)
 
+    # ---- applications ----
+    applications = subparsers.add_parser("applications", help="Application management")
+    app_sub = applications.add_subparsers(dest="app_cmd", required=True)
+
+    create = app_sub.add_parser("create", help="Create OAuth application")
+    create.add_argument(
+        "--json", required=True, help="Path to json with application defined"
+    )
     return parser

@@ -1,3 +1,8 @@
+from app.di import bootstrap
+
+bootstrap()
+
+
 def create_identity(fullname: str, email: str, config):
     print("CREATE IDENTITY")
     print(f"Full name: {fullname}")

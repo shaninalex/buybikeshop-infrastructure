@@ -2,6 +2,7 @@ from typing import Callable, Type, TypeVar, cast
 
 import punq
 from app.db import database
+from app.repositories import ApplicationRepository
 from databases import Database
 
 T = TypeVar("T")
@@ -29,24 +30,13 @@ class Container:
 
 
 def _configure(container: Container) -> None:
-    # container.register(Templates, instance=Templates())
     container.register(Database, instance=database)
-    # categories_repository = CategoriesRepository(database)
-    # products_variants_repository = ProductsVariantsRepository(database)
-    # products_repository = ProductsRepository(database, products_variants_repository)
-    # container.register(CategoriesRepository, instance=categories_repository)
-    # container.register(
-    #     ProductsVariantsRepository, instance=products_variants_repository
-    # )
-    # container.register(ProductsRepository, instance=products_repository)
-    # web_entities = EntityWebService(
-    #     products_variants_repository, categories_repository, products_repository
-    # )
-    # container.register(EntityWebService, instance=web_entities)
-    pass
+    application_repository = ApplicationRepository(database)
+    container.register(ApplicationRepository, instance=application_repository)
 
 
 def create_container() -> Container:
+    print("Create DI container")
     return Container(_configure)
 
 

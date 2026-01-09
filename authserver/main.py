@@ -1,5 +1,8 @@
+import asyncio
+
 import uvicorn
 from app.args import get_parser
+from app.cmd.application import application_create
 from app.cmd.identity import create_identity, delete_identity
 from app.config import load_config
 from app.web import new_auth_server
@@ -32,6 +35,14 @@ def main():
             delete_identity(
                 identity_id=args.id,
                 config=config,
+            )
+    elif args.command == "applications":
+        if args.app_cmd == "create":
+            asyncio.run(
+                application_create(
+                    payload_path=args.json,
+                    config=config,
+                )
             )
 
 

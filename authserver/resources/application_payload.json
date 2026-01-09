@@ -1,0 +1,11 @@
+{
+    "app_name": "Store",
+    "client_id": "uhT3qQ91lXPJmW/dsdxfJ/nj6taLIzB2",
+    "client_secret": "WaoKtOieCB3fSjgtiXYCItWK+E/LkEdudNK3+tvPSy+rEzzpI6e7rTkA6iVLKXs7fdjGHNWXv+3+kD7ay4v4Fg==",
+    "url_home_page": "http://localhost:8001",
+    "redirect_urls": [
+        {
+            "redirect_uri": "http://localhost:8001/auth/callback"
+        }
+    ]
+}

@@ -8,7 +8,7 @@ from uuid import UUID
 class ApplicationRedirectUrl:
     id: UUID
     application_id: UUID
-    redirect_url: str
+    redirect_uri: str
     active: bool
 
 

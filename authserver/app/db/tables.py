@@ -24,7 +24,7 @@ applications = Table(
     "applications",
     metadata,
     Column("id", UUID, primary_key=True),
-    Column("fullname", String(30)),
+    Column("app_name", String(30)),
     Column("active", Boolean(False)),
     Column("client_id", String()),
     Column("client_secret", String()),
@@ -38,6 +38,6 @@ application_redirect_uris = Table(
     metadata,
     Column("id", UUID, primary_key=True),
     Column("application_id", UUID, ForeignKey("applications.id")),
-    Column("redirect_url", String()),
+    Column("redirect_uri", String()),
     Column("active", Boolean(False)),
 )
