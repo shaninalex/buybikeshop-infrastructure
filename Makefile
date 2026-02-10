@@ -19,10 +19,21 @@ migrate_down:
 
 start:
 	docker compose \
-	    -f ./docker/local/docker-compose.base.yaml \
+	    -f ./docker/docker-compose.base.yaml \
+		-f ./docker/hydra.docker.yaml \
+		-f ./docker/kratos.docker.yaml \
 		up -d --build
+
+stop:
+	docker compose \
+        -f ./docker/docker-compose.base.yaml \
+        -f ./docker/hydra.docker.yaml \
+        -f ./docker/kratos.docker.yaml \
+		stop
 
 clear:
 	docker compose \
-        -f ./docker/local/docker-compose.base.yaml \
+        -f ./docker/docker-compose.base.yaml \
+        -f ./docker/hydra.docker.yaml \
+        -f ./docker/kratos.docker.yaml \
 		down -v

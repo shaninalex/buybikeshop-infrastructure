@@ -1,4 +1,0 @@
-debug: true
-port: 8000
-database:
-  url: postgresql://postgres:postgres@localhost:5432/postgres

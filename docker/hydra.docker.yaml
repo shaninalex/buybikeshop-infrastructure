@@ -1,0 +1,32 @@
+services:
+  hydra:
+    image: oryd/hydra:v25.4.0
+    ports:
+      - "4444:4444" # Public port
+      - "4445:4445" # Admin port
+      - "5555:5555" # Port for hydra token user
+    volumes:
+      - type: bind
+        source: ../resources/hydra/
+        target: /etc/config/hydra/
+    environment:
+      - DSN=postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable&search_path=hydra
+    command: serve -c /etc/config/hydra/hydra.yaml all --dev
+    restart: unless-stopped
+    depends_on:
+      - hydra-migrate
+    networks:
+      - intranet
+
+  hydra-migrate:
+    image: oryd/hydra:v25.4.0
+    environment:
+      - DSN=postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable&search_path=hydra
+    command: migrate -c /etc/config/hydra/hydra.yaml sql up -e --yes
+    volumes:
+      - type: bind
+        source: ../resources/hydra/
+        target: /etc/config/hydra/
+    restart: on-failure
+    networks:
+      - intranet
