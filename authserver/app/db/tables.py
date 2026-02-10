@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlalchemy import (
     UUID,
     Boolean,
@@ -9,6 +11,11 @@ from sqlalchemy import (
 )
 
 from . import metadata
+
+
+def default_current_date():
+    return datetime.now()
+
 
 identities = Table(
     "identities",
@@ -29,7 +36,7 @@ applications = Table(
     Column("client_id", String()),
     Column("client_secret", String()),
     Column("home_url", String()),
-    Column("created_at", DateTime),
+    Column("created_at", DateTime, default=default_current_date),
 )
 
 
@@ -40,4 +47,16 @@ application_redirect_uris = Table(
     Column("application_id", UUID, ForeignKey("applications.id")),
     Column("redirect_uri", String()),
     Column("active", Boolean(False)),
+)
+
+credentials = Table(
+    "credentials",
+    metadata,
+    Column("id", UUID, primary_key=True),
+    Column("identity_id", UUID, ForeignKey("identities.id")),
+    Column("provider", String()),
+    Column("provider_user_id", String()),
+    Column("email", String()),
+    Column("pwd_hash", String()),
+    Column("created_at", DateTime, default=default_current_date),
 )
