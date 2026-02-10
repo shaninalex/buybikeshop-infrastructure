@@ -5,7 +5,8 @@ from uuid import uuid4
 
 from app import domain
 from app.config import Config
-from app.db import database
+
+# from app.db import database
 from app.di import bootstrap, resolve
 from app.repositories import ApplicationRepository
 
@@ -41,7 +42,7 @@ def parse_application_from_file(path: str) -> domain.Application:
 
 
 async def application_create(payload_path: str, config: Config):
-    await database.connect()
+    # await database.connect()
     print("Create application from file: ", payload_path)
 
     app = parse_application_from_file(payload_path)
@@ -55,4 +56,4 @@ async def application_create(payload_path: str, config: Config):
             raise Exception("alredy exists", app.app_name)
 
     await repository.save(app)
-    await database.disconnect()
+    # await database.disconnect()

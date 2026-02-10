@@ -3,12 +3,13 @@ from uuid import UUID
 
 from app.db.tables import application_redirect_uris, applications
 from app.domain import Application, ApplicationRedirectUrl
-from databases import Database
+
+# from databases import Database
 from sqlalchemy import insert, outerjoin, select
 
 
 class ApplicationRepository:
-    def __init__(self, db: Database):
+    def __init__(self, db):
         self._db = db
 
     async def list(self) -> List[Application]:

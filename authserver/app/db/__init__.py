@@ -1,7 +1,7 @@
 import logging
 import os
 
-import databases
+# import databases
 import sqlalchemy
 
 DEBUG = os.getenv("DEBUG", default=False)
@@ -19,4 +19,4 @@ _connection_string: str = os.getenv(
 
 # Define metadata and database connection
 metadata = sqlalchemy.MetaData()
-database = databases.Database(_connection_string)
+# database = databases.Database(_connection_string)

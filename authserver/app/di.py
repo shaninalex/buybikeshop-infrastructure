@@ -1,9 +1,11 @@
 from typing import Callable, Type, TypeVar, cast
 
 import punq
-from app.db import database
+
+# from app.db import database
 from app.repositories import ApplicationRepository
-from databases import Database
+
+# from databases import Database
 
 T = TypeVar("T")
 
@@ -30,9 +32,10 @@ class Container:
 
 
 def _configure(container: Container) -> None:
-    container.register(Database, instance=database)
-    application_repository = ApplicationRepository(database)
-    container.register(ApplicationRepository, instance=application_repository)
+    # container.register(Database, instance=database)
+    # application_repository = ApplicationRepository(database)
+    # container.register(ApplicationRepository, instance=application_repository)
+    pass
 
 
 def create_container() -> Container:
