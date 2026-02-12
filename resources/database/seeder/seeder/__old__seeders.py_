@@ -1,0 +1,229 @@
+# create categories and subcategories
+
+
+# # create vendors ( fake.company() )
+# class VendorsMaker:
+#     drop_stmt = text("""DELETE FROM vendor""")
+#     insert_stmt = text("""
+#         INSERT INTO vendor (title)
+#         VALUES (:title) RETURNING id
+#     """)
+
+#     def __init__(self, engine, fake):
+#         self.engine = engine
+#         self.fake = fake
+
+#     def create(self):
+#         with self.engine.connect() as conn:
+#             conn.execute(self.drop_stmt)
+#             for v in range(20):
+#                 conn.execute(self.insert_stmt, {"title": self.fake.word().upper()})
+#             conn.commit()
+
+
+# # create brands ( names )
+# class BrandsMaker:
+#     drop_stmt = text("""DELETE FROM store_products_brand""")
+#     insert_stmt = text("""
+#         INSERT INTO store_products_brand (title)
+#         VALUES (:title) RETURNING id""")
+
+#     def __init__(self, engine, fake):
+#         self.engine = engine
+#         self.fake = fake
+
+#     def create(self):
+#         with self.engine.connect() as conn:
+#             for v in range(20):
+#                 conn.execute(self.insert_stmt, {"title": self.fake.word().upper()})
+#             conn.commit()
+
+
+# # Attributes
+# class AttributesMaker:
+#     insert_attr_stmt = text(
+#         """INSERT INTO store_products_attributes (title) VALUES (:attr) RETURNING id"""
+#     )
+#     insert_attr_values_stmt = text("""
+#         INSERT INTO store_products_attributes_values (attribute_id, value)
+#         VALUES (:attr_id, :value) RETURNING id""")
+
+#     def __init__(self, engine, path):
+#         self.path = path
+#         self.engine = engine
+
+#     def create(self):
+#         with open(f"{self.path}/resources/attributes.json") as f:
+#             d = json.load(f)
+#             with self.engine.connect() as conn:
+#                 self._make(conn, d)
+#                 conn.commit()
+
+#     def _make(self, conn, data: dict):
+#         for d in data:
+#             result = conn.execute(self.insert_attr_stmt, {"attr": d})
+#             attr_id = result.fetchone()[0]
+#             for value in data[d]:
+#                 conn.execute(
+#                     self.insert_attr_values_stmt, {"attr_id": attr_id, "value": value}
+#                 )
+
+
+# class ProductsMaker:
+#     product_stmt = text("""
+#         INSERT INTO store_products (title, category_id, brand_id, vendor_id, description, short_description)
+#         VALUES (:title, :category_id, :brand_id, :vendor_id, :description, :short_description) RETURNING id
+#     """)
+#     product_variant_stmt = text("""
+#         INSERT INTO store_products_variants (product_id, title, price, sku, barcode)
+#         VALUES (:product_id, :title, :price, :sku, :barcode) RETURNING id
+#     """)
+
+#     def __init__(
+#         self,
+#         engine,
+#         fake: Faker,
+#         categories: CategoriesMaker,
+#         vendors: VendorsMaker,
+#         brands: BrandsMaker,
+#         attrs: AttributesMaker,
+#     ):
+#         self.engine = engine
+#         self.fake: Faker = fake
+#         self.categories = categories
+#         self.vendors = vendors
+#         self.brands = brands
+#         self.attrs = attrs
+
+#     def make_products(self, amount: int):
+#         with self.engine.connect() as conn:
+#             for i in range(1, amount + 1):
+#                 category_id = self.get_category_id(conn)
+#                 brand_id = self.get_brand_id(conn)
+#                 vendor_id = self.get_vendor_id(conn)
+
+#                 long_description = []
+#                 for _ in range(random.randrange(4, 10)):
+#                     long_description.append(
+#                         self.fake.paragraph(
+#                             random.randrange(8, 12), variable_nb_sentences=True
+#                         )
+#                     )
+#                 result = conn.execute(
+#                     self.product_stmt,
+#                     {
+#                         "title": self._product_title(),
+#                         "category_id": category_id,
+#                         "brand_id": brand_id,
+#                         "vendor_id": vendor_id,
+#                         "description": "\n\n".join(long_description),
+#                         "short_description": self.fake.paragraph(
+#                             random.randrange(5, 10)
+#                         ),
+#                     },
+#                 )
+#                 product_id = result.fetchone()[0]
+#                 self._build_variants(conn, product_id)
+
+#                 if i % 100 == 0 or i == amount:
+#                     print(f"({i}/{amount})")
+
+#             conn.commit()
+
+#     def _build_variants(self, conn, product_id):
+#         for _ in range(random.randrange(1, 5)):
+#             variant = conn.execute(
+#                 self.product_variant_stmt,
+#                 {
+#                     "product_id": product_id,
+#                     "title": self.fake.word() if bool(random.getrandbits(1)) else None,
+#                     "price": self.fake.pyfloat(
+#                         positive=True,
+#                         right_digits=2,
+#                         left_digits=random.randrange(3, 5),
+#                     ),
+#                     "sku": self._generate_sku(),
+#                     "barcode": f"{self.fake.random_int(min=100_000_000_000_000, max=999_999_999_999_999)}",
+#                 },
+#             )
+#             variant_id = variant.fetchone()[0]
+#             self._set_variant_attributes(conn, variant_id)
+#             self._set_variant_media(conn, variant_id)
+
+#     def _generate_sku(self) -> str:
+#         first = "".join(self.fake.random_letters(3)).upper()
+#         last = "".join(self.fake.random_letters(3)).upper()
+#         return f"{first}-{self.fake.random_int(min=100_000, max=999_999)}-{last}"
+
+#     def _set_variant_attributes(self, conn, variant_id):
+#         attr = [
+#             "color",
+#             "frame size",
+#             "frame type",
+#             "wheel size",
+#             "fork dumper",
+#             "brakes",
+#         ]
+#         for a in attr:
+#             attr_result = conn.execute(
+#                 text(
+#                     """SELECT id FROM store_products_attributes WHERE title = :title"""
+#                 ),
+#                 {"title": a},
+#             )
+#             attr_id = attr_result.fetchone()[0]
+#             attr_value = conn.execute(
+#                 text(
+#                     """SELECT id FROM store_products_attributes_values WHERE attribute_id = :attribute_id ORDER BY RANDOM() LIMIT 1"""
+#                 ),
+#                 {"attribute_id": attr_id},
+#             )
+#             attr_value_id = attr_value.fetchone()[0]
+#             conn.execute(
+#                 text("""
+#                     INSERT INTO store_products_attributes_map (product_variant_id, attribute_id, value_id)
+#                     VALUES (:product_variant_id, :attribute_id, :value_id)
+#                 """),
+#                 {
+#                     "product_variant_id": variant_id,
+#                     "attribute_id": attr_id,
+#                     "value_id": attr_value_id,
+#                 },
+#             )
+
+#     def _product_title(self) -> str:
+#         part1 = " ".join(
+#             self.fake.words(random.randrange(2, 5), unique=True)
+#         ).capitalize()
+#         idx = self.fake.random_int(min=100_000, max=999_999)
+#         return f"{part1} {idx}"
+
+#     def get_category_id(self, conn) -> int:
+#         return self._get_id(conn, "store_products_categories")
+
+#     def get_brand_id(self, conn) -> int:
+#         return self._get_id(conn, "store_products_brand")
+
+#     def get_vendor_id(self, conn) -> int:
+#         return self._get_id(conn, "vendor")
+
+#     def _get_id(self, conn, table) -> int:
+#         result = conn.execute(text(f"SELECT id FROM {table} ORDER BY RANDOM() LIMIT 1"))
+#         brand = result.fetchone()
+#         if not brand:
+#             raise ValueError(f"not found {table}")
+#         return brand[0]
+
+#     def _set_variant_media(self, conn, variant_id):
+#         for m in get_random_media():
+#             conn.execute(
+#                 text("""
+#                     INSERT INTO store_products_media (variant_id, media_type, url)
+#                     VALUES (:variant_id, :media_type, :url)
+#                 """),
+#                 {
+#                     "variant_id": variant_id,
+#                     "media_type": "image",
+#                     "url": f"http://localhost:8000/static{m}",
+#                 },
+#             )

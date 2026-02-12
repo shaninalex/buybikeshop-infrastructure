@@ -1,0 +1,34 @@
+{
+  "bikes": {
+    "ladies": {},
+    "e-bikes": {},
+    "mtb": {},
+    "travel": {},
+    "cross": {},
+    "junior": {},
+    "city": {},
+    "sport": {}
+  },
+  "parts": {
+    "brakes": {
+      "brackets": {},
+      "hydro": {}
+    },
+    "tubes": {},
+    "grips": {},
+    "head sets": {},
+    "hubs": {},
+    "tires": {},
+    "pedals": {},
+    "seat clamps": {},
+    "rims": {}
+  },
+  "equipment": {
+    "helmets": {},
+    "clothes": {},
+    "shoes": {},
+    "computer": {}
+  },
+  "accessories": {
+  }
+}

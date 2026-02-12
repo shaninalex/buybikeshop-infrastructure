@@ -1,0 +1,51 @@
+{
+  "color": {
+    "carbon-matt / yellow-neon": {},
+    "carbon-matt / red / orange": {},
+    "carbon-matt / lime / green": {},
+    "red / black / lime": {},
+    "grey-matt / lime": {},
+    "black / silver / red": {}
+  },
+  "frame size": {
+    "10-12 XXS": {},
+    "13-14 XS": {},
+    "15-16 S": {},
+    "17-18 M": {},
+    "19-20 L": {},
+    "21-22 XL": {},
+    "23-24 XXL": {}
+  },
+  "frame type": {
+    "hardtail": {},
+    "damper": {}
+  },
+  "wheel size": {
+    "14": {},
+    "16": {},
+    "20": {},
+    "24": {},
+    "26": {},
+    "27": {},
+    "28": {},
+    "29": {},
+    "36": {},
+    "12": {},
+    "18": {},
+    "19": {},
+    "21": {},
+    "22": {},
+    "25": {}
+  },
+  "fork dumper": {
+    "yes": {},
+    "no": {}
+  },
+  "brakes": {
+    "hydraulic disc": {},
+    "mechanical disc": {},
+    "foot": {},
+    "dining": {},
+    "roller": {}
+  }
+}

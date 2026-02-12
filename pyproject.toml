@@ -1,13 +1,25 @@
 [project]
 name = "buybikeshop"
 version = "0.1.0"
-description = "Add your description here"
+description = "Root pyproject"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "psycopg2-binary>=2.9.11",
     "punq>=0.7.0",
     "pyyaml>=6.0.3",
     "sqlalchemy>=2.0.46",
-    "starlette>=0.52.1",
-    "uvicorn>=0.40.0",
+
+    # declare local dependencies from libs/python
 ]
+
+[tool.uv.workspace]
+members = [
+    # database seeder. Fill database with mock products, categories, brands etc.
+    "resources/database/seeder"
+    # libs/python - python shared packages
+    # "libs/python/*"
+]
+
+# [tool.uv.sources]
+# core = { workspace = true }
