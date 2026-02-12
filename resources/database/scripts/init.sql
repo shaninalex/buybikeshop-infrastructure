@@ -2,11 +2,6 @@
 -- also make available to all database schemas.
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp" schema pg_catalog;
 
--- DEPRECATED: use "public" schema by default. Too mach schemas make another unnecessary level of complication
--- Inventory schema. Store all products, product variants, vendor procurement and vendors themselves
--- CREATE SCHEMA inventory;
--- CREATE SCHEMA market;
-
 -- kratos is an identity provider. Will be used for customers.
 CREATE SCHEMA customers;
 
@@ -16,5 +11,8 @@ CREATE SCHEMA employees;
 -- databases for hydra
 CREATE SCHEMA hydra;
 
--- databases for keto
+-- databases for keto ( permission management )
 CREATE SCHEMA keto;
+
+-- for warehouse
+CREATE SCHEMA warehouse;
