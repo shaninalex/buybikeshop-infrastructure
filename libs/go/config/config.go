@@ -8,7 +8,12 @@ import (
 )
 
 type Config struct {
-	Port uint `yaml:"port"`
+	Port     uint   `yaml:"port"`
+	Database string `yaml:"database"`
+}
+
+func (s *Config) GetDatabaseUrl() string {
+	return s.Database
 }
 
 func ReadConfig(path string) *Config {

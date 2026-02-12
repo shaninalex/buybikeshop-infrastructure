@@ -12,6 +12,7 @@ import (
 
 	"buybikeshop/apps/warehouse/app/api"
 	"buybikeshop/libs/go/config"
+	"buybikeshop/libs/go/persistance"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
@@ -37,6 +38,7 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 				return appContext
 			})
 
+			_ = c.Provide(persistance.ProvideDB)
 			_ = c.Provide(config.ProvideConfig(configPath))
 
 			// init api module
