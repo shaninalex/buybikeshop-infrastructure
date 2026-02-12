@@ -39,6 +39,7 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 
 			_ = c.Provide(config.ProvideConfig(configPath))
 
+			// init api module
 			_ = api.Module(c)
 
 			err = c.Invoke(func(router *gin.Engine, config *config.Config, ctx context.Context) {
