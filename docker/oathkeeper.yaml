@@ -1,0 +1,16 @@
+services:
+  oauthkeeper:
+    image: oryd/oathkeeper:v25.4.0
+    ports:
+      - 8080:8080
+      # - 4456:4456
+    command: serve proxy -c "/etc/config/oathkeeper/oathkeeper.yaml"
+    environment:
+      - LOG_LEVEL=debug
+    restart: on-failure
+    volumes:
+      - type: bind
+        source: ../resources/oathkeeper/
+        target: /etc/config/oathkeeper
+    networks:
+      - intranet

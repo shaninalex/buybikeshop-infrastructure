@@ -1,0 +1,33 @@
+- id: "backend:warehouse"
+  upstream:
+    preserve_host: true
+    url: "http://warehouse:8001"
+  match:
+    url: "http://localhost:8001/<**>"
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+  authenticators:
+    - handler: noop
+  authorizer:
+    handler: allow
+  mutators:
+    - handler: noop
+
+- id: "ory:kratos-selfservice-ui-node:anonymous"
+  upstream:
+    preserve_host: true
+    url: "http://kratos-selfservice-ui-node:4435"
+  match:
+    url: "http://127.0.0.1:4455/<{registration,welcome,recovery,verification,login,error,health/{alive,ready},**.css,**.js,**.png,**.svg,**.woff*}>"
+    methods:
+      - GET
+  authenticators:
+    - handler: anonymous
+  authorizer:
+    handler: allow
+  mutators:
+    - handler: noop

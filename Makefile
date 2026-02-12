@@ -25,6 +25,7 @@ start:
 	    -f ./docker/docker-compose.base.yaml \
 		-f ./docker/hydra.docker.yaml \
 		-f ./docker/kratos.docker.yaml \
+		-f ./docker/oathkeeper.yaml \
 		up -d --build
 
 stop:
@@ -32,6 +33,7 @@ stop:
         -f ./docker/docker-compose.base.yaml \
         -f ./docker/hydra.docker.yaml \
         -f ./docker/kratos.docker.yaml \
+		-f ./docker/oathkeeper.yaml \
 		stop
 
 clear:
@@ -39,4 +41,5 @@ clear:
         -f ./docker/docker-compose.base.yaml \
         -f ./docker/hydra.docker.yaml \
         -f ./docker/kratos.docker.yaml \
+		-f ./docker/oathkeeper.yaml \
 		down -v
