@@ -1,1 +1,7 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+    /* Bulma modifiers */
+    --bulma-body-size: 0.8rem;
+
+    /* app secific variables */
+    --app-color-border: #dcdcdc;
+}

@@ -1,0 +1,4 @@
+:host {
+    padding: 1rem;
+    border-right: 1px solid var(--app-color-border);
+}
