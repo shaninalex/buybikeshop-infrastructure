@@ -1,15 +1,12 @@
 package auth
 
 import (
+	"buybikeshop/libs/go/config"
+
 	ory "github.com/ory/kratos-client-go"
 )
 
-type KratosConfigProvider interface {
-	KratosUrlBrowser() string
-	KratosUrlAdmin() string
-}
-
-func ProvideKratos(config KratosConfigProvider) *ory.APIClient {
+func ProvideKratos(config *config.Config) *ory.APIClient {
 	configuration := ory.NewConfiguration()
 	configuration.Servers = []ory.ServerConfiguration{
 		{

@@ -4,6 +4,7 @@ import (
 	"io"
 	"os"
 
+	"github.com/google/uuid"
 	"go.yaml.in/yaml/v2"
 )
 
@@ -11,6 +12,19 @@ type Config struct {
 	Port     uint         `yaml:"port"`
 	Database string       `yaml:"database"`
 	Kratos   KratosConfig `yaml:"kratos"`
+	OAuth    OAuthConfig  `yaml:"oauth"`
+}
+
+type OAuthConfig struct {
+	ClientID         uuid.UUID `yaml:"client_id"`
+	RedirectUri      string    `yaml:"redirect_uri"`
+	AuthorizationUrl string    `yaml:"authorization_url"`
+	TokenUrl         string    `yaml:"token_url"`
+	Scopes           []string  `yaml:"scopes"`
+}
+
+func (s *Config) GetOAuthConfig() OAuthConfig {
+	return s.OAuth
 }
 
 type KratosConfig struct {

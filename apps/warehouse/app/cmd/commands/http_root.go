@@ -35,18 +35,31 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 			appContext, appCancel := context.WithCancel(context.Background())
 			defer appCancel()
 
-			_ = c.Provide(func() context.Context {
+			if err := c.Provide(func() context.Context {
 				return appContext
-			})
+			}); err != nil {
+				panic(err)
+			}
 
-			_ = c.Provide(config.ProvideConfig(configPath))
-			_ = c.Provide(persistance.ProvideDB)
-			_ = c.Provide(auth.ProvideKratos)
+			if err := c.Provide(config.ProvideConfig(configPath)); err != nil {
+				panic(err)
+			}
+			if err := c.Provide(persistance.ProvideDB); err != nil {
+				panic(err)
+			}
+			if err := c.Provide(auth.ProvideKratos); err != nil {
+				panic(err)
+			}
+			if err := c.Provide(auth.ProvideOAuthConfig); err != nil {
+				panic(err)
+			}
 
 			// init api module
-			_ = api.Module(c)
+			if err := api.Module(c); err != nil {
+				panic(err)
+			}
 
-			err = c.Invoke(func(router *gin.Engine, config *config.Config, ctx context.Context) {
+			if err := c.Invoke(func(router *gin.Engine, config *config.Config, ctx context.Context) {
 				srv := &http.Server{
 					Addr:    fmt.Sprintf(":%d", config.Port),
 					Handler: router,
@@ -74,8 +87,7 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 				}
 
 				log.Println("Server exiting")
-			})
-			if err != nil {
+			}); err != nil {
 				panic(err)
 			}
 		},

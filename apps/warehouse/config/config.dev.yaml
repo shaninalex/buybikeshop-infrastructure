@@ -7,3 +7,13 @@ database: "postgresql+psycopg2://postgres:postgres@localhost:5432/postgres"
 kratos:
   url_browser: "http://localhost:4433"
   url_admin: "http://localhost:4434"
+
+oauth:
+  client_id: "acb13030-4f72-4276-af68-1c84ba3c664f"
+  redirect_uri: "http://127.0.0.1:8080/callback"
+  authorization_url: "http://127.0.0.1:4444/oauth2/auth"
+  token_url: "http://127.0.0.1:4444/oauth2/token"
+  scopes:
+    - offline
+    - openid
+    - workshop
