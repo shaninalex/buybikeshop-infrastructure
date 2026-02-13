@@ -10,7 +10,7 @@ CREATE TABLE warehouse.brands
     title VARCHAR UNIQUE
 );
 
-CREATE TABLE warehouse.vendor
+CREATE TABLE warehouse.suppliers
 (
     id    SERIAL PRIMARY KEY,
     title VARCHAR UNIQUE
@@ -20,7 +20,6 @@ CREATE TABLE warehouse.categories
 (
     id        SERIAL PRIMARY KEY,
     title     VARCHAR(30) UNIQUE,
-    level     INT NOT NULL DEFAULT 0,  -- may be do not need this.
     parent_id BIGINT
 );
 
@@ -28,7 +27,6 @@ CREATE OR REPLACE VIEW warehouse.v_categories_tree AS
 (
 SELECT c1.id,
        c1.title,
-       c1.level,
        parent.id    AS parent_id,
        parent.title AS parent_title
 FROM warehouse.categories c1
@@ -45,7 +43,7 @@ CREATE TABLE warehouse.products
     collection_id     bigint,
     category_id       bigint  NOT NULL,
     brand_id          bigint,
-    vendor_id         bigint, -- what if 2 vendors supply same product?
+    supplier_id       bigint,
     description       varchar,
     short_description varchar,
     created_at        timestamp DEFAULT now(),
@@ -53,13 +51,13 @@ CREATE TABLE warehouse.products
 
     CONSTRAINT products_collection_id_fk FOREIGN KEY (collection_id) REFERENCES warehouse.collections (id),
     CONSTRAINT products_brand_id_fk FOREIGN KEY (brand_id) REFERENCES warehouse.brands (id),
-    CONSTRAINT products_vendor_id_fk FOREIGN KEY (vendor_id) REFERENCES warehouse.vendor (id),
+    CONSTRAINT products_supplier_id_fk FOREIGN KEY (supplier_id) REFERENCES warehouse.suppliers (id),
     CONSTRAINT products_category_id_fk FOREIGN KEY (category_id) REFERENCES warehouse.categories (id)
 );
 CREATE INDEX products_title_idx ON warehouse.products (title);
 
 
-CREATE TABLE warehouse.variants
+CREATE TABLE warehouse.product_variants
 (
     id          SERIAL          PRIMARY KEY,
     product_id  bigint          NOT NULL,
@@ -70,16 +68,13 @@ CREATE TABLE warehouse.variants
     created_at  timestamp       DEFAULT now(),
     updated_at  timestamp,
 
-    -- TODO: warehouse does not keep prices. Wrong responsibility!
-    -- price       numeric(10, 2)  NOT NULL,
-    -- CONSTRAINT check_price_non_negative CHECK (price >= 0.00),
     CONSTRAINT store_product_variant_product_id_fk
         FOREIGN KEY (product_id)
             REFERENCES warehouse.products (id)
             ON DELETE CASCADE
 );
 
-CREATE INDEX store_products_variants_title_idx ON warehouse.variants (title);
+CREATE INDEX store_products_variants_title_idx ON warehouse.product_variants (title);
 
 CREATE TABLE warehouse.attributes
 (
@@ -100,7 +95,7 @@ CREATE TABLE warehouse.attributes_values
             ON DELETE CASCADE
 );
 
-CREATE TABLE warehouse.variant_attributes
+CREATE TABLE warehouse.product_variant_attributes
 (
     id                 SERIAL PRIMARY KEY,
     product_variant_id bigint NOT NULL,
@@ -110,7 +105,7 @@ CREATE TABLE warehouse.variant_attributes
     CONSTRAINT unique_variant_attribute UNIQUE (product_variant_id, attribute_id),
     CONSTRAINT store_products_attributes_map_product_variant_id_fk
         FOREIGN KEY (product_variant_id)
-            REFERENCES warehouse.variants (id)
+            REFERENCES warehouse.product_variants (id)
             ON DELETE CASCADE,
     CONSTRAINT store_products_attributes_map_attribute_id_fk
         FOREIGN KEY (attribute_id)
@@ -122,18 +117,18 @@ CREATE TABLE warehouse.variant_attributes
             ON DELETE CASCADE
 );
 
-CREATE OR REPLACE VIEW warehouse.v_variant_attributes AS
+CREATE OR REPLACE VIEW warehouse.v_product_variant_attributes AS
 (
 SELECT map.product_variant_id AS variant_id,
        attr.id                AS attr_id,
        attr.title             AS attribute,
        val.value              AS value
-FROM warehouse.variant_attributes map
+FROM warehouse.product_variant_attributes map
          JOIN warehouse.attributes_values val ON map.value_id = val.id
          JOIN warehouse.attributes attr ON val.attribute_id = attr.id
     );
 
-CREATE TABLE warehouse.variant_media
+CREATE TABLE warehouse.product_variant_media
 (
     id         SERIAL PRIMARY KEY,
     variant_id bigint  NOT NULL,
@@ -143,7 +138,7 @@ CREATE TABLE warehouse.variant_media
 
     CONSTRAINT store_products_media_variant_id_fk
         FOREIGN KEY (variant_id)
-            REFERENCES warehouse.variants (id)
+            REFERENCES warehouse.product_variants (id)
             ON DELETE CASCADE,
 
     -- Maybe later will be convenient to create media_type table to hold additional types

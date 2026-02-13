@@ -35,11 +35,11 @@ type ApiDeps struct {
 	InventoryController *inventory.InventoryController
 }
 
-func NewApi(deps ApiDeps) *gin.Engine {
+func ProvideAPI(deps ApiDeps) *gin.Engine {
 
 	// base API middlewares
 	router := ProvideRouter()
-	router.Use(gin.Recovery()) // <= write your own recovery middleware
+	router.Use(gin.Recovery())
 
 	// router.Use(middlewares.LoggingMiddleware())
 	// router.Use(middlewares.CORSMiddleware())

@@ -18,12 +18,12 @@ def seed_products(config: Path):
 class CategoriesSeeder:
     drop_stmt = text("""DELETE FROM warehouse.categories""")
     insert_stmt = text("""
-        INSERT INTO warehouse.categories (title, level, parent_id)
-        VALUES (:title, :level, :parent_id) RETURNING id
+        INSERT INTO warehouse.categories (title, parent_id)
+        VALUES (:title, :parent_id) RETURNING id
     """)
 
-    def __init__(self, engine, path):
-        self.path = path
+    def __init__(self, engine, system_path):
+        self.system_path = system_path
         self.engine = engine
 
     def clear(self):
@@ -32,24 +32,23 @@ class CategoriesSeeder:
             conn.commit()
 
     def create(self):
-        with open(f"{self.path}/../resources/categories.json") as f:
+        with open(f"{self.system_path}/../resources/categories.json") as f:
             d = json.load(f)
             print("Create categories")
             with self.engine.connect() as conn:
                 self._make(conn, d, 0)
                 conn.commit()
 
-    def _make(self, conn, data: dict, level: int, parent_id: int | None = None):
+    def _make(self, conn, data: dict, parent_id: int | None = None):
         for d in data:
             result = conn.execute(
                 self.insert_stmt,
                 {
                     "title": d,
-                    "level": level,
                     "parent_id": parent_id,
                 },
             )
             cid = result.fetchone()[0]
             print(f"{cid}: {d}")
             if len(data[d].keys()) > 0:
-                self._make(conn, data[d], level + 1, cid)
+                self._make(conn, data[d], cid)

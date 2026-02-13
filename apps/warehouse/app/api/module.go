@@ -9,7 +9,7 @@ import (
 func Module(c *dig.Container) error {
 	_ = inventory.Module(c)
 
-	_ = c.Provide(NewApi)
+	_ = c.Provide(ProvideAPI)
 
 	return nil
 }
