@@ -8,8 +8,22 @@ import (
 )
 
 type Config struct {
-	Port     uint   `yaml:"port"`
-	Database string `yaml:"database"`
+	Port     uint         `yaml:"port"`
+	Database string       `yaml:"database"`
+	Kratos   KratosConfig `yaml:"kratos"`
+}
+
+type KratosConfig struct {
+	UrlBrowser string `yaml:"url_browser"`
+	UrlAdmin   string `yaml:"url_admin"`
+}
+
+func (s *Config) KratosUrlBrowser() string {
+	return s.Kratos.UrlBrowser
+}
+
+func (s *Config) KratosUrlAdmin() string {
+	return s.Kratos.UrlBrowser
 }
 
 func (s *Config) GetDatabaseUrl() string {

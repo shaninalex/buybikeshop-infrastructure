@@ -4,6 +4,7 @@ go 1.25.6
 
 require (
 	github.com/gin-gonic/gin v1.11.0
+	github.com/ory/kratos-client-go v1.3.8
 	github.com/spf13/cobra v1.10.2
 	go.uber.org/dig v1.19.0
 	go.yaml.in/yaml/v2 v2.4.3

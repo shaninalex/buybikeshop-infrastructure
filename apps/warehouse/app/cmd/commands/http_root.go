@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"buybikeshop/apps/warehouse/app/api"
+	"buybikeshop/libs/go/auth"
 	"buybikeshop/libs/go/config"
 	"buybikeshop/libs/go/persistance"
 
@@ -38,8 +39,9 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 				return appContext
 			})
 
-			_ = c.Provide(persistance.ProvideDB)
 			_ = c.Provide(config.ProvideConfig(configPath))
+			_ = c.Provide(persistance.ProvideDB)
+			_ = c.Provide(auth.ProvideKratos)
 
 			// init api module
 			_ = api.Module(c)

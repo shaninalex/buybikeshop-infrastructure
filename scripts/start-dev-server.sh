@@ -13,7 +13,11 @@ cleanup() {
         fi
     done
 
-    echo "Services stopped."
+    echo "Services stopped. Stop docker."
+
+    docker compose -f ./dev/docker-compose.dev.yaml stop
+
+    echo "Stopped."
 }
 
 trap cleanup EXIT INT TERM
@@ -39,7 +43,7 @@ make migrate_up
 # ========================
 
 echo "Starting Oathkeeper..."
-oathkeeper serve proxy -c ./dev/config/oathkeeper.yml &
+oathkeeper serve proxy -c ./dev/config/oathkeeper.yaml &
 OATHKEEPER_PID=$!
 
 echo "Starting Kratos..."

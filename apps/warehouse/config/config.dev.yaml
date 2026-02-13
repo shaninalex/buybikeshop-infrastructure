@@ -3,3 +3,7 @@ port: 8001
 # TODO: create warehouse db user
 # that user should be able to read only warehouse schema
 database: "postgresql+psycopg2://postgres:postgres@localhost:5432/postgres"
+
+kratos:
+  url_browser: "http://localhost:4433"
+  url_admin: "http://localhost:4434"

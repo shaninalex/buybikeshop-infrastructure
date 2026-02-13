@@ -19,3 +19,17 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  kratos-selfservice-ui-node:
+    image: oryd/kratos-selfservice-ui-node:v25.4.0
+    ports:
+      - "4455:4455"
+    environment:
+      - KRATOS_PUBLIC_URL=http://host.docker.internal:4433/ # http://kratos:4433/
+      - KRATOS_BROWSER_URL=http://127.0.0.1:4433/
+      - HYDRA_ADMIN_URL=http://host.docker.internal:4455 # http://hydra:4445
+      - PORT=4455
+      - COOKIE_SECRET=SuperSecretCookie
+      - CSRF_COOKIE_NAME=__OryKratosApp
+      - CSRF_COOKIE_SECRET=SuperSecretCookieCsrf
+    restart: on-failure
