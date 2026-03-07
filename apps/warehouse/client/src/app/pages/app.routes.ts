@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { PageContainer } from '@pages/page.container';
-import { HomePage } from '@pages/home-page';
+import { InventoryPage, inventoryRoutes } from '@pages/inventory-page';
 import { VendorsPage } from "@pages/vendors-page";
 import { DeliveriesPage } from "@pages/deliveries-page";
 import { SettingsPage } from "@pages/settings-page";
@@ -13,7 +13,8 @@ export const routes: Routes = [
         children: [
             {
                 path: '',
-                component: HomePage,
+                component: InventoryPage,
+                children: inventoryRoutes,
             },
             {
                 path: 'vendors',
