@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-support-page',
-  imports: [],
-  templateUrl: './support-page.html',
+    selector: 'app-support-page',
+    imports: [],
+    templateUrl: './support-page.html',
 })
 export class SupportPage {
-
 }

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ThemeSwitcher } from '@core/layout/components';
 
 @Component({
     selector: 'app-header',
@@ -37,6 +38,9 @@ import { Component } from '@angular/core';
                         </li>
                     </ul>
                     <ul class="navbar-nav mb-2 mb-lg-0">
+                        <li class="nav-item d-flex align-items-center">
+                            <app-theme-switcher/>
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                aria-expanded="false">
@@ -57,6 +61,9 @@ import { Component } from '@angular/core';
         </nav>
     `,
     styleUrl: './header.component.css',
+    imports: [
+        ThemeSwitcher
+    ]
 })
 export class HeaderComponent {
 }
