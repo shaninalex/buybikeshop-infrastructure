@@ -1,14 +1,5 @@
-export interface ProductModel {
-    id: number;
-    title: string;
-    description: string;
-    short_description: string;
-    created_at: Date;
-    updated_at: Date;
-}
-
 export interface ProductVariantModel {
-    id: string;
+    id: number;
     product_id: number;
     title: string;
     description: string;

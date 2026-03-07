@@ -19,6 +19,16 @@
         </tr>
         </thead>
         <tbody>
+            @if (products$ | async; as products) {
+                @for (product of products; track product.id) {
+                    <tr>
+                        <td>{{ product.id }}</td>
+                        <td>{{ product.title }}</td>
+                        <td>WC-1016</td>
+                        <td>150</td>
+                    </tr>
+                }
+            }
         <tr>
             <td>16</td>
             <td>Wireless Charger</td>

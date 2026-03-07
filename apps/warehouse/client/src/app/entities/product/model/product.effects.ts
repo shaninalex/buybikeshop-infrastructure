@@ -1,6 +1,6 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject, Injectable } from '@angular/core';
-import { actionProductList, actionProductSetList, } from './product.actions';
+import { actionProductGetList, actionProductSetList, } from './product.actions';
 import { exhaustMap, of, switchMap } from 'rxjs';
 import { ProductApi } from '../api/api.service';
 
@@ -11,11 +11,11 @@ export class ProductEffects {
 
     get_products_list$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(actionProductList),
+            ofType(actionProductGetList),
             exhaustMap(() =>
                 this.productsApi
                     .GetProducts()
-                    .pipe(switchMap((data) => of(actionProductSetList({products: data})))),
+                    .pipe(switchMap((data) => of(actionProductSetList({ products: data })))),
             ),
         ),
     );
