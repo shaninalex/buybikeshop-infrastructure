@@ -1,11 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ThemeSwitcher } from '@core/layout/components';
+import { UiService } from '@shared/ui';
+import { Observable } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'app-header',
     template: `
         <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
             <div class="container-fluid">
+                @if (title$ | async; as title) {
+                    <a class="navbar-brand" href="#">{{ title }}</a>
+                }
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -62,8 +68,11 @@ import { ThemeSwitcher } from '@core/layout/components';
     `,
     styleUrl: './header.component.css',
     imports: [
-        ThemeSwitcher
+        ThemeSwitcher,
+        AsyncPipe
     ]
 })
 export class HeaderComponent {
+    private ui = inject(UiService)
+    title$: Observable<string> = this.ui.pageTitle;
 }
