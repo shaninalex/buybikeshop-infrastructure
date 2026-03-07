@@ -1,4 +1,5 @@
 import random
+from typing import List
 
 DEFAULT_MEDIA = [
     "/img/bike0.jpg",
