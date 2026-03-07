@@ -46,10 +46,10 @@ clear:
 
 start_db:
 	docker compose \
-        -f ./docker/docker-compose.base.yaml \
+        -f ./docker/docker-compose.base.yml \
         up -d --build
 
 clear_db:
 	docker compose \
-        -f ./docker/docker-compose.base.yaml \
+        -f ./docker/docker-compose.base.yml \
 		down -v
