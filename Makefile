@@ -43,3 +43,14 @@ clear:
         -f ./docker/kratos.docker.yaml \
 		-f ./docker/oathkeeper.yaml \
 		down -v
+
+start_db:
+	docker compose \
+        -f ./docker/docker-compose.base.yaml \
+        up -d --build
+
+clear_db:
+	docker compose \
+        -f ./docker/docker-compose.base.yaml \
+		down -v
+
