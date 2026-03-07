@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterLink } from "@angular/router";
 
 @Component({
     selector: 'app-sidebar',
@@ -11,24 +12,27 @@ import { Component } from '@angular/core';
                         <a class="nav-link active" aria-current="page" href="#">Inventory</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Vendors</a>
+                        <a class="nav-link" routerLink="/vendors">Vendors</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Deliveries</a>
+                        <a class="nav-link" routerLink="/deliveries">Deliveries</a>
                     </li>
                 </ul>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Support</a>
+                        <a class="nav-link active" aria-current="page" routerLink="/support">Support</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Settings</a>
+                        <a class="nav-link active" aria-current="page" routerLink="/settings">Settings</a>
                     </li>
                 </ul>
             </div>
         </aside>
     `,
     styleUrl: './sidebar.component.css',
+    imports: [
+        RouterLink
+    ]
 })
 export class SidebarComponent {
 }

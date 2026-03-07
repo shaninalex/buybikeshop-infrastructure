@@ -1,6 +1,10 @@
 import { Routes } from '@angular/router';
-import { HomePage } from './home-page/home-page';
-import { PageContainer } from './page.container';
+import { PageContainer } from '@pages/page.container';
+import { HomePage } from '@pages/home-page';
+import { VendorsPage } from "@pages/vendors-page";
+import { DeliveriesPage } from "@pages/deliveries-page";
+import { SettingsPage } from "@pages/settings-page";
+import { SupportPage } from "@pages/support-page";
 
 export const routes: Routes = [
     {
@@ -10,6 +14,22 @@ export const routes: Routes = [
             {
                 path: '',
                 component: HomePage,
+            },
+            {
+                path: 'vendors',
+                component: VendorsPage,
+            },
+            {
+                path: 'deliveries',
+                component: DeliveriesPage,
+            },
+            {
+                path: 'settings',
+                component: SettingsPage,
+            },
+            {
+                path: 'support',
+                component: SupportPage,
             },
         ],
     },
