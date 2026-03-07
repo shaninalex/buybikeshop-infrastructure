@@ -2,6 +2,8 @@
 -- also make available to all database schemas.
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp" schema pg_catalog;
 
+--- SERVICES
+
 -- kratos is an identity provider. Will be used for customers.
 CREATE SCHEMA customers;
 
@@ -14,5 +16,13 @@ CREATE SCHEMA hydra;
 -- databases for keto ( permission management )
 CREATE SCHEMA keto;
 
--- for warehouse
-CREATE SCHEMA warehouse;
+--- APPLICATION
+
+-- suppliers, contractors, delivery services, contacts, addresses
+CREATE SCHEMA partners;
+
+-- inventory, warehouses, deliveries,
+CREATE SCHEMA inventory;
+
+-- products, categories, brands...
+CREATE SCHEMA catalog;

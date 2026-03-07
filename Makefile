@@ -45,4 +45,11 @@ clear:
 		down -v
 
 start_db:
-	docker compose -f ./dev/docker-compose.dev.yml up -d --build
+	docker compose \
+        -f ./docker/docker-compose.base.yaml \
+        up -d --build
+
+clear_db:
+	docker compose \
+        -f ./docker/docker-compose.base.yaml \
+		down -v

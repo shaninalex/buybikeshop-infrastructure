@@ -16,9 +16,9 @@ def seed_products(config: Path):
 
 
 class CategoriesSeeder:
-    drop_stmt = text("""DELETE FROM warehouse.categories""")
+    drop_stmt = text("""DELETE FROM catalog.categories""")
     insert_stmt = text("""
-        INSERT INTO warehouse.categories (title, parent_id)
+        INSERT INTO catalog.categories (title, parent_id)
         VALUES (:title, :parent_id) RETURNING id
     """)
 
