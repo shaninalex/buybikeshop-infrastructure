@@ -1,7 +1,3 @@
-:root {
-    /* Bulma modifiers */
-    --bulma-body-size: 0.8rem;
-
-    /* app secific variables */
-    --app-color-border: #dcdcdc;
+html, body {
+    font-size: 0.95rem;
 }

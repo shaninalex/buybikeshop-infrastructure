@@ -48,7 +48,7 @@ errors:
 access_rules:
   matching_strategy: glob
   repositories:
-    - file:///etc/config/oathkeeper/access-rules.yml
+    - file:///home/alex/projects/buybikeshop/dev/config/oathkeeper.yml
 
 authenticators:
   anonymous:

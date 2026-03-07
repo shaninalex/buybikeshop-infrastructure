@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { ProductModel, NewProductModel } from '@entities/product';
+import { NewProductModel, ProductModel } from '@entities/product';
 import { APIResponse } from '@shared/models';
 import { HttpClient } from '@angular/common/http';
 
@@ -12,19 +12,19 @@ export class ProductApi {
 
     GetProducts(): Observable<ProductModel[]> {
         return this.http
-            .get<APIResponse<ProductModel[]>>(`/api/v1/products`, { withCredentials: true })
+            .get<APIResponse<ProductModel[]>>(`/api/v1/products`, {withCredentials: true})
             .pipe(map((response) => response.data));
     }
 
     CreateProduct(payload: NewProductModel): Observable<ProductModel> {
         return this.http
-            .post<APIResponse<ProductModel>>(`/api/v1/products`, payload, { withCredentials: true })
+            .post<APIResponse<ProductModel>>(`/api/v1/products`, payload, {withCredentials: true})
             .pipe(map((response) => response.data));
     }
 
     DeleteProduct(productId: string): Observable<void> {
         return this.http
-            .delete<APIResponse<void>>(`/api/v1/product/${productId}`, { withCredentials: true })
+            .delete<APIResponse<void>>(`/api/v1/product/${productId}`, {withCredentials: true})
             .pipe(map((response) => response.data));
     }
 
@@ -33,7 +33,7 @@ export class ProductApi {
         return this.http
             .patch<
                 APIResponse<ProductModel>
-            >(`/api/v1/product/${productId}`, payload, { withCredentials: true })
+            >(`/api/v1/product/${productId}`, payload, {withCredentials: true})
             .pipe(map((response) => response.data));
     }
 }

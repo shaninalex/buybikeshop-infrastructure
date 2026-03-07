@@ -15,7 +15,7 @@ cleanup() {
 
     echo "Services stopped. Stop docker."
 
-    docker compose -f ./dev/docker-compose.dev.yaml stop
+    docker compose -f ./dev/docker-compose.dev.yml stop
 
     echo "Stopped."
 }
@@ -27,13 +27,13 @@ trap cleanup EXIT INT TERM
 # ========================
 
 echo "start dev docker compose"
-docker compose -f ./dev/docker-compose.dev.yaml up -d
+docker compose -f ./dev/docker-compose.dev.yml up -d
 
 echo "apply migrations for kratos"
-kratos migrate -c ./dev/config/kratos.yaml sql -e --yes
+kratos migrate -c ./dev/config/kratos.yml sql -e --yes
 
 echo "apply migrations for hydra"
-hydra migrate -c ./dev/config/hydra.yaml sql up -e --yes
+hydra migrate -c ./dev/config/hydra.yml sql up -e --yes
 
 echo "migrate application schema"
 make migrate_up
@@ -43,15 +43,15 @@ make migrate_up
 # ========================
 
 echo "Starting Oathkeeper..."
-oathkeeper serve proxy -c ./dev/config/oathkeeper.yaml &
+oathkeeper serve proxy -c ./dev/config/oathkeeper.yml &
 OATHKEEPER_PID=$!
 
 echo "Starting Kratos..."
-kratos serve -c ./dev/config/kratos.yaml --dev --watch-courier &
+kratos serve -c ./dev/config/kratos.yml --dev --watch-courier &
 KRATOS_PID=$!
 
 echo "Starting Hydra..."
-hydra serve -c ./dev/config/hydra.yaml all --dev &
+hydra serve -c ./dev/config/hydra.yml all --dev &
 HYDRA_PID=$!
 
 wait

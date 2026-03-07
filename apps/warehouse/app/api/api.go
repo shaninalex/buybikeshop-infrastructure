@@ -14,7 +14,7 @@ import (
 
 func ProvideRouter() *gin.Engine {
 	router := gin.New()
-	gin.SetMode(gin.ReleaseMode)
+	gin.SetMode(gin.DebugMode)
 
 	router.RedirectTrailingSlash = false
 	router.RedirectFixedPath = false
