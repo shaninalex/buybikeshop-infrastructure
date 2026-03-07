@@ -6,6 +6,6 @@ import { SidebarComponent } from './sidebar.component';
     selector: 'main-layout',
     imports: [HeaderComponent, SidebarComponent],
     templateUrl: './main.layout.html',
-    styleUrl: './main.layout.css',
 })
-export class MainLayout {}
+export class MainLayout {
+}

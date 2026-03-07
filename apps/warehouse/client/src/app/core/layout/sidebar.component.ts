@@ -3,6 +3,12 @@ import { RouterLink } from "@angular/router";
 
 @Component({
     selector: 'app-sidebar',
+    imports: [
+        RouterLink
+    ],
+    host: {
+        class: "sidebar"
+    },
     template: `
         <aside class="border-end vh-100 p-2 d-flex flex-column justify-content-between">
             <h3 class="fw-bold fs-3">Warehouse</h3>
@@ -29,10 +35,6 @@ import { RouterLink } from "@angular/router";
             </div>
         </aside>
     `,
-    styleUrl: './sidebar.component.css',
-    imports: [
-        RouterLink
-    ]
 })
 export class SidebarComponent {
 }

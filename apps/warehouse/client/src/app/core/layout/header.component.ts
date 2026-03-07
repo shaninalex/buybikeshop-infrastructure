@@ -10,7 +10,7 @@ import { AsyncPipe } from '@angular/common';
         <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
             <div class="container-fluid">
                 @if (title$ | async; as title) {
-                    <a class="navbar-brand" href="#">{{ title }}</a>
+                    <a class="navbar-brand fw-bold" href="#">{{ title }}</a>
                 }
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -66,7 +66,9 @@ import { AsyncPipe } from '@angular/common';
             </div>
         </nav>
     `,
-    styleUrl: './header.component.css',
+    host: {
+        class: "header"
+    },
     imports: [
         ThemeSwitcher,
         AsyncPipe

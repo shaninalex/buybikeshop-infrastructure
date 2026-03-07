@@ -1,3 +1,31 @@
 html, body {
     font-size: 0.95rem;
 }
+
+.main {
+    height: 100vh;
+    display: flex;
+}
+
+.sidebar {
+    width: 170px;
+}
+
+.header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.content {
+    width: calc(100% - 170px);
+    position: relative;
+    padding-top: 3.5rem;
+}
+
+.page-content {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 100%;
+}
