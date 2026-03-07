@@ -1,6 +1,5 @@
 port: 8001
 
-# TODO: create warehouse db user
 # that user should be able to read only warehouse schema
 database: "postgresql+psycopg2://postgres:postgres@localhost:5432/postgres"
 

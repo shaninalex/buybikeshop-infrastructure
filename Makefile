@@ -22,24 +22,27 @@ migrate_down:
 
 start:
 	docker compose \
-	    -f ./docker/docker-compose.base.yaml \
-		-f ./docker/hydra.docker.yaml \
-		-f ./docker/kratos.docker.yaml \
-		-f ./docker/oathkeeper.yaml \
+	    -f ./docker/docker-compose.base.yml \
+		-f ./docker/hydra.docker.yml \
+		-f ./docker/kratos.docker.yml \
+		-f ./docker/oathkeeper.yml \
 		up -d --build
 
 stop:
 	docker compose \
-        -f ./docker/docker-compose.base.yaml \
-        -f ./docker/hydra.docker.yaml \
-        -f ./docker/kratos.docker.yaml \
-		-f ./docker/oathkeeper.yaml \
+        -f ./docker/docker-compose.base.yml \
+        -f ./docker/hydra.docker.yml \
+        -f ./docker/kratos.docker.yml \
+		-f ./docker/oathkeeper.yml \
 		stop
 
 clear:
 	docker compose \
-        -f ./docker/docker-compose.base.yaml \
-        -f ./docker/hydra.docker.yaml \
-        -f ./docker/kratos.docker.yaml \
-		-f ./docker/oathkeeper.yaml \
+        -f ./docker/docker-compose.base.yml \
+        -f ./docker/hydra.docker.yml \
+        -f ./docker/kratos.docker.yml \
+		-f ./docker/oathkeeper.yml \
 		down -v
+
+start_db:
+	docker compose -f ./dev/docker-compose.dev.yml up -d --build
