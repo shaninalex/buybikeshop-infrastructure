@@ -53,3 +53,9 @@ clear_db:
 	docker compose \
         -f ./docker/docker-compose.base.yml \
 		down -v
+
+generate_go_grpc:
+	protoc -I proto \
+		--go_out=./gen \
+		--go-grpc_out=./gen \
+		$$(find proto -name '*.proto')

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+option go_package = "grpc-buybikeshop-go/catalog";
+
+package catalog;
+
+// Catalog will contain many services (brands, categories, collections, media, product variants, etc.)
+// so message definitions are split into separate files under catalog/ and imported here.
+import "catalog/product.proto";
+
+service Catalog {
+    rpc ProductList (ProductListRequest) returns (ProductListReply) {}
+}

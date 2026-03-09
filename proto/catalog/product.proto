@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package catalog;
+
+option go_package = "grpc-buybikeshop-go/catalog";
+
+import "google/protobuf/timestamp.proto";
+
+message ProductListRequest {
+    string query = 1;
+
+    // Filter by collections
+    repeated uint64 collection_ids = 2;
+
+    // Filter by categories
+    repeated uint64 category_ids = 3;
+
+    // Filter by brands
+    repeated uint64 brand_ids = 4;
+
+    // Created date range
+    google.protobuf.Timestamp created_from = 5;
+    google.protobuf.Timestamp created_to = 6;
+
+    // Sorting
+    ProductSortField sort_field = 7;
+    SortDirection sort_direction = 8;
+
+    // Pagination
+    uint32 limit = 9;
+    uint32 offset = 10;
+}
+
+enum ProductSortField {
+    PRODUCT_SORT_FIELD_UNSPECIFIED = 0;
+    PRODUCT_SORT_FIELD_CREATED_AT = 1;
+}
+
+enum SortDirection {
+    SORT_DIRECTION_UNSPECIFIED = 0;
+    SORT_DIRECTION_ASC = 1;
+    SORT_DIRECTION_DESC = 2;
+}
+
+message ProductListReply {
+    repeated Product products = 1;
+    uint64 total = 2;
+}
+
+message Product {
+    uint64 id = 1;
+    string title = 2;
+    string description = 6;
+    string short_description = 7;
+
+    uint64 collection_id = 3;
+    uint64 category_id = 4;
+    uint64 brand_id = 5;
+
+    google.protobuf.Timestamp created_at = 8;
+    google.protobuf.Timestamp updated_at = 9;
+}
