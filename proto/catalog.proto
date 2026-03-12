@@ -9,5 +9,8 @@ package catalog;
 import "catalog/product.proto";
 
 service Catalog {
-    rpc ProductList (ProductListRequest) returns (ProductListReply) {}
+  rpc ProductList (ProductListRequest) returns (ProductListReply) {}
+  rpc ProductGet (ProductGetRequest) returns (ProductGetReply) {}
+  rpc ProductVariantList (ProductVariantListRequest) returns (ProductVariantListReply) {}
+  rpc ProductVariantGet (ProductVariantGetRequest) returns (ProductVariantGetReply) {}
 }
