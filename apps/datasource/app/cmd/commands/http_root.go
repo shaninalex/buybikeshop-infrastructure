@@ -1,4 +1,4 @@
-package main
+package commands
 
 import (
 	pb "buybikeshop/gen/grpc-buybikeshop-go/catalog"
@@ -44,7 +44,7 @@ func (c server) mustEmbedUnimplementedserver() {
 	panic("implement me")
 }
 
-func main() {
+func Serve() {
 	flag.Parse()
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
 	if err != nil {
