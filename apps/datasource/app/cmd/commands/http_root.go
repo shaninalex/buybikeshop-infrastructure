@@ -1,8 +1,7 @@
 package commands
 
 import (
-	"buybikeshop/apps/datasource/app/server/catalog"
-	pb "buybikeshop/gen/grpc-buybikeshop-go/catalog"
+	"buybikeshop/apps/datasource/app/server"
 	"buybikeshop/libs/go/config"
 	"buybikeshop/libs/go/persistance"
 	"context"
@@ -38,19 +37,20 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 				return grpc.NewServer()
 			})
 
-			_ = c.Provide(catalog.ProvideCatalogAdapter)
-			_ = c.Provide(catalog.ProvideCatalogServer)
+			_ = server.InitServerModules(c)
+			_ = c.Provide(server.NewRegistry)
 
-			if err = c.Invoke(func(s *grpc.Server, config *config.Config, catalogServer *catalog.CatalogServer, ctx context.Context) {
+			if err = c.Invoke(func(config *config.Config, r *server.Registry, ctx context.Context) {
 				lis, err := net.Listen("tcp", fmt.Sprintf(":%d", config.Int("server.port")))
 				if err != nil {
 					log.Fatalf("failed to listen: %v", err)
 				}
 
-				pb.RegisterCatalogServer(s, catalogServer)
-
 				fmt.Printf("server listening on port: %d\n", config.Int("server.port"))
-				_ = s.Serve(lis)
+				err = r.Server.Serve(lis)
+				if err != nil {
+					log.Fatalf("failed to listen: %v", err)
+				}
 
 			}); err != nil {
 				panic(err)

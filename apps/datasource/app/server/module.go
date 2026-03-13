@@ -6,12 +6,8 @@ import (
 	"go.uber.org/dig"
 )
 
-func Module(c *dig.Container) error {
+func InitServerModules(c *dig.Container) error {
 	if err := catalog.Module(c); err != nil {
-		return err
-	}
-
-	if err := c.Invoke(NewDatasource); err != nil {
 		return err
 	}
 
