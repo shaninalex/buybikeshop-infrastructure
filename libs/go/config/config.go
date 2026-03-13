@@ -9,10 +9,11 @@ import (
 )
 
 type Config struct {
-	Port     uint         `yaml:"port"`
-	Database string       `yaml:"database"`
-	Kratos   KratosConfig `yaml:"kratos"`
-	OAuth    OAuthConfig  `yaml:"oauth"`
+	Port       uint         `yaml:"port"`
+	Database   string       `yaml:"database"`
+	Kratos     KratosConfig `yaml:"kratos"`
+	OAuth      OAuthConfig  `yaml:"oauth"`
+	Datasource Datasource   `yaml:"datasource"`
 }
 
 type OAuthConfig struct {
@@ -21,6 +22,10 @@ type OAuthConfig struct {
 	AuthorizationUrl string    `yaml:"authorization_url"`
 	TokenUrl         string    `yaml:"token_url"`
 	Scopes           []string  `yaml:"scopes"`
+}
+
+type Datasource struct {
+	GrpcPort uint `yaml:"grpc_port"`
 }
 
 func (s *Config) GetOAuthConfig() OAuthConfig {

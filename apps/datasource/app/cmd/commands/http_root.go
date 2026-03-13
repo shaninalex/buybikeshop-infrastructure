@@ -1,60 +1,56 @@
 package commands
 
 import (
+	"buybikeshop/apps/datasource/app/pkg"
 	pb "buybikeshop/gen/grpc-buybikeshop-go/catalog"
+	"buybikeshop/libs/go/config"
+	"buybikeshop/libs/go/persistance"
 	"context"
-	"flag"
 	"fmt"
 	"log"
 	"net"
 
+	"github.com/gin-gonic/gin"
+	"github.com/spf13/cobra"
+	"go.uber.org/dig"
 	"google.golang.org/grpc"
 )
 
-var (
-	port = flag.Int("port", 50051, "The datasource port")
-)
+func NewHttpRootCommand() (cmd *cobra.Command) {
+	cmd = &cobra.Command{
+		Use:   "serve",
+		Short: "Run webserver",
+		Args:  cobra.ArbitraryArgs,
+		Run: func(cmd *cobra.Command, args []string) {
+			c := dig.New()
+			configPath, err := cmd.Flags().GetString("config")
+			if err != nil {
+				panic(err)
+			}
 
-type server struct {
-	pb.UnimplementedCatalogServer
-}
+			appContext, appCancel := context.WithCancel(context.Background())
+			defer appCancel()
 
-func (c server) ProductList(ctx context.Context, request *pb.ProductListRequest) (*pb.ProductListReply, error) {
-	//TODO implement me
-	panic("implement me")
-}
+			_ = c.Provide(func() context.Context { return appContext })
+			_ = c.Provide(config.ProvideConfig(configPath))
+			_ = c.Provide(persistance.ProvideDB)
 
-func (c server) ProductGet(ctx context.Context, request *pb.ProductGetRequest) (*pb.ProductGetReply, error) {
-	//TODO implement me
-	panic("implement me")
-}
+			if err := c.Invoke(func(router *gin.Engine, config *config.Config, ctx context.Context) {
 
-func (c server) ProductVariantList(ctx context.Context, request *pb.ProductVariantListRequest) (*pb.ProductVariantListReply, error) {
-	//TODO implement me
-	panic("implement me")
-}
+				lis, err := net.Listen("tcp", fmt.Sprintf(":%d", int(config.Datasource.GrpcPort)))
+				if err != nil {
+					log.Fatalf("failed to listen: %v", err)
+				}
 
-func (c server) ProductVariantGet(ctx context.Context, request *pb.ProductVariantGetRequest) (*pb.ProductVariantGetReply, error) {
-	//TODO implement me
-	panic("implement me")
-}
+				s := grpc.NewServer()
+				pb.RegisterCatalogServer(s, &pkg.CatalogServer{})
 
-func (c server) mustEmbedUnimplementedserver() {
-	//TODO implement me
-	panic("implement me")
-}
-
-func Serve() {
-	flag.Parse()
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+				s.Serve(lis)
+			}); err != nil {
+				panic(err)
+			}
+		},
 	}
-	s := grpc.NewServer()
-	pb.RegisterCatalogServer(s, &server{})
-	log.Printf("server listening at %v", lis.Addr())
 
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
-	}
+	return cmd
 }

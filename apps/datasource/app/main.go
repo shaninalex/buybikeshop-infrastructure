@@ -1,7 +1,7 @@
 package main
 
 import (
-	"buybikeshop/apps/warehouse/app/cmd"
+	"buybikeshop/apps/datasource/app/cmd"
 	"os"
 )
 

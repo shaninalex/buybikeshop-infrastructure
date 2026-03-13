@@ -1,26 +1,27 @@
 package persistance
 
 import (
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
+	"database/sql"
+	"fmt"
+
+	_ "github.com/lib/pq"
 )
 
 type DatabaseConfig interface {
 	GetDatabaseUrl() string
 }
 
-func ProvideDB(config DatabaseConfig) *gorm.DB {
-	return connect(config.GetDatabaseUrl())
+func ProvideDB(config DatabaseConfig) *sql.DB {
+	connectionString := fmt.Sprintf("host=%s port=%d user=%s "+
+		"password=%s dbname=%s sslmode=disable",
+		config.GetDatabaseUrl(), config.GetDatabasePort(), config., password, dbname)
+	return connect(connectionString)
 }
 
-func connect(connectionString string) *gorm.DB {
-	// NOTE: there are can be different databases - planing also use postgres. But not for now.
-	db, err := gorm.Open(sqlite.Open(connectionString), &gorm.Config{})
+func connect(connectionString string) *sql.DB {
+	db, err := sql.Open("postgres", connectionString)
 	if err != nil {
 		panic("failed to connect database")
-	}
-	if res := db.Exec("PRAGMA foreign_keys = ON"); res.Error != nil {
-		panic(res.Error.Error())
 	}
 
 	return db
