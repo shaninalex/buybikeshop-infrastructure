@@ -1,17 +1,25 @@
-package pkg
+package catalog
 
 import (
 	pb "buybikeshop/gen/grpc-buybikeshop-go/catalog"
 	"context"
-	"database/sql"
 )
 
 type CatalogAdapter struct {
-	db *sql.DB
+}
+
+func ProvideCatalogAdapter() *CatalogAdapter {
+	return &CatalogAdapter{}
 }
 
 func (c CatalogAdapter) ProductList(ctx context.Context, request *pb.ProductListRequest) (*pb.ProductListReply, error) {
-	return &pb.ProductListReply{}, nil
+	return &pb.ProductListReply{
+		Products: []*pb.Product{
+			{
+				Id: 1,
+			},
+		},
+	}, nil
 }
 
 func (c CatalogAdapter) ProductGet(ctx context.Context, request *pb.ProductGetRequest) (*pb.ProductGetReply, error) {

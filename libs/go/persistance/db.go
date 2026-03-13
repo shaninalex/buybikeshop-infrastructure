@@ -2,7 +2,6 @@ package persistance
 
 import (
 	"database/sql"
-	"fmt"
 
 	_ "github.com/lib/pq"
 )
@@ -12,9 +11,7 @@ type DatabaseConfig interface {
 }
 
 func ProvideDB(config DatabaseConfig) *sql.DB {
-	connectionString := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		config.GetDatabaseUrl(), config.GetDatabasePort(), config., password, dbname)
+	connectionString := "host=localhost port=5432 user=postgres password=postgres dbname=postgres sslmode=disable"
 	return connect(connectionString)
 }
 

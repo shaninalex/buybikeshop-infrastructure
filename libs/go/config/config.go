@@ -1,72 +1,31 @@
 package config
 
 import (
-	"io"
-	"os"
+	"fmt"
 
-	"github.com/google/uuid"
-	"go.yaml.in/yaml/v2"
+	"github.com/spf13/viper"
 )
 
 type Config struct {
-	Port       uint         `yaml:"port"`
-	Database   string       `yaml:"database"`
-	Kratos     KratosConfig `yaml:"kratos"`
-	OAuth      OAuthConfig  `yaml:"oauth"`
-	Datasource Datasource   `yaml:"datasource"`
-}
-
-type OAuthConfig struct {
-	ClientID         uuid.UUID `yaml:"client_id"`
-	RedirectUri      string    `yaml:"redirect_uri"`
-	AuthorizationUrl string    `yaml:"authorization_url"`
-	TokenUrl         string    `yaml:"token_url"`
-	Scopes           []string  `yaml:"scopes"`
-}
-
-type Datasource struct {
-	GrpcPort uint `yaml:"grpc_port"`
-}
-
-func (s *Config) GetOAuthConfig() OAuthConfig {
-	return s.OAuth
-}
-
-type KratosConfig struct {
-	UrlBrowser string `yaml:"url_browser"`
-	UrlAdmin   string `yaml:"url_admin"`
-}
-
-func (s *Config) KratosUrlBrowser() string {
-	return s.Kratos.UrlBrowser
-}
-
-func (s *Config) KratosUrlAdmin() string {
-	return s.Kratos.UrlBrowser
-}
-
-func (s *Config) GetDatabaseUrl() string {
-	return s.Database
+	v *viper.Viper
 }
 
 func ReadConfig(path string) *Config {
-	f, err := os.Open(path)
-	if err != nil {
-		panic(err)
+	s := &Config{
+		v: viper.New(),
 	}
-	defer f.Close()
+	s.v.AddConfigPath(path)
+	s.v.SetConfigType("yml")
+	s.v.SetConfigName("config.dev")
+	s.v.WatchConfig() //we need it to reload config in containers without restart
 
-	b, err := io.ReadAll(f)
-	if err != nil {
-		panic(err)
-	}
+	err := s.v.ReadInConfig()
 
-	var config Config
-	if err := yaml.Unmarshal(b, &config); err != nil {
-		panic(err)
+	if err != nil { // Handle errors reading the config file
+		panic(fmt.Errorf("Can't open config file. %s \n", err))
 	}
 
-	return &config
+	return s
 }
 
 func ProvideConfig(configPath string) func() *Config {
@@ -74,3 +33,7 @@ func ProvideConfig(configPath string) func() *Config {
 		return ReadConfig(configPath)
 	}
 }
+
+func (s *Config) Int(param string) int { return s.v.GetInt(param) }
+
+func (s *Config) String(param string) string { return s.v.GetString(param) }

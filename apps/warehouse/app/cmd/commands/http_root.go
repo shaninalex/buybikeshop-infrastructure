@@ -46,11 +46,11 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 
 			if err := c.Invoke(func(router *gin.Engine, config *config.Config, ctx context.Context) {
 				srv := &http.Server{
-					Addr:    fmt.Sprintf(":%d", config.Port),
+					Addr:    fmt.Sprintf(":%d", config.Int("port")),
 					Handler: router,
 				}
 
-				log.Printf("Run server on :%d\n", config.Port)
+				log.Printf("Run server on :%d\n", config.Int("port"))
 				go func() {
 					if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 						log.Fatalf("listen: %s\n", err)

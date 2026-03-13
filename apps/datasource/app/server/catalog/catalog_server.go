@@ -1,12 +1,16 @@
-package pkg
+package catalog
 
 import (
 	pb "buybikeshop/gen/grpc-buybikeshop-go/catalog"
 	"context"
 )
 
-func ProvideCatalogServer() *CatalogServer {
-	return &CatalogServer{}
+func ProvideCatalogServer(
+	catalogAdapter *CatalogAdapter,
+) *CatalogServer {
+	return &CatalogServer{
+		catalogAdapter: catalogAdapter,
+	}
 }
 
 type CatalogServer struct {

@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"buybikeshop/apps/datasource/app/pkg"
+	"buybikeshop/apps/datasource/app/server/catalog"
 	pb "buybikeshop/gen/grpc-buybikeshop-go/catalog"
 	"buybikeshop/libs/go/config"
 	"buybikeshop/libs/go/persistance"
@@ -10,7 +10,6 @@ import (
 	"log"
 	"net"
 
-	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
 	"go.uber.org/dig"
 	"google.golang.org/grpc"
@@ -23,6 +22,7 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 		Args:  cobra.ArbitraryArgs,
 		Run: func(cmd *cobra.Command, args []string) {
 			c := dig.New()
+
 			configPath, err := cmd.Flags().GetString("config")
 			if err != nil {
 				panic(err)
@@ -34,18 +34,24 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 			_ = c.Provide(func() context.Context { return appContext })
 			_ = c.Provide(config.ProvideConfig(configPath))
 			_ = c.Provide(persistance.ProvideDB)
+			_ = c.Provide(func() *grpc.Server {
+				return grpc.NewServer()
+			})
 
-			if err := c.Invoke(func(router *gin.Engine, config *config.Config, ctx context.Context) {
+			_ = c.Provide(catalog.ProvideCatalogAdapter)
+			_ = c.Provide(catalog.ProvideCatalogServer)
 
-				lis, err := net.Listen("tcp", fmt.Sprintf(":%d", int(config.Datasource.GrpcPort)))
+			if err = c.Invoke(func(s *grpc.Server, config *config.Config, catalogServer *catalog.CatalogServer, ctx context.Context) {
+				lis, err := net.Listen("tcp", fmt.Sprintf(":%d", config.Int("server.port")))
 				if err != nil {
 					log.Fatalf("failed to listen: %v", err)
 				}
 
-				s := grpc.NewServer()
-				pb.RegisterCatalogServer(s, &pkg.CatalogServer{})
+				pb.RegisterCatalogServer(s, catalogServer)
 
-				s.Serve(lis)
+				fmt.Printf("server listening on port: %d\n", config.Int("server.port"))
+				_ = s.Serve(lis)
+
 			}); err != nil {
 				panic(err)
 			}
