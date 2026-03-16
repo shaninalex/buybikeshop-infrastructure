@@ -2,11 +2,11 @@ package connector
 
 import (
 	pb "buybikeshop/gen/grpc-buybikeshop-go/catalog"
-	"buybikeshop/libs/go/auth"
 	"buybikeshop/libs/go/config"
 	"log"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 type DatasourceClient struct {
@@ -16,14 +16,13 @@ type DatasourceClient struct {
 }
 
 func ProvideClient(config *config.Config) *DatasourceClient {
-	creds, err := auth.GrpcCredentials(config.String("creds.ca_pem"))
-	if err != nil {
-		panic(err)
-	}
-
+	//creds, err := auth.GrpcCredentials(config.String("creds.ca_pem"))
+	//if err != nil {
+	//	panic(err)
+	//}
 	conn, err := grpc.NewClient(
 		config.String("grpc.host"),
-		grpc.WithTransportCredentials(creds),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
