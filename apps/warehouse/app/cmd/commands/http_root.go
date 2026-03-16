@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"buybikeshop/apps/warehouse/app/pkg"
 	"context"
 	"fmt"
 	"log"
@@ -40,6 +41,9 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 			_ = c.Provide(persistance.ProvideDB)
 			_ = c.Provide(auth.ProvideKratos)
 			_ = c.Provide(auth.ProvideOAuthConfig)
+
+			// init core warehouse modules ( grpc client, loggers, utilites )
+			_ = c.Provide(pkg.Module)
 
 			// init api module
 			_ = api.Module(c)

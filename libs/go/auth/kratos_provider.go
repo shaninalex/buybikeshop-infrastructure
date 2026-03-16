@@ -10,7 +10,7 @@ func ProvideKratos(config *config.Config) *ory.APIClient {
 	configuration := ory.NewConfiguration()
 	configuration.Servers = []ory.ServerConfiguration{
 		{
-			URL: config.KratosUrlBrowser(),
+			URL: config.String("kratos.url_browser"),
 		},
 	}
 	return ory.NewAPIClient(configuration)

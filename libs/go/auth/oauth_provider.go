@@ -6,16 +6,15 @@ import (
 	"golang.org/x/oauth2"
 )
 
-func ProvideOAuthConfig(config *config.Config) *oauth2.Config {
-	c := config.GetOAuthConfig()
+func ProvideOAuthConfig(c *config.Config) *oauth2.Config {
 	return &oauth2.Config{
-		ClientID:     c.ClientID.String(),
+		ClientID:     c.String("oauth.client_id"),
 		ClientSecret: "",
-		RedirectURL:  c.RedirectUri,
-		Scopes:       c.Scopes,
+		RedirectURL:  c.String("oauth.redirect_url"),
+		Scopes:       c.StringSlice("oauth.scopes"),
 		Endpoint: oauth2.Endpoint{
-			AuthURL:  c.AuthorizationUrl,
-			TokenURL: c.TokenUrl,
+			AuthURL:  c.String("oauth.authorization_url"),
+			TokenURL: c.String("oauth.token_url"),
 		},
 	}
 }

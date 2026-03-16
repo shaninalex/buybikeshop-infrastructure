@@ -11,7 +11,6 @@ import (
 
 	"github.com/spf13/cobra"
 	"go.uber.org/dig"
-	"google.golang.org/grpc"
 )
 
 func NewHttpRootCommand() (cmd *cobra.Command) {
@@ -33,9 +32,7 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 			_ = c.Provide(func() context.Context { return appContext })
 			_ = c.Provide(config.ProvideConfig(configPath))
 			_ = c.Provide(persistance.ProvideDB)
-			_ = c.Provide(func() *grpc.Server {
-				return grpc.NewServer()
-			})
+			_ = c.Provide(server.ProvideGrpcServer)
 
 			_ = server.InitServerModules(c)
 			_ = c.Provide(server.NewRegistry)

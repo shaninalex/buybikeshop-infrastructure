@@ -16,3 +16,6 @@ oauth:
     - offline
     - openid
     - workshop
+
+creds:
+  ca_pem: "creds/ca.pem"

@@ -37,3 +37,7 @@ func ProvideConfig(configPath string) func() *Config {
 func (s *Config) Int(param string) int { return s.v.GetInt(param) }
 
 func (s *Config) String(param string) string { return s.v.GetString(param) }
+
+func (s *Config) Bool(param string) bool { return s.v.GetBool(param) }
+
+func (s *Config) StringSlice(param string) []string { return s.v.GetStringSlice(param) }

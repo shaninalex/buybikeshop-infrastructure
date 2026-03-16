@@ -3,12 +3,21 @@ package persistance
 import (
 	"buybikeshop/libs/go/config"
 	"database/sql"
+	"fmt"
 
 	_ "github.com/lib/pq"
 )
 
 func ProvideDB(config *config.Config) *sql.DB {
-	connectionString := "host=localhost port=5432 user=postgres password=postgres dbname=postgres sslmode=disable"
+	connectionString := fmt.Sprintf(
+		"host=%s, port=%d user=%s password=%s dbname=%s sslmode=%s",
+		config.String("database.host"),
+		config.Int("database.port"),
+		config.String("database.user"),
+		config.String("database.password"),
+		config.String("database.dbname"),
+		config.String("database.sslmode"),
+	)
 	return connect(connectionString)
 }
 
