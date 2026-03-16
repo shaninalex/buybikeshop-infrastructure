@@ -19,3 +19,6 @@ oauth:
 
 creds:
   ca_pem: "creds/ca.pem"
+
+grpc:
+    host: "localhost:50051"

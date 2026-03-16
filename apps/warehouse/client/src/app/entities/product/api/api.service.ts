@@ -12,7 +12,7 @@ export class ProductApi {
 
     GetProducts(): Observable<ProductModel[]> {
         return this.http
-            .get<APIResponse<ProductModel[]>>(`/api/v1/warehouse/products`, { withCredentials: true })
+            .get<APIResponse<ProductModel[]>>(`/api/v1/warehouse/products`)
             .pipe(map((response) => response.data));
     }
 }

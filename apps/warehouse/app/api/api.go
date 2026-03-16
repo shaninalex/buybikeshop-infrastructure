@@ -4,7 +4,6 @@ import (
 	"buybikeshop/apps/warehouse"
 	"buybikeshop/apps/warehouse/app/api/controllers/inventory"
 	"buybikeshop/apps/warehouse/app/api/controllers/product"
-	"buybikeshop/apps/warehouse/app/api/middlewares"
 	"net/http"
 
 	ory "github.com/ory/kratos-client-go"
@@ -47,7 +46,7 @@ func ProvideAPI(deps ApiDeps) *gin.Engine {
 	router := ProvideRouter()
 	router.Use(gin.Recovery())
 
-	router.Use(middlewares.AuthMiddleware(deps.KratosAPIClient))
+	//router.Use(middlewares.AuthMiddleware(deps.KratosAPIClient))
 
 	v1 := router.Group("/api/v1/warehouse")
 	deps.InventoryController.Register(v1)

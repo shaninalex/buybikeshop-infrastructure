@@ -9,9 +9,6 @@ database:
     dbname: postgres
     sslmode: disable
 
-grpc:
-    host: "localhost:50051"
-
 creds:
     server_pem: "certs/server.pem"
     server_key_pem: "certs/server_key.pem"
