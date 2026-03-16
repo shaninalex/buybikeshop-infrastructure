@@ -12,10 +12,10 @@ import (
 type DatasourceClient struct {
 	conn *grpc.ClientConn
 
-	catalogClient pb.CatalogClient
+	CatalogClient pb.CatalogClient
 }
 
-func ProvideClient(config *config.Config) *DatasourceClient {
+func ProvideDatasourceClient(config *config.Config) *DatasourceClient {
 	//creds, err := auth.GrpcCredentials(config.String("creds.ca_pem"))
 	//if err != nil {
 	//	panic(err)
@@ -32,7 +32,7 @@ func ProvideClient(config *config.Config) *DatasourceClient {
 	return &DatasourceClient{
 		conn: conn,
 
-		catalogClient: c,
+		CatalogClient: c,
 	}
 }
 

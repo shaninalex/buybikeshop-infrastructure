@@ -7,7 +7,7 @@ import (
 )
 
 func Module(c *dig.Container) error {
-	_ = c.Provide(connector.ProvideClient)
+	_ = c.Provide(connector.ProvideDatasourceClient)
 
 	return nil
 }

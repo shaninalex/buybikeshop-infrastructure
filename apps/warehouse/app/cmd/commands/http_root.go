@@ -2,6 +2,7 @@ package commands
 
 import (
 	"buybikeshop/apps/warehouse/app/pkg"
+	"buybikeshop/apps/warehouse/app/pkg/connector"
 	"context"
 	"fmt"
 	"log"
@@ -41,6 +42,7 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 			_ = c.Provide(persistance.ProvideDB)
 			_ = c.Provide(auth.ProvideKratos)
 			_ = c.Provide(auth.ProvideOAuthConfig)
+			_ = c.Provide(connector.ProvideDatasourceClient)
 
 			// init core warehouse modules ( grpc client, loggers, utilites )
 			_ = c.Provide(pkg.Module)
@@ -50,11 +52,11 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 
 			if err := c.Invoke(func(router *gin.Engine, config *config.Config, ctx context.Context) {
 				srv := &http.Server{
-					Addr:    fmt.Sprintf(":%d", config.Int("port")),
+					Addr:    fmt.Sprintf(":%d", 8001),
 					Handler: router,
 				}
 
-				log.Printf("Run server on :%d\n", config.Int("port"))
+				log.Printf("Run server on :%d\n", 8001)
 				go func() {
 					if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 						log.Fatalf("listen: %s\n", err)
