@@ -14,5 +14,7 @@ func (s *ProductController) handleProducts(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(200, data.Products)
+	c.JSON(200, gin.H{
+		"data": data.Products,
+	})
 }
