@@ -18,4 +18,5 @@ func NewProductController(datasource *connector.DatasourceClient) *ProductContro
 
 func (s *ProductController) Register(router *gin.RouterGroup) {
 	router.GET("products", s.handleProducts)
+	router.GET("products/:product_id/variants", s.handleProductVariants)
 }

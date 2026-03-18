@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package catalog;
+
+option go_package = "grpc-buybikeshop-go/catalog";
+
+message Collection {
+  uint64 id = 1;
+  string title = 2;
+}
+
+message Brand {
+  uint64 id = 1;
+  string title = 2;
+}
+
+message Category {
+  uint64 id = 1;
+  string title = 2;
+}
+
+
+message BrandListRequest {}
+
+message BrandListReply {
+  repeated Brand brands = 1;
+}
+
+message BrandSaveRequest {
+  Brand brand = 1;
+}
+
+message BrandSaveReply {
+  Brand brand = 1;
+}
+
+message BrandDeleteRequest {
+  uint64 id = 1;
+}
+
+message BrandDeleteReply {
+  bool status = 1;
+  string message = 2;
+}

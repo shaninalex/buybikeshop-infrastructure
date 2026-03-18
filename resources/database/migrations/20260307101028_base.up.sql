@@ -1,7 +1,8 @@
+-- collections are set of categories under single logic - "winter sale" for example.
 CREATE TABLE catalog.collections
 (
     id   SERIAL PRIMARY KEY,
-    name varchar(30) UNIQUE
+    title varchar(30) UNIQUE
 );
 
 CREATE TABLE catalog.brands

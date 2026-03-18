@@ -7,10 +7,20 @@ package catalog;
 // Catalog will contain many services (brands, categories, collections, media, product variants, etc.)
 // so message definitions are split into separate files under catalog/ and imported here.
 import "catalog/product.proto";
+import "catalog/meta.proto";
 
 service Catalog {
   rpc ProductList (ProductListRequest) returns (ProductListReply) {}
   rpc ProductGet (ProductGetRequest) returns (ProductGetReply) {}
   rpc ProductVariantList (ProductVariantListRequest) returns (ProductVariantListReply) {}
   rpc ProductVariantGet (ProductVariantGetRequest) returns (ProductVariantGetReply) {}
+
+  // brands
+  rpc BrandList(BrandListRequest) returns (BrandListReply) {}
+  rpc BrandSave(BrandSaveRequest) returns (BrandSaveReply) {} // create/update
+  rpc BrandDelete(BrandDeleteRequest) returns (BrandDeleteReply) {}
+
+  // TODO:
+  // - collections
+  // - categories
 }

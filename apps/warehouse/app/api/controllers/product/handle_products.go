@@ -2,6 +2,8 @@ package product
 
 import (
 	pb "buybikeshop/gen/grpc-buybikeshop-go/catalog"
+	"buybikeshop/libs/go/transport"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,12 +11,8 @@ import (
 func (s *ProductController) handleProducts(c *gin.Context) {
 	data, err := s.datasource.CatalogClient.ProductList(c.Request.Context(), &pb.ProductListRequest{})
 	if err != nil {
-		c.JSON(500, gin.H{
-			"message": err.Error(),
-		})
+		transport.Error(c, http.StatusInternalServerError, err)
 		return
 	}
-	c.JSON(200, gin.H{
-		"data": data.Products,
-	})
+	transport.Success(c, http.StatusOK, data)
 }
