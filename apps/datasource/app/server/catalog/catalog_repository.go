@@ -44,3 +44,19 @@ func (s *CatalogRepository) ProductList(ctx context.Context) ([]models.Product, 
 
 	return products, nil
 }
+
+func (s *CatalogRepository) ProductGet(ctx context.Context, productId uint64) (*models.Product, error) {
+	q, _, err := goqu.From("catalog.products").Select().
+		Select("id", "title", "description", "short_description", "created_at").
+		Where(goqu.C("id").Eq(productId)).
+		ToSQL()
+	if err != nil {
+		return nil, err
+	}
+	p := models.Product{}
+	row := s.db.QueryRowContext(ctx, q)
+	if err := row.Scan(&p.ID, &p.Title, &p.Description, &p.ShortDescription, &p.CreatedAt); err != nil {
+		return nil, err
+	}
+	return &p, nil
+}

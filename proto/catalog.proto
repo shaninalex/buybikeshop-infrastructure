@@ -20,7 +20,8 @@ service Catalog {
   rpc BrandSave(BrandSaveRequest) returns (BrandSaveReply) {} // create/update
   rpc BrandDelete(BrandDeleteRequest) returns (BrandDeleteReply) {}
 
-  // TODO:
-  // - collections
   // - categories
+  rpc CategoryList(CategoryListRequest) returns (CategoryListReply) {}
+  rpc CategorySave(CategorySaveRequest) returns (CategorySaveReply) {} // create/update
+  rpc CategoryDelete(CategoryDeleteRequest) returns (CategoryDeleteReply) {}
 }

@@ -4,11 +4,6 @@ package catalog;
 
 option go_package = "grpc-buybikeshop-go/catalog";
 
-message Collection {
-  uint64 id = 1;
-  string title = 2;
-}
-
 message Brand {
   uint64 id = 1;
   string title = 2;
@@ -18,7 +13,6 @@ message Category {
   uint64 id = 1;
   string title = 2;
 }
-
 
 message BrandListRequest {}
 
@@ -39,6 +33,29 @@ message BrandDeleteRequest {
 }
 
 message BrandDeleteReply {
+  bool status = 1;
+  string message = 2;
+}
+
+message CategoryListRequest {}
+
+message CategoryListReply {
+  repeated Category brands = 1;
+}
+
+message CategorySaveRequest {
+  Category category = 1;
+}
+
+message CategorySaveReply {
+  Brand catalog = 1;
+}
+
+message CategoryDeleteRequest {
+  uint64 id = 1;
+}
+
+message CategoryDeleteReply {
   bool status = 1;
   string message = 2;
 }
