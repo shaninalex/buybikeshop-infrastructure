@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# TODO:
-# Ideally each server should have own credentials files
-
 set -e
 
 # ---- configuration ----

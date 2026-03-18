@@ -16,8 +16,7 @@ func ReadConfig(path string) *Config {
 	}
 	s.v.AddConfigPath(path)
 	s.v.SetConfigType("yml")
-	s.v.SetConfigName("config.dev")
-	s.v.WatchConfig() //we need it to reload config in containers without restart
+	s.v.SetConfigName("config.dev") // TODO: make it environment dependend ( dev, prod, test... )
 
 	err := s.v.ReadInConfig()
 
