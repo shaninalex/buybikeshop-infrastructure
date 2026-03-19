@@ -7,18 +7,23 @@ requires-python = ">=3.14"
 dependencies = [
     "psycopg2-binary>=2.9.11",
     "punq>=0.7.0",
+    "python-dotenv>=1.2.2",
     "pyyaml>=6.0.3",
     "seeder",
     "sqlalchemy>=2.0.46",
     # declare local dependencies from libs/python
+    "starlette>=0.52.1",
+    "uvicorn>=0.42.0",
 ]
 
 [tool.uv.workspace]
 members = [
     # database seeder. Fill database with mock products, categories, brands etc.
-    "resources/database/seeder"
+    "resources/database/seeder",
     # libs/python - python shared packages
     # "libs/python/*"
+
+    "apps/market", # e-commerce platform
 ]
 
 [tool.uv.sources]

@@ -4,7 +4,10 @@ version = "0.0.0"
 description = "Project market. The online store"
 readme = "README.md"
 dependencies = [
-    "starlette",
+    "uvicorn",
+    "python-dotenv>=1.2.2",
+    "starlette>=0.52.1",
+    "uvicorn>=0.42.0",
 ]
 
 [build-system]
