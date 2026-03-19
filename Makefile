@@ -23,9 +23,6 @@ migrate_down:
 start:
 	docker compose \
 	    -f ./docker/docker-compose.base.yml \
-		-f ./docker/hydra.docker.yml \
-		-f ./docker/kratos.docker.yml \
-		-f ./docker/oathkeeper.yml \
 		-f ./docker/datasource.docker.yml \
 		-f ./docker/warehouse.docker.yml \
 		up -d --build
@@ -33,9 +30,6 @@ start:
 stop:
 	docker compose \
         -f ./docker/docker-compose.base.yml \
-        -f ./docker/hydra.docker.yml \
-        -f ./docker/kratos.docker.yml \
-		-f ./docker/oathkeeper.yml \
 		-f ./docker/datasource.docker.yml \
 		-f ./docker/warehouse.docker.yml \
 		stop
@@ -43,12 +37,17 @@ stop:
 clear:
 	docker compose \
         -f ./docker/docker-compose.base.yml \
-        -f ./docker/hydra.docker.yml \
-        -f ./docker/kratos.docker.yml \
-		-f ./docker/oathkeeper.yml \
 		-f ./docker/datasource.docker.yml \
 		-f ./docker/warehouse.docker.yml \
 		down -v
+
+
+rebuild:
+	docker compose \
+        -f ./docker/docker-compose.base.yml \
+		-f ./docker/datasource.docker.yml \
+		-f ./docker/warehouse.docker.yml \
+		up -d --no-deps --build $(name)
 
 start_db:
 	docker compose \
@@ -65,3 +64,4 @@ generate_go_grpc:
 		--go_out=./gen \
 		--go-grpc_out=./gen \
 		$$(find proto -name '*.proto')
+
