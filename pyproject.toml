@@ -15,6 +15,8 @@ dependencies = [
     # declare local dependencies from libs/python
     "starlette>=0.52.1",
     "uvicorn>=0.42.0",
+    "jinja2>=3.1.6",
+    "market",
 ]
 
 [tool.uv.workspace]
@@ -32,6 +34,7 @@ members = [
 [tool.uv.sources]
 seeder = { workspace = true }
 grpc-buybikeshop-python = { workspace = true }
+market = { workspace = true }
 
 [dependency-groups]
 dev = [
