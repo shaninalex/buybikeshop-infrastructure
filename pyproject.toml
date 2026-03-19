@@ -8,8 +8,8 @@ dependencies = [
     "psycopg2-binary>=2.9.11",
     "punq>=0.7.0",
     "pyyaml>=6.0.3",
+    "seeder",
     "sqlalchemy>=2.0.46",
-
     # declare local dependencies from libs/python
 ]
 
@@ -20,6 +20,9 @@ members = [
     # libs/python - python shared packages
     # "libs/python/*"
 ]
+
+[tool.uv.sources]
+seeder = { workspace = true }
 
 # [tool.uv.sources]
 # core = { workspace = true }

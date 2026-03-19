@@ -16,6 +16,7 @@ dependencies = [
     { name = "psycopg2-binary" },
     { name = "punq" },
     { name = "pyyaml" },
+    { name = "seeder" },
     { name = "sqlalchemy" },
 ]
 
@@ -24,6 +25,7 @@ requires-dist = [
     { name = "psycopg2-binary", specifier = ">=2.9.11" },
     { name = "punq", specifier = ">=0.7.0" },
     { name = "pyyaml", specifier = ">=6.0.3" },
+    { name = "seeder", editable = "resources/database/seeder" },
     { name = "sqlalchemy", specifier = ">=2.0.46" },
 ]
 
