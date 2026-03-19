@@ -88,13 +88,7 @@ message ProductGetReply {
 
 message ProductVariantListRequest {
   // Filter by product
-  uint64 product_id = 1;
-
-  string query = 2;
-
-  // Sorting
-  ProductVariantSortField sort_field = 3;
-  SortDirection sort_direction = 4;
+  repeated uint64 product_ids = 1;
 
   // Pagination
   uint32 limit = 5;

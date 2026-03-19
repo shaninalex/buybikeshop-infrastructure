@@ -60,3 +60,68 @@ func (s *CatalogRepository) ProductGet(ctx context.Context, productId uint64) (*
 	}
 	return &p, nil
 }
+
+func (s *CatalogRepository) ProductVariantList(ctx context.Context, productIds []uint64) ([]models.ProductVariant, error) {
+	q, _, err := goqu.From("catalog.product_variants").Select().
+		Select(
+			"id",
+			"product_id",
+			"inventory_item_id",
+			"title",
+			"description",
+			"sku",
+			"barcode",
+			"created_at",
+			"updated_at",
+		).
+		Where(goqu.C("product_id").In(productIds)).
+		ToSQL()
+	if err != nil {
+		return nil, err
+	}
+	rows, err := s.db.QueryContext(ctx, q)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	productVariants := []models.ProductVariant{}
+	for rows.Next() {
+		var p models.ProductVariant
+		err = rows.Scan(&p.Id, &p.ProductId, &p.InventoryItemId, &p.Title, &p.Description, &p.Sku, &p.Barcode, &p.CreatedAt, &p.UpdatedAt)
+		if err != nil {
+			return nil, err
+		}
+		productVariants = append(productVariants, p)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+	return productVariants, nil
+}
+
+func (s *CatalogRepository) ProductVariantGet(ctx context.Context, productId uint64) (*models.ProductVariant, error) {
+	q, _, err := goqu.From("catalog.product_variants").Select().
+		Select(
+			"id",
+			"product_id",
+			"inventory_item_id",
+			"title",
+			"description",
+			"sku",
+			"barcode",
+			"created_at",
+			"updated_at",
+		).
+		Where(goqu.C("product_id").Eq(productId)).
+		ToSQL()
+	if err != nil {
+		return nil, err
+	}
+	row := s.db.QueryRowContext(ctx, q)
+	var p models.ProductVariant
+	err = row.Scan(&p.Id, &p.ProductId, &p.InventoryItemId, &p.Title, &p.Description, &p.Sku, &p.Barcode, &p.CreatedAt, &p.UpdatedAt)
+	if err != nil {
+		return nil, err
+	}
+	return &p, nil
+}

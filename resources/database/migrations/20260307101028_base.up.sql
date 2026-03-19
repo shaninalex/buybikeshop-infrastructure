@@ -1,10 +1,3 @@
--- collections are set of categories under single logic - "winter sale" for example.
-CREATE TABLE catalog.collections
-(
-    id   SERIAL PRIMARY KEY,
-    title varchar(30) UNIQUE
-);
-
 CREATE TABLE catalog.brands
 (
     id    SERIAL PRIMARY KEY,
@@ -35,7 +28,6 @@ CREATE TABLE catalog.products
 (
     id                SERIAL PRIMARY KEY,
     title             varchar NOT NULL UNIQUE,
-    collection_id     bigint,
     category_id       bigint  NOT NULL,
     brand_id          bigint,
     description       varchar,
@@ -43,7 +35,6 @@ CREATE TABLE catalog.products
     created_at        timestamp DEFAULT now(),
     updated_at        timestamp,
 
-    FOREIGN KEY (collection_id) REFERENCES catalog.collections (id),
     FOREIGN KEY (brand_id) REFERENCES catalog.brands (id),
     FOREIGN KEY (category_id) REFERENCES catalog.categories (id)
 );
@@ -59,7 +50,7 @@ CREATE TABLE catalog.product_variants
 (
     id                SERIAL PRIMARY KEY,
     product_id        bigint        NOT NULL,
-    inventory_item_id bigint UNIQUE NOT NULL,
+    inventory_item_id bigint UNIQUE,
     title             varchar       NULL,
     description       varchar       NULL,
     sku               varchar       NULL UNIQUE,

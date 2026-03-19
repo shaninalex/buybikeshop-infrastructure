@@ -44,9 +44,25 @@ func (c CatalogAdapter) ProductGet(ctx context.Context, request *pb.ProductGetRe
 }
 
 func (c CatalogAdapter) ProductVariantList(ctx context.Context, request *pb.ProductVariantListRequest) (*pb.ProductVariantListReply, error) {
-	return &pb.ProductVariantListReply{}, nil
+	variants, err := c.catalogRepository.ProductVariantList(ctx, request.GetProductIds())
+	if err != nil {
+		return nil, err
+	}
+	pbProductVariants := make([]*pb.ProductVariant, len(variants))
+	for i, p := range variants {
+		pbProductVariants[i] = models.ToProtoProductVariant(&p)
+	}
+	return &pb.ProductVariantListReply{
+		Variants: pbProductVariants,
+	}, nil
 }
 
 func (c CatalogAdapter) ProductVariantGet(ctx context.Context, request *pb.ProductVariantGetRequest) (*pb.ProductVariantGetReply, error) {
-	return &pb.ProductVariantGetReply{}, nil
+	variant, err := c.catalogRepository.ProductVariantGet(ctx, request.GetId())
+	if err != nil {
+		return nil, err
+	}
+	return &pb.ProductVariantGetReply{
+		Variant: models.ToProtoProductVariant(variant),
+	}, nil
 }
