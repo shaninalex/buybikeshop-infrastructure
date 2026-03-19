@@ -219,3 +219,6 @@ gen/*
 !gen/.gitkeep
 
 var
+config.*.yml
+config.yml
+!config.example.yml

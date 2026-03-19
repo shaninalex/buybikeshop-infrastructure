@@ -27,7 +27,7 @@ func (s *ProductController) handleProductVariants(c *gin.Context) {
 	}
 
 	data, err := s.datasource.CatalogClient.ProductVariantList(c.Request.Context(), &pb.ProductVariantListRequest{
-		ProductId: productId,
+		ProductIds: []uint64{productId},
 	})
 	if err != nil {
 		transport.Error(c, http.StatusInternalServerError, err)

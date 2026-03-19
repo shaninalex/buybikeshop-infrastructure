@@ -1,11 +1,11 @@
 port: 8001
 
 # that user should be able to read only warehouse schema
-database: "postgresql+psycopg2://postgres:postgres@localhost:5432/postgres"
+database: "postgresql+psycopg2://postgres:postgres@postgres:5432/postgres"
 
 kratos:
-  url_browser: "http://localhost:4433"
-  url_admin: "http://localhost:4434"
+  url_browser: "http://kratos:4433"
+  url_admin: "http://kratos:4434"
 
 oauth:
   client_id: "acb13030-4f72-4276-af68-1c84ba3c664f"
@@ -21,4 +21,4 @@ creds:
   ca_pem: "creds/ca.pem"
 
 grpc:
-    host: "localhost:50051"
+    host: "datasource:50051"

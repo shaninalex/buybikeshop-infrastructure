@@ -2,13 +2,9 @@ server:
     port: 50051
 
 database:
-    host: localhost
+    host: postgres
     port: 5432
     user: postgres
     password: postgres
     dbname: postgres
     sslmode: disable
-
-creds:
-    server_pem: "certs/server.pem"
-    server_key_pem: "certs/server_key.pem"

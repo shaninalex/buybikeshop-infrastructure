@@ -14,10 +14,7 @@ func ReadConfig(path string) *Config {
 	s := &Config{
 		v: viper.New(),
 	}
-	s.v.AddConfigPath(path)
-	s.v.SetConfigType("yml")
-	s.v.SetConfigName("config.dev") // TODO: make it environment dependend ( dev, prod, test... )
-
+	s.v.SetConfigFile(path)
 	err := s.v.ReadInConfig()
 
 	if err != nil { // Handle errors reading the config file

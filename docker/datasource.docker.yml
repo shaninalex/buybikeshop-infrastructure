@@ -1,0 +1,24 @@
+networks:
+  datasource-net:
+    internal: true
+
+services:
+  postgres:
+    networks:
+      - datasource-net
+
+  datasource:
+    build:
+      context: ../
+      dockerfile: apps/datasource/Dockerfile
+    volumes:
+      - type: bind
+        source: ../apps/datasource/config/config.yml
+        target: /root/config.yml
+    command: ["./datasource", "serve", "--config=/root/config.yml"]
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - datasource-net

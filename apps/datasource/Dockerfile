@@ -4,7 +4,7 @@ WORKDIR /build
 COPY . ./
 
 RUN go mod tidy
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o datasource app/main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o datasource apps/datasource/app/main.go
 
 RUN chmod +x datasource
 

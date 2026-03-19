@@ -26,6 +26,8 @@ start:
 		-f ./docker/hydra.docker.yml \
 		-f ./docker/kratos.docker.yml \
 		-f ./docker/oathkeeper.yml \
+		-f ./docker/datasource.docker.yml \
+		-f ./docker/warehouse.docker.yml \
 		up -d --build
 
 stop:
@@ -34,6 +36,8 @@ stop:
         -f ./docker/hydra.docker.yml \
         -f ./docker/kratos.docker.yml \
 		-f ./docker/oathkeeper.yml \
+		-f ./docker/datasource.docker.yml \
+		-f ./docker/warehouse.docker.yml \
 		stop
 
 clear:
@@ -42,6 +46,8 @@ clear:
         -f ./docker/hydra.docker.yml \
         -f ./docker/kratos.docker.yml \
 		-f ./docker/oathkeeper.yml \
+		-f ./docker/datasource.docker.yml \
+		-f ./docker/warehouse.docker.yml \
 		down -v
 
 start_db:
