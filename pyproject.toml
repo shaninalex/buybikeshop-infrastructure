@@ -10,6 +10,7 @@ dependencies = [
     "python-dotenv>=1.2.2",
     "pyyaml>=6.0.3",
     "seeder",
+    "grpc_buybikeshop_python",
     "sqlalchemy>=2.0.46",
     # declare local dependencies from libs/python
     "starlette>=0.52.1",
@@ -24,10 +25,20 @@ members = [
     # "libs/python/*"
 
     "apps/market", # e-commerce platform
+
+    "gen/grpc_buybikeshop_python", # generated gRPC stubs
 ]
 
 [tool.uv.sources]
 seeder = { workspace = true }
+grpc-buybikeshop-python = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "grpcio>=1.78.0",
+    "grpcio-tools>=1.78.0",
+    "protobuf>=6.33.6",
+]
 
 # [tool.uv.sources]
 # core = { workspace = true }

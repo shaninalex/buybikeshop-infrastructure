@@ -65,3 +65,10 @@ generate_go_grpc:
 		--go-grpc_out=./gen \
 		$$(find proto -name '*.proto')
 
+generate_python_grpc:
+	uv run python -m grpc_tools.protoc -I./proto \
+		--python_out=./gen/grpc_buybikeshop_python \
+		--pyi_out=./gen/grpc_buybikeshop_python \
+		--grpc_python_out=./gen/grpc_buybikeshop_python \
+		$$(find proto -name '*.proto')
+	find ./gen/grpc_buybikeshop_python -type d -exec touch {}/__init__.py \;
