@@ -10,7 +10,7 @@ import (
 type ProductVariant struct {
 	Id              uint64
 	ProductId       uint64
-	InventoryItemId uint64
+	InventoryItemId *uint64
 	Title           string
 	Description     string
 	Sku             string
@@ -18,11 +18,11 @@ type ProductVariant struct {
 	Price           float32
 	Currency        string
 	CreatedAt       time.Time
-	UpdatedAt       time.Time
+	UpdatedAt       *time.Time
 }
 
 func ToProtoProductVariant(p *ProductVariant) *pb.ProductVariant {
-	return &pb.ProductVariant{
+	variant := &pb.ProductVariant{
 		Id:              p.Id,
 		ProductId:       p.ProductId,
 		InventoryItemId: p.InventoryItemId,
@@ -32,8 +32,10 @@ func ToProtoProductVariant(p *ProductVariant) *pb.ProductVariant {
 		Barcode:         p.Barcode,
 		Price:           p.Price,
 		Currency:        p.Currency,
-
-		UpdatedAt: timestamppb.New(p.UpdatedAt),
-		CreatedAt: timestamppb.New(p.CreatedAt),
+		CreatedAt:       timestamppb.New(p.CreatedAt),
 	}
+	if p.UpdatedAt != nil {
+		variant.UpdatedAt = timestamppb.New(*p.UpdatedAt)
+	}
+	return variant
 }

@@ -27,7 +27,6 @@ name = "buybikeshop"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "psycopg2-binary" },
     { name = "python-dotenv" },
 ]
 
@@ -39,10 +38,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [
-    { name = "psycopg2-binary", specifier = ">=2.9.11" },
-    { name = "python-dotenv", specifier = ">=1.2.2" },
-]
+requires-dist = [{ name = "python-dotenv", specifier = ">=1.2.2" }]
 
 [package.metadata.requires-dev]
 dev = [
@@ -285,10 +281,14 @@ version = "0.0.0"
 source = { editable = "resources/database/seeder" }
 dependencies = [
     { name = "faker" },
+    { name = "psycopg2-binary" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "faker", specifier = ">=40.4.0" }]
+requires-dist = [
+    { name = "faker", specifier = ">=40.4.0" },
+    { name = "psycopg2-binary", specifier = ">=2.9.11" },
+]
 
 [[package]]
 name = "setuptools"
