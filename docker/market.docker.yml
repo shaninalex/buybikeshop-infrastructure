@@ -12,9 +12,9 @@ services:
       APP_MARKET_WEB_TEMPLATES_PATH: "templates"
       APP_MARKET_WEB_STATIC_PATH: "static"
     restart: unless-stopped
-#    depends_on:
-#      datasource:
-#        condition: service_started
+    depends_on:
+      datasource:
+        condition: service_started
     networks:
       - intranet
       - datasource-net
