@@ -11,9 +11,6 @@ dependencies = [
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["catalog*"]
-
 [tool.setuptools]
+packages = ["catalog"]
 py-modules = ["catalog_pb2", "catalog_pb2_grpc"]

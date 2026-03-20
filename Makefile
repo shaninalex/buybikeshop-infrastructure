@@ -25,6 +25,7 @@ start:
 	    -f ./docker/docker-compose.base.yml \
 		-f ./docker/datasource.docker.yml \
 		-f ./docker/warehouse.docker.yml \
+		-f ./docker/market.docker.yml \
 		up -d --build
 
 stop:
@@ -32,6 +33,7 @@ stop:
         -f ./docker/docker-compose.base.yml \
 		-f ./docker/datasource.docker.yml \
 		-f ./docker/warehouse.docker.yml \
+		-f ./docker/market.docker.yml \
 		stop
 
 clear:
@@ -39,6 +41,7 @@ clear:
         -f ./docker/docker-compose.base.yml \
 		-f ./docker/datasource.docker.yml \
 		-f ./docker/warehouse.docker.yml \
+		-f ./docker/market.docker.yml \
 		down -v
 
 
@@ -47,6 +50,7 @@ rebuild:
         -f ./docker/docker-compose.base.yml \
 		-f ./docker/datasource.docker.yml \
 		-f ./docker/warehouse.docker.yml \
+		-f ./docker/market.docker.yml \
 		up -d --no-deps --build $(name)
 
 start_db:

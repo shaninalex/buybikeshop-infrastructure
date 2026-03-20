@@ -1,0 +1,20 @@
+services:
+  market:
+    build:
+      context: ../
+      dockerfile: apps/market/Dockerfile
+    ports:
+      - "8004:8004"
+    env_file:
+      - ../apps/market/.env
+    environment:
+      APP_MARKET_DATASOURCE: "datasource:50051"
+      APP_MARKET_WEB_TEMPLATES_PATH: "templates"
+      APP_MARKET_WEB_STATIC_PATH: "static"
+    restart: unless-stopped
+#    depends_on:
+#      datasource:
+#        condition: service_started
+    networks:
+      - intranet
+      - datasource-net

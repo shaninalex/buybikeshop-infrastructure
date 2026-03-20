@@ -27,5 +27,3 @@ values (1, 'product A (vA)', 'description', 'S9SD0-SDA-94K90', '23MSD20934MA', 1
        (2, 'product B (vC)', 'description', 'DIJF8-VDB-94K92', '8DS8VLPO9KMC', 12.00),
        (2, 'product B (vD)', 'description', 'DIJF8-VDB-94K93', '8DS8VLPO9KMD', 12.00);
 
-select *
-from catalog.product_variants;

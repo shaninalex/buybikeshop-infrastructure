@@ -1,7 +1,3 @@
-networks:
-  datasource-net:
-    internal: true
-
 services:
   postgres:
     networks:
