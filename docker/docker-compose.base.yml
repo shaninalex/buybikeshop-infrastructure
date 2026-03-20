@@ -20,10 +20,32 @@ services:
       - ../resources/database/scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
       - postgres:/var/lib/postgresql/data/
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres" ]
       interval: 5s
       timeout: 5s
       retries: 5
     networks:
       - intranet
       - datasource-net
+
+  migrate-main-schema:
+    build:
+      context: ../resources/database
+      dockerfile: Dockerfile
+    command: ["/root/migrate.sh"]
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+    networks:
+      - intranet
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # If you need dependencies from other services migrations ( like Kratos for example ).
+    # We need to wait them before execute this one.
+    # depends_on:
+    #   kratos-migrate:
+    #     condition: service_completed_successfully
