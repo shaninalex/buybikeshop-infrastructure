@@ -6,8 +6,7 @@ volumes:
 networks:
   intranet:
   datasource-net:
-#  datasource-net:
-#    internal: true
+    internal: true
 
 services:
   postgres:
@@ -27,3 +26,4 @@ services:
       retries: 5
     networks:
       - intranet
+      - datasource-net

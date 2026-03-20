@@ -1,8 +1,4 @@
 services:
-  postgres:
-    networks:
-      - datasource-net
-
   datasource:
     build:
       context: ../
