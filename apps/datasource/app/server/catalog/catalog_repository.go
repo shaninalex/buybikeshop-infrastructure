@@ -46,7 +46,7 @@ func (s *CatalogRepository) ProductList(ctx context.Context) ([]models.Product, 
 }
 
 func (s *CatalogRepository) ProductGet(ctx context.Context, productId uint64) (*models.Product, error) {
-	q, _, err := goqu.From("catalog.products").Select().
+	q, _, err := goqu.From("catalog.products").
 		Select("id", "title", "description", "short_description", "created_at").
 		Where(goqu.C("id").Eq(productId)).
 		ToSQL()
@@ -58,6 +58,11 @@ func (s *CatalogRepository) ProductGet(ctx context.Context, productId uint64) (*
 	if err := row.Scan(&p.ID, &p.Title, &p.Description, &p.ShortDescription, &p.CreatedAt); err != nil {
 		return nil, err
 	}
+	variants, err := s.ProductVariantList(ctx, []uint64{productId})
+	if err != nil {
+		return nil, err
+	}
+	p.Variants = variants
 	return &p, nil
 }
 
@@ -71,6 +76,8 @@ func (s *CatalogRepository) ProductVariantList(ctx context.Context, productIds [
 			"description",
 			"sku",
 			"barcode",
+			"price",
+			"currency",
 			"created_at",
 			"updated_at",
 		).
@@ -87,7 +94,7 @@ func (s *CatalogRepository) ProductVariantList(ctx context.Context, productIds [
 	productVariants := []models.ProductVariant{}
 	for rows.Next() {
 		var p models.ProductVariant
-		err = rows.Scan(&p.Id, &p.ProductId, &p.InventoryItemId, &p.Title, &p.Description, &p.Sku, &p.Barcode, &p.CreatedAt, &p.UpdatedAt)
+		err = rows.Scan(&p.Id, &p.ProductId, &p.InventoryItemId, &p.Title, &p.Description, &p.Sku, &p.Barcode, &p.Price, &p.Currency, &p.CreatedAt, &p.UpdatedAt)
 		if err != nil {
 			return nil, err
 		}

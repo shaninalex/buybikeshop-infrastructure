@@ -57,8 +57,10 @@ message Product {
   uint64 category_id = 4;
   uint64 brand_id = 5;
 
-  google.protobuf.Timestamp created_at = 8;
-  google.protobuf.Timestamp updated_at = 9;
+  repeated ProductVariant variants = 8;
+
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
 }
 
 message ProductVariant {
@@ -69,9 +71,10 @@ message ProductVariant {
   string description = 5;
   string sku = 6;
   string barcode = 7;
-
-  google.protobuf.Timestamp created_at = 8;
-  google.protobuf.Timestamp updated_at = 9;
+  float price = 8;
+  string currency = 9;
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
 }
 
 // ── ProductGet ──
