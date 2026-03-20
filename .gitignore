@@ -215,8 +215,9 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-gen/*
-!gen/.gitkeep
+gen/grpc-buybikeshop-go/*
+gen/grpc_buybikeshop_python/*
+!gen/grpc_buybikeshop_python/pyproject.toml
 
 var
 config.*.yml

@@ -23,32 +23,35 @@ migrate_down:
 start:
 	docker compose \
 	    -f ./docker/docker-compose.base.yml \
-		-f ./docker/hydra.docker.yml \
-		-f ./docker/kratos.docker.yml \
-		-f ./docker/oathkeeper.yml \
 		-f ./docker/datasource.docker.yml \
 		-f ./docker/warehouse.docker.yml \
+		-f ./docker/market.docker.yml \
 		up -d --build
 
 stop:
 	docker compose \
         -f ./docker/docker-compose.base.yml \
-        -f ./docker/hydra.docker.yml \
-        -f ./docker/kratos.docker.yml \
-		-f ./docker/oathkeeper.yml \
 		-f ./docker/datasource.docker.yml \
 		-f ./docker/warehouse.docker.yml \
+		-f ./docker/market.docker.yml \
 		stop
 
 clear:
 	docker compose \
         -f ./docker/docker-compose.base.yml \
-        -f ./docker/hydra.docker.yml \
-        -f ./docker/kratos.docker.yml \
-		-f ./docker/oathkeeper.yml \
 		-f ./docker/datasource.docker.yml \
 		-f ./docker/warehouse.docker.yml \
+		-f ./docker/market.docker.yml \
 		down -v
+
+
+rebuild:
+	docker compose \
+        -f ./docker/docker-compose.base.yml \
+		-f ./docker/datasource.docker.yml \
+		-f ./docker/warehouse.docker.yml \
+		-f ./docker/market.docker.yml \
+		up -d --no-deps --build $(name)
 
 start_db:
 	docker compose \
@@ -65,3 +68,11 @@ generate_go_grpc:
 		--go_out=./gen \
 		--go-grpc_out=./gen \
 		$$(find proto -name '*.proto')
+
+generate_python_grpc:
+	uv run python -m grpc_tools.protoc -I./proto \
+		--python_out=./gen/grpc_buybikeshop_python \
+		--pyi_out=./gen/grpc_buybikeshop_python \
+		--grpc_python_out=./gen/grpc_buybikeshop_python \
+		$$(find proto -name '*.proto')
+	find ./gen/grpc_buybikeshop_python -type d -exec touch {}/__init__.py \;

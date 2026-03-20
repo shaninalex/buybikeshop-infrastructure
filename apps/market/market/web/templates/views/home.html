@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-4">
+            <div class="card">
+                <a href="{{ url_for('product', product_id=product.id) }}">
+                    <img alt="{{ product.title }}" class="card-img-top" src="{{ url_for('static', path='images/2023-Author-Aura-XR2-768x448-2150028769.jpg') }}">
+                </a>
+                <div class="card-body">
+                    <a class="card-title fw-bold" href="{{ url_for('product', product_id=product.id) }}">{{ product.title }}</a>
+                    <p class="mb-0">{{ product.short_description }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

@@ -5,6 +5,9 @@ volumes:
 
 networks:
   intranet:
+  datasource-net:
+#  datasource-net:
+#    internal: true
 
 services:
   postgres:

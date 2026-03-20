@@ -14,5 +14,6 @@ func (s *ProductController) handleProducts(c *gin.Context) {
 		transport.Error(c, http.StatusInternalServerError, err)
 		return
 	}
-	transport.Success(c, http.StatusOK, data)
+
+	transport.Success(c, data)
 }
