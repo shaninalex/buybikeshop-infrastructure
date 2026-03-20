@@ -15,6 +15,8 @@ type ProductVariant struct {
 	Description     string
 	Sku             string
 	Barcode         string
+	Price           float32
+	Currency        string
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
 }
@@ -28,7 +30,10 @@ func ToProtoProductVariant(p *ProductVariant) *pb.ProductVariant {
 		Description:     p.Description,
 		Sku:             p.Sku,
 		Barcode:         p.Barcode,
-		UpdatedAt:       timestamppb.New(p.UpdatedAt),
-		CreatedAt:       timestamppb.New(p.CreatedAt),
+		Price:           p.Price,
+		Currency:        p.Currency,
+
+		UpdatedAt: timestamppb.New(p.UpdatedAt),
+		CreatedAt: timestamppb.New(p.CreatedAt),
 	}
 }
