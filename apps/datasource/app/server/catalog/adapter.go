@@ -1,0 +1,107 @@
+package catalog
+
+import (
+	"buybikeshop/apps/datasource/app/models"
+	pb "buybikeshop/gen/grpc-buybikeshop-go/catalog"
+	"context"
+)
+
+type Adapter struct {
+	repository *Repository
+}
+
+func ProvideAdapter(catalogRepository *Repository) *Adapter {
+	return &Adapter{
+		repository: catalogRepository,
+	}
+}
+
+func (c Adapter) ProductList(ctx context.Context, request *pb.ProductListRequest) (*pb.ProductListReply, error) {
+	// TODO: process request parameters
+	products, err := c.repository.ProductList(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	pbProducts := make([]*pb.Product, len(products))
+	for i, p := range products {
+		pbProducts[i] = models.ToProtoProduct(&p)
+	}
+
+	return &pb.ProductListReply{
+		Products: pbProducts,
+	}, nil
+}
+
+func (c Adapter) ProductGet(ctx context.Context, request *pb.ProductGetRequest) (*pb.ProductGetReply, error) {
+	p, err := c.repository.ProductGet(ctx, request.GetId())
+	if err != nil {
+		return nil, err
+	}
+	return &pb.ProductGetReply{
+		Product: models.ToProtoProduct(p),
+	}, nil
+}
+
+func (c Adapter) ProductVariantList(ctx context.Context, request *pb.ProductVariantListRequest) (*pb.ProductVariantListReply, error) {
+	variants, err := c.repository.ProductVariantList(ctx, request.GetProductIds())
+	if err != nil {
+		return nil, err
+	}
+	pbProductVariants := make([]*pb.ProductVariant, len(variants))
+	for i, p := range variants {
+		pbProductVariants[i] = models.ToProtoProductVariant(&p)
+	}
+	return &pb.ProductVariantListReply{
+		Variants: pbProductVariants,
+	}, nil
+}
+
+func (c Adapter) ProductVariantGet(ctx context.Context, request *pb.ProductVariantGetRequest) (*pb.ProductVariantGetReply, error) {
+	variant, err := c.repository.ProductVariantGet(ctx, request.GetId())
+	if err != nil {
+		return nil, err
+	}
+	return &pb.ProductVariantGetReply{
+		Variant: models.ToProtoProductVariant(variant),
+	}, nil
+}
+
+func (c Adapter) BrandList(ctx context.Context, request *pb.BrandListRequest) (*pb.BrandListReply, error) {
+	brands, err := c.repository.BrandList(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.BrandListReply{
+		Brands: models.ToProtoBrands(brands),
+	}, nil
+}
+
+func (c Adapter) BrandSave(ctx context.Context, request *pb.BrandSaveRequest) (*pb.BrandSaveReply, error) {
+	brand, err := c.repository.BrandSave(ctx, models.Brand{
+		ID:    request.Brand.Id,
+		Title: request.Brand.Title,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &pb.BrandSaveReply{
+		Brand: models.ToProtoBrand(*brand),
+	}, nil
+}
+
+func (c Adapter) BrandDelete(ctx context.Context, request *pb.BrandDeleteRequest) (*pb.BrandDeleteReply, error) {
+	return nil, nil
+}
+
+func (c Adapter) CategoryList(ctx context.Context, request *pb.CategoryListRequest) (*pb.CategoryListReply, error) {
+	return nil, nil
+}
+
+func (c Adapter) CategorySave(ctx context.Context, request *pb.CategorySaveRequest) (*pb.CategorySaveReply, error) {
+	return nil, nil
+}
+
+func (c Adapter) CategoryDelete(ctx context.Context, request *pb.CategoryDeleteRequest) (*pb.CategoryDeleteReply, error) {
+	return nil, nil
+}

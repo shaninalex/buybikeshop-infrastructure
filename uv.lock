@@ -278,7 +278,7 @@ wheels = [
 [[package]]
 name = "seeder"
 version = "0.0.0"
-source = { editable = "resources/database/seeder" }
+source = { editable = "database/seeder" }
 dependencies = [
     { name = "faker" },
     { name = "psycopg2-binary" },

@@ -15,7 +15,7 @@ type Registry struct {
 type ApiDeps struct {
 	dig.In
 
-	CatalogServer *catalog.CatalogServer
+	CatalogServer *catalog.Server
 }
 
 func NewRegistry(deps ApiDeps, s *grpc.Server) *Registry {
