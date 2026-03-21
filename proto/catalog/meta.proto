@@ -49,7 +49,7 @@ message CategorySaveRequest {
 }
 
 message CategorySaveReply {
-  Brand catalog = 1;
+  Category category = 1;
 }
 
 message CategoryDeleteRequest {

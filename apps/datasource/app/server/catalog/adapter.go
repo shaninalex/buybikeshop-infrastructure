@@ -91,17 +91,53 @@ func (c Adapter) BrandSave(ctx context.Context, request *pb.BrandSaveRequest) (*
 }
 
 func (c Adapter) BrandDelete(ctx context.Context, request *pb.BrandDeleteRequest) (*pb.BrandDeleteReply, error) {
-	return nil, nil
+	err := c.repository.BrandDelete(ctx, request.GetId())
+	if err != nil {
+		return &pb.BrandDeleteReply{
+			Status:  false,
+			Message: err.Error(),
+		}, err
+	}
+	return &pb.BrandDeleteReply{
+		Status:  true,
+		Message: "Success",
+	}, nil
 }
 
 func (c Adapter) CategoryList(ctx context.Context, request *pb.CategoryListRequest) (*pb.CategoryListReply, error) {
-	return nil, nil
+	categories, err := c.repository.CategoryList(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.CategoryListReply{
+		Brands: models.ToProtoCatalogs(categories),
+	}, nil
 }
 
 func (c Adapter) CategorySave(ctx context.Context, request *pb.CategorySaveRequest) (*pb.CategorySaveReply, error) {
-	return nil, nil
+	category, err := c.repository.CategorySave(ctx, models.Category{
+		ID:       request.Category.Id,
+		Title:    request.Category.Title,
+		ParentId: request.Category.ParentId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &pb.CategorySaveReply{
+		Category: models.ToProtoCategory(category),
+	}, nil
 }
 
 func (c Adapter) CategoryDelete(ctx context.Context, request *pb.CategoryDeleteRequest) (*pb.CategoryDeleteReply, error) {
-	return nil, nil
+	err := c.repository.CategoryDelete(ctx, request.GetId())
+	if err != nil {
+		return &pb.CategoryDeleteReply{
+			Status:  false,
+			Message: err.Error(),
+		}, err
+	}
+	return &pb.CategoryDeleteReply{
+		Status:  true,
+		Message: "Success",
+	}, nil
 }

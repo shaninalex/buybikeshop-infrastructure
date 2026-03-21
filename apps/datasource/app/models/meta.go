@@ -3,14 +3,14 @@ package models
 import pb "buybikeshop/gen/grpc-buybikeshop-go/catalog"
 
 type Brand struct {
-	ID    uint64
-	Title string
+	ID    uint64 `db:"id"`
+	Title string `db:"title"`
 }
 
 type Category struct {
-	ID       uint64
-	Title    string
-	ParentId uint64
+	ID       uint64  `db:"id"`
+	Title    string  `db:"title"`
+	ParentId *uint64 `db:"parent_id"`
 }
 
 func ToProtoBrand(p Brand) *pb.Brand {
@@ -32,6 +32,14 @@ func ToProtoCategory(p *Category) *pb.Category {
 	return &pb.Category{
 		Id:       p.ID,
 		Title:    p.Title,
-		ParentId: &p.ParentId,
+		ParentId: p.ParentId,
 	}
+}
+
+func ToProtoCatalogs(p []Category) []*pb.Category {
+	brands := make([]*pb.Category, len(p))
+	for _, b := range p {
+		brands = append(brands, ToProtoCategory(&b))
+	}
+	return brands
 }
