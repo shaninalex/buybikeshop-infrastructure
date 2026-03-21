@@ -16,6 +16,25 @@ func ProvideAdapter(catalogRepository *Repository) *Adapter {
 	}
 }
 
+func (c Adapter) ProductSave(ctx context.Context, request *pb.ProductSaveRequest) (*pb.ProductSaveReply, error) {
+	p, err := c.repository.ProductSave(ctx, models.Product{
+		ID:               request.Product.Id,
+		Title:            request.Product.Title,
+		CategoryId:       request.Product.CategoryId,
+		BrandId:          request.Product.BrandId,
+		Description:      request.Product.Description,
+		ShortDescription: request.Product.ShortDescription,
+		//Variants:         request.Product.Variants,
+		CreatedAt: request.Product.CreatedAt.AsTime(),
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &pb.ProductSaveReply{
+		Product: models.ToProtoProduct(p),
+	}, nil
+}
+
 func (c Adapter) ProductList(ctx context.Context, request *pb.ProductListRequest) (*pb.ProductListReply, error) {
 	// TODO: process request parameters
 	products, err := c.repository.ProductList(ctx)
@@ -104,6 +123,7 @@ func (c Adapter) BrandDelete(ctx context.Context, request *pb.BrandDeleteRequest
 	}, nil
 }
 
+//goland:noinspection GoUnusedParameter
 func (c Adapter) CategoryList(ctx context.Context, request *pb.CategoryListRequest) (*pb.CategoryListReply, error) {
 	categories, err := c.repository.CategoryList(ctx)
 	if err != nil {

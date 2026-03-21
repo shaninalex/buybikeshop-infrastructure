@@ -76,6 +76,16 @@ message ProductVariant {
   google.protobuf.Timestamp updated_at = 11;
 }
 
+message ProductSaveRequest {
+    Product product = 1;
+}
+
+message ProductSaveReply {
+    Product product = 1;
+    bool status = 2;
+    string message = 3;
+}
+
 // ── ProductGet ──
 
 message ProductGetRequest {

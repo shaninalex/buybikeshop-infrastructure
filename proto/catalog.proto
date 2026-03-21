@@ -12,6 +12,7 @@ import "catalog/meta.proto";
 service Catalog {
   rpc ProductList (ProductListRequest) returns (ProductListReply) {}
   rpc ProductGet (ProductGetRequest) returns (ProductGetReply) {}
+  rpc ProductSave (ProductSaveRequest) returns (ProductSaveReply) {}
   rpc ProductVariantList (ProductVariantListRequest) returns (ProductVariantListReply) {}
   rpc ProductVariantGet (ProductVariantGetRequest) returns (ProductVariantGetReply) {}
 
