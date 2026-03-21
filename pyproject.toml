@@ -11,7 +11,7 @@ dependencies = [
 [tool.uv.workspace]
 members = [
     # database seeder. Fill database with mock products, categories, brands etc.
-    "resources/database/seeder",
+    "database/seeder",
 
     # e-commerce platform
     "apps/market",
