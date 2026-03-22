@@ -50,7 +50,7 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 			// init api module
 			_ = api.Module(c)
 
-			if err := c.Invoke(func(router *gin.Engine, config *config.Config, ctx context.Context) {
+			if err = c.Invoke(func(router *gin.Engine, config *config.Config, ctx context.Context) {
 				srv := &http.Server{
 					Addr:    fmt.Sprintf(":%d", 8001),
 					Handler: router,

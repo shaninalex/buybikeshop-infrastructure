@@ -4,6 +4,8 @@ import (
 	"buybikeshop/apps/warehouse"
 	"buybikeshop/apps/warehouse/app/api/controllers/inventory"
 	"buybikeshop/apps/warehouse/app/api/controllers/product"
+	"buybikeshop/apps/warehouse/app/api/middlewares"
+	"buybikeshop/libs/go/config"
 	"net/http"
 
 	ory "github.com/ory/kratos-client-go"
@@ -38,6 +40,7 @@ type ApiDeps struct {
 	KratosAPIClient     *ory.APIClient
 	InventoryController *inventory.InventoryController
 	ProductController   *product.ProductController
+	Config              *config.Config
 }
 
 func ProvideAPI(deps ApiDeps) *gin.Engine {
@@ -46,7 +49,7 @@ func ProvideAPI(deps ApiDeps) *gin.Engine {
 	router := ProvideRouter()
 	router.Use(gin.Recovery())
 
-	//router.Use(middlewares.AuthMiddleware(deps.KratosAPIClient))
+	router.Use(middlewares.AuthMiddleware(deps.KratosAPIClient, deps.Config))
 
 	v1 := router.Group("/api/v1/warehouse")
 	deps.InventoryController.Register(v1)
