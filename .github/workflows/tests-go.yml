@@ -1,0 +1,54 @@
+name: Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - github-action-for-go-tests
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
+
+      - name: Start test services
+        run: |
+          docker compose -f ./tdata/docker-compose.test.yml up -d --build
+
+      - name: Wait for migrations to finish
+        run: |
+          echo "Waiting for migrations to complete..."
+
+          CONTAINER=$(docker compose -f ./tdata/docker-compose.test.yml ps -q migrate-main-schema)
+
+          # Wait until container exits
+          while [ "$(docker inspect -f '{{.State.Running}}' $CONTAINER)" = "true" ]; do
+            sleep 2
+          done
+
+          # Check exit code
+          EXIT_CODE=$(docker inspect -f '{{.State.ExitCode}}' $CONTAINER)
+
+          if [ "$EXIT_CODE" != "0" ]; then
+            echo "Migrations failed!"
+            docker logs $CONTAINER
+            exit 1
+          fi
+
+          echo "Migrations completed successfully!"
+
+      - name: Run tests
+        run: go test ./... -v
+
+      - name: Shutdown services
+        if: always()
+        run: docker compose -f ./tdata/docker-compose.test.yml down -v

@@ -26,6 +26,7 @@ start:
 		-f ./docker/datasource.docker.yml \
 		-f ./docker/warehouse.docker.yml \
 		-f ./docker/market.docker.yml \
+		-f ./docker/kratos.docker.yml \
 		up -d --build
 
 stop:
@@ -34,6 +35,7 @@ stop:
 		-f ./docker/datasource.docker.yml \
 		-f ./docker/warehouse.docker.yml \
 		-f ./docker/market.docker.yml \
+		-f ./docker/kratos.docker.yml \
 		stop
 
 clear:
@@ -42,6 +44,7 @@ clear:
 		-f ./docker/datasource.docker.yml \
 		-f ./docker/warehouse.docker.yml \
 		-f ./docker/market.docker.yml \
+		-f ./docker/kratos.docker.yml \
 		down -v
 
 
@@ -51,6 +54,7 @@ rebuild:
 		-f ./docker/datasource.docker.yml \
 		-f ./docker/warehouse.docker.yml \
 		-f ./docker/market.docker.yml \
+		-f ./docker/kratos.docker.yml \
 		up -d --no-deps --build $(name)
 
 start_db:
@@ -78,3 +82,8 @@ generate_python_grpc:
 	find ./gen/grpc_buybikeshop_python -type d -exec touch {}/__init__.py \;
 
 generate_grpc: generate_go_grpc generate_python_grpc
+
+start_test_db:
+	docker compose \
+		-f ./tdata/docker-compose.test.yml \
+		up -d --build
