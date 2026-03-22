@@ -31,7 +31,7 @@ jobs:
           echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
 
       - name: Generate gRPC code
-        run: make generate_go_grpc
+        run: ./run.sh generate_go_grpc
 
       - name: Start test services
         run: |

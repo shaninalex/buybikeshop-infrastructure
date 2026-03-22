@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"buybikeshop/libs/go/config"
 	"net/http"
 	"time"
 
@@ -8,7 +9,7 @@ import (
 	ory "github.com/ory/kratos-client-go"
 )
 
-func AuthMiddleware(kratos *ory.APIClient) func(c *gin.Context) {
+func AuthMiddleware(kratos *ory.APIClient, cnf *config.Config) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		session, _, err := kratos.FrontendAPI.ToSession(c.Request.Context()).Cookie(c.GetHeader("Cookie")).Execute()
 		if err != nil {
