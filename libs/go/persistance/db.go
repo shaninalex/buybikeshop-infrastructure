@@ -18,18 +18,17 @@ func ProvideDB(config *config.Config) *sql.DB {
 		config.String("database.dbname"),
 		config.String("database.sslmode"),
 	)
-	return connect(connectionString)
+	return Connect(connectionString)
 }
 
-func connect(connectionString string) *sql.DB {
+func Connect(connectionString string) *sql.DB {
 	db, err := sql.Open("postgres", connectionString)
 	if err != nil {
 		panic("failed to connect database")
 	}
 
-	if err := db.Ping(); err != nil {
+	if err = db.Ping(); err != nil {
 		panic("failed to ping database: " + err.Error())
 	}
-
 	return db
 }

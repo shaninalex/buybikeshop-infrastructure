@@ -40,99 +40,24 @@ CREATE TABLE catalog.products
 );
 CREATE INDEX products_title_idx ON catalog.products (title);
 
-CREATE TABLE inventory.inventory_items
-(
-    id  SERIAL PRIMARY KEY,
-    sku varchar UNIQUE
-);
 
 CREATE TABLE catalog.product_variants
 (
-    id                SERIAL PRIMARY KEY,
-    product_id        bigint        NOT NULL,
-    inventory_item_id bigint UNIQUE,
-    title             varchar       NULL,
-    description       varchar       NULL,
-    sku               varchar       NULL UNIQUE,
-    barcode           varchar       NULL UNIQUE,
-    created_at        timestamp DEFAULT now(),
-    updated_at        timestamp,
+    id          SERIAL PRIMARY KEY,
+    product_id  bigint  NOT NULL,
+    title       varchar NOT NULL,
+    description varchar NULL,
+    sku         varchar NULL UNIQUE,
+    barcode     varchar NULL UNIQUE,
+    created_at  timestamp DEFAULT now(),
+    updated_at  timestamp,
 
     FOREIGN KEY (product_id)
         REFERENCES catalog.products (id)
-        ON DELETE CASCADE,
-
-    FOREIGN KEY (inventory_item_id)
-        REFERENCES inventory.inventory_items (id)
         ON DELETE CASCADE
 );
 
 CREATE INDEX catalog_products_variants_title_idx ON catalog.product_variants (title);
-
-CREATE TABLE catalog.attributes
-(
-    id    SERIAL PRIMARY KEY,
-    title varchar NOT NULL UNIQUE
-);
-
-CREATE TABLE catalog.attributes_values
-(
-    id           SERIAL PRIMARY KEY,
-    attribute_id bigint  NOT NULL,
-    value        varchar NOT NULL,
-
-    CONSTRAINT unique_attribute_value UNIQUE (attribute_id, value),
-    FOREIGN KEY (attribute_id)
-        REFERENCES catalog.attributes (id)
-        ON DELETE CASCADE
-);
-
-CREATE TABLE catalog.product_variant_attributes
-(
-    id                 SERIAL PRIMARY KEY,
-    product_variant_id bigint NOT NULL,
-    attribute_id       bigint NOT NULL,
-    value_id           bigint NOT NULL,
-
-    CONSTRAINT unique_variant_attribute UNIQUE (product_variant_id, attribute_id),
-    FOREIGN KEY (product_variant_id)
-        REFERENCES catalog.product_variants (id)
-        ON DELETE CASCADE,
-    FOREIGN KEY (attribute_id)
-        REFERENCES catalog.attributes (id)
-        ON DELETE CASCADE,
-    FOREIGN KEY (value_id)
-        REFERENCES catalog.attributes_values (id)
-        ON DELETE CASCADE
-);
-
-CREATE OR REPLACE VIEW catalog.v_product_variant_attributes AS
-(
-SELECT map.product_variant_id AS variant_id,
-       attr.id                AS attr_id,
-       attr.title             AS attribute,
-       val.value              AS value
-FROM catalog.product_variant_attributes map
-         JOIN catalog.attributes_values val ON map.value_id = val.id
-         JOIN catalog.attributes attr ON val.attribute_id = attr.id
-    );
-
-CREATE TABLE catalog.product_variant_media
-(
-    id         SERIAL PRIMARY KEY,
-    variant_id bigint  NOT NULL,
-    media_type varchar NOT NULL,
-    url        varchar NOT NULL,
-    created_at timestamp DEFAULT NOW(),
-
-    FOREIGN KEY (variant_id)
-        REFERENCES catalog.product_variants (id)
-        ON DELETE CASCADE,
-
-    -- Maybe later will be convenient to create media_type table to hold additional types
-    -- like: image, video, audio, 3d-presentation
-    CONSTRAINT catalog_products_media_type CHECK (media_type IN ('image', 'video'))
-);
 
 -- INVENTORY
 
@@ -143,6 +68,17 @@ CREATE TABLE inventory.warehouses
     address    text      NOT NULL,
     code       varchar UNIQUE,
     created_at timestamp NOT NULL DEFAULT now()
+);
+
+CREATE TABLE inventory.inventory_items
+(
+    id                 SERIAL PRIMARY KEY,
+    sku                varchar UNIQUE,
+    product_variant_id bigint NULL,
+
+    FOREIGN KEY (product_variant_id)
+        REFERENCES catalog.product_variants (id)
+        ON DELETE SET NULL
 );
 
 CREATE TABLE inventory.inventory_levels

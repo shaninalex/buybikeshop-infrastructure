@@ -12,7 +12,17 @@
         <!-- Product Details -->
         <div class="col-md-6">
             <h2 class="mb-3">{{ product.title }}</h2>
-            <p class="text-muted mb-4">SKU: WH1000XM4</p>
+
+            <div>Variants:</div>
+            {% for variant in product.variants %}
+            <p class="text-muted mb-4">SKU: {{variant.sku}}</p>
+            {% endfor %}
+
+            <small class="alert alert-info d-block p-2" role="alert">
+                TODO: design proper product variations. A product, most often, is a set of other product parts ( frame,
+                wheels etc. )
+            </small>
+
             <div class="mb-3">
                 <span class="h4 me-2">$349.99</span>
                 <span class="text-muted"><s>$399.99</s></span>

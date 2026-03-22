@@ -9,7 +9,6 @@ WORKDIR /app
 COPY pyproject.toml uv.lock .python-version ./
 COPY apps/market/pyproject.toml ./apps/market/pyproject.toml
 COPY gen/grpc_buybikeshop_python/pyproject.toml ./gen/grpc_buybikeshop_python/pyproject.toml
-COPY resources/database/seeder/pyproject.toml ./resources/database/seeder/pyproject.toml
 
 # Install external dependencies first (cached layer)
 RUN uv sync --frozen --no-dev --no-install-workspace --package market

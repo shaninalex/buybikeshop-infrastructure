@@ -3,9 +3,9 @@ package catalog
 import "go.uber.org/dig"
 
 func Module(c *dig.Container) error {
-	_ = c.Provide(ProvideCatalogRepository)
-	_ = c.Provide(ProvideCatalogAdapter)
-	_ = c.Provide(ProvideCatalogServer)
+	_ = c.Provide(ProvideRepository)
+	_ = c.Provide(ProvideAdapter)
+	_ = c.Provide(ProvideServer)
 
 	return nil
 }

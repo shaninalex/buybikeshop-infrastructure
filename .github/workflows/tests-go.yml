@@ -1,0 +1,60 @@
+name: Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
+
+      - name: Install protoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y protobuf-compiler
+
+      - name: Install protoc plugins
+        run: |
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+
+          # Add GOPATH/bin to PATH
+          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+
+      - name: Generate gRPC code
+        run: make generate_go_grpc
+
+      - name: Start test services
+        run: |
+          docker compose -f ./tdata/docker-compose.test.yml up -d --build
+
+      - name: Wait for migrations to finish
+        run: |
+          echo "Waiting for migrations..."
+
+          CONTAINER=$(docker compose -f ./tdata/docker-compose.test.yml ps -q migrate-main-schema)
+          while [ "$(docker inspect -f '{{.State.Running}}' $CONTAINER)" = "true" ]; do
+            sleep 2
+          done
+          EXIT_CODE=$(docker inspect -f '{{.State.ExitCode}}' $CONTAINER)
+          if [ "$EXIT_CODE" != "0" ]; then
+            echo "Migrations failed!"
+            docker logs $CONTAINER
+            exit 1
+          fi
+
+      - name: Run tests
+        run: go test ./... -v
+
+      - name: Shutdown services
+        if: always()
+        run: docker compose -f ./tdata/docker-compose.test.yml down -v

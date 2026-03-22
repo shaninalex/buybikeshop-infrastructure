@@ -66,7 +66,6 @@ message Product {
 message ProductVariant {
   uint64 id = 1;
   uint64 product_id = 2;
-  uint64 inventory_item_id = 3;
   string title = 4;
   string description = 5;
   string sku = 6;
@@ -75,6 +74,16 @@ message ProductVariant {
   string currency = 9;
   google.protobuf.Timestamp created_at = 10;
   google.protobuf.Timestamp updated_at = 11;
+}
+
+message ProductSaveRequest {
+    Product product = 1;
+}
+
+message ProductSaveReply {
+    Product product = 1;
+    bool status = 2;
+    string message = 3;
 }
 
 // ── ProductGet ──
