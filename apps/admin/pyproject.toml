@@ -10,7 +10,12 @@ dependencies = [
     "python-dotenv>=1.2.2",
     "starlette>=0.52.1",
     "uvicorn>=0.42.0",
+    "common_tools",
 ]
+
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
+
+[tool.uv.sources]
+common_tools = { workspace = true }

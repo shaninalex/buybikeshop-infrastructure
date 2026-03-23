@@ -1,5 +1,4 @@
 {% from "partials/navbar.html" import NavBar with context %}
-{% from "partials/footer.html" import Footer with context %}
 
 <!doctype html>
 <html lang="en">
@@ -21,8 +20,6 @@
 <div class="container">
     {% block content %}{% endblock %}
 </div>
-
-{{ Footer() }}
 
 <script src="/static/js/bootstrap.bundle.min.js"></script>
 </body>

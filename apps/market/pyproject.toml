@@ -11,10 +11,12 @@ dependencies = [
     "starlette>=0.52.1",
     "uvicorn>=0.42.0",
     "grpc_buybikeshop_python",
+    "common_tools",
 ]
 
 [tool.uv.sources]
 grpc_buybikeshop_python = { workspace = true }
+common_tools = { workspace = true }
 
 [build-system]
 requires = ["setuptools"]
