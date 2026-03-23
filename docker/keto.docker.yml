@@ -1,0 +1,33 @@
+services:
+  keto-migrate:
+    image: oryd/keto:v26.2.0
+    volumes:
+      - type: bind
+        source: ../resources/keto
+        target: /home/ory
+    environment:
+      - LOG_LEVEL=debug
+      - DSN=postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable&search_path=keto
+    command: ["migrate", "up", "-y"]
+    networks:
+      - intranet
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  keto:
+    image: oryd/keto:v26.2.0
+    volumes:
+      - type: bind
+        source: ../resources/keto
+        target: /home/ory
+    ports:
+      - "4466:4466"
+      - "4467:4467"
+    depends_on:
+      - keto-migrate
+    environment:
+      - DSN=postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable&search_path=keto
+    restart: on-failure
+    networks:
+      - intranet
