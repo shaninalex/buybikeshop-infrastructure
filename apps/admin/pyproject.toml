@@ -1,7 +1,7 @@
 [project]
-name = "market"
+name = "admin"
 version = "0.0.0"
-description = "Project market. The online store"
+description = "Project admin. System management administration panel."
 readme = "README.md"
 dependencies = [
     "punq>=0.7.0",
@@ -10,14 +10,17 @@ dependencies = [
     "python-dotenv>=1.2.2",
     "starlette>=0.52.1",
     "uvicorn>=0.42.0",
-    "grpc_buybikeshop_python",
+    "requests",
+
+    "ory-kratos-client",
+
+    # internal
     "common_tools",
 ]
-
-[tool.uv.sources]
-grpc_buybikeshop_python = { workspace = true }
-common_tools = { workspace = true }
 
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
+
+[tool.uv.sources]
+common_tools = { workspace = true }

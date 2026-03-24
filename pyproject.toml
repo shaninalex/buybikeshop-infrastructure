@@ -16,14 +16,22 @@ members = [
     # e-commerce platform
     "apps/market",
 
+    # system administration panel
+    "apps/admin",
+
     # generated gRPC stubs
     "gen/grpc_buybikeshop_python",
+
+    # common tools
+    "libs/python/common_tools"
 ]
 
 [tool.uv.sources]
 seeder = { workspace = true }
 grpc-buybikeshop-python = { workspace = true }
 market = { workspace = true }
+admin = { workspace = true }
+common_tools = { workspace = true }
 
 [dependency-groups]
 dev = [
@@ -31,6 +39,3 @@ dev = [
     "grpcio-tools>=1.78.0",
     "protobuf>=6.33.6",
 ]
-
-# [tool.uv.sources]
-# core = { workspace = true }

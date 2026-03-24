@@ -10,6 +10,7 @@ COMPOSE_MAIN=(
   -f "$PROJECT_ROOT/docker/warehouse.docker.yml"
   -f "$PROJECT_ROOT/docker/market.docker.yml"
   -f "$PROJECT_ROOT/docker/kratos.docker.yml"
+  -f "$PROJECT_ROOT/docker/keto.docker.yml"
 )
 
 COMPOSE_TEST=(

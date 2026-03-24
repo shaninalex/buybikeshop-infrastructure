@@ -1,8 +1,8 @@
 from starlette.applications import Starlette
 from starlette.types import ASGIApp
 
-from market.web.di import bootstrap
-from market.web.routes import routes
+from admin.web.di import bootstrap
+from admin.web.routes import routes
 
 bootstrap()
 

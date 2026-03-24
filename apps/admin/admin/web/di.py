@@ -1,16 +1,12 @@
-"""Web app DI"""
 import os
 
-import grpc
-
+from admin.core.service_kratos import ServiceKratos
+from admin.web.templating import Templates
 from common_tools.di import Container
-from market.core.connector import CatalogConnector
-from market.web.templating import Templates
 
 
 def _configure(container: Container) -> None:
-    channel = grpc.insecure_channel(os.environ.get("APP_MARKET_DATASOURCE"))
-    container.register(CatalogConnector, instance=CatalogConnector(channel))
+    container.register(ServiceKratos, instance=ServiceKratos(os.environ.get("APP_ADMIN_KRATOS_ADMIN"), ""))
     container.register(Templates, instance=Templates())
 
 

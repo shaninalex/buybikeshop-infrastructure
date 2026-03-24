@@ -1,3 +1,21 @@
+## 0.4.0 (2026-03-24)
+
+### Feat
+
+- **admin**: di, templates, views
+- **admin**: basic setup + assets
+- **db**: clean up schema
+- **db**: migrate on start
+
+### Fix
+
+- **kratos**: do not hardcode return urls in login flow config
+- **github actions**: incorrect call
+
+### Refactor
+
+- **migrate**: download golang-migrate in Dockerfile
+
 ## 0.3.0 (2026-03-20)
 
 ### Feat
