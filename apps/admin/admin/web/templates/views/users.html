@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>Users</h3>
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th scope="col">state</th>
+        <th scope="col">id</th>
+        <th scope="col">traits</th>
+        <th scope="col">roles</th>
+        <th scope="col">created</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+            <tr>
+                <th>{{ user.state }}</th>
+                <th><span style="white-space: nowrap">{{ user.id }}</span></th>
+                <td>{{ user.traits }}</td>
+                <td>coming soon</td>
+                <td>{{ user.created_at | dateformat }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

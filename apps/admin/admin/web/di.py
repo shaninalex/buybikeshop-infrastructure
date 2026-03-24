@@ -1,11 +1,12 @@
-"""Web app DI"""
+import os
 
-from common_tools.di import Container
-
+from admin.core.service_kratos import ServiceKratos
 from admin.web.templating import Templates
+from common_tools.di import Container
 
 
 def _configure(container: Container) -> None:
+    container.register(ServiceKratos, instance=ServiceKratos(os.environ.get("APP_ADMIN_KRATOS_ADMIN"), ""))
     container.register(Templates, instance=Templates())
 
 
