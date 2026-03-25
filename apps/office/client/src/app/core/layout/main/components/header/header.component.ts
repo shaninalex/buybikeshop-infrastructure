@@ -8,8 +8,9 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
         RouterLinkActive
     ],
     template: `
-        <nav class="navbar navbar-expand-lg bg-dark mb-4" data-bs-theme="dark">
-            <div class="container-fluid">
+        <div class="mb-4" style="height: 56px;"></div>
+        <nav class="navbar navbar-expand-lg bg-dark position-fixed top-0 left-0 w-100" data-bs-theme="dark">
+            <div class="container">
                 <a class="navbar-brand" routerLink="/">
                     <img src="images/logo.png" alt="BuyBikeShop Office" style="width: 2rem">
                 </a>
@@ -28,28 +29,20 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
                         <li class="nav-item">
                             <a class="nav-link" routerLinkActive="active fw-bold" routerLink="/partners">Partners</a>
                         </li>
+                    </ul>
+                    <ul class="navbar-nav">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                               aria-expanded="false">
-                                Dropdown
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
+                            <span class="nav-link" data-bs-toggle="dropdown">
+                                <i class="fa-solid fa-bell"></i>
+                                <span class="badge text-bg-danger">4</span>
+                            </span>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                        <li class="nav-item dropdown">
+                            <span class="nav-link py-0">
+                                <img src="images/default-avatar.png" alt="profile" style="width: 2rem">
+                            </span>
                         </li>
                     </ul>
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
                 </div>
             </div>
         </nav>

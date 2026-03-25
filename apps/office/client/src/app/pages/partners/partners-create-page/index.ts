@@ -1,0 +1,1 @@
+export { PartnersCreatePage } from './partners-create-page'

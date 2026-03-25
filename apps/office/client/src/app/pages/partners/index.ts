@@ -1,1 +1,1 @@
-export { PartnersPage } from './partners.page'
+export { partners_routes } from './routes'

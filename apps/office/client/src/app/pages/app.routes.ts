@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomePage } from '@pages/home';
 import { PageContainer } from '@pages/page.container';
-import { PartnersPage } from '@pages/partners';
+import { partners_routes } from "@pages/partners/routes";
 
 export const routes: Routes = [
     {
@@ -12,10 +12,7 @@ export const routes: Routes = [
                 path: "",
                 component: HomePage,
             },
-            {
-                path: "partners",
-                component: PartnersPage,
-            }
+            ...partners_routes,
         ]
     }
 ];

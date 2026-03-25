@@ -8,10 +8,9 @@ import { HeaderComponent } from './components';
     ],
     template: `
         <app-header/>
-        <div class="container-fluid">
+        <div class="container">
             <ng-content/>
         </div>
-
     `
 })
 export class MainLayout {
