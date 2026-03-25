@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package partners;
+
+option go_package = "grpc-buybikeshop-go/partners";
+
+import "google/protobuf/timestamp.proto";
+import "partners/partners.proto";
+
+service Partners {
+  rpc PartnersList (PartnersListRequest) returns (PartnersListReply) {}
+}

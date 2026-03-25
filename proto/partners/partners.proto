@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package partners;
+
+option go_package = "grpc-buybikeshop-go/partners";
+
+import "google/protobuf/timestamp.proto";
+
+message PartnerRole {
+  uint64 id = 1;
+  string role = 2;
+}
+
+message PartnerContact {
+  uint64 id = 1;
+  string contacts = 2;
+  uint64 partner_id = 3;
+  google.protobuf.Timestamp created_at = 4;
+}
+
+message Partner {
+  uint64 id = 1;
+  PartnerRole role = 2;
+  string title = 3;
+  repeated PartnerContact contacts = 4;
+  google.protobuf.Timestamp created_at = 5;
+}
+
+message PartnersListRequest {
+  string query = 1;
+  repeated uint64 roles = 2;
+
+  // Pagination
+  uint32 limit = 9;
+  uint32 offset = 10;
+}
+
+message PartnersListReply {
+  repeated Partner partners = 1;
+  uint64 total = 2;
+}

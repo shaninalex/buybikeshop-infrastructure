@@ -38,7 +38,7 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 			_ = c.Provide(config.ProvideConfig(configPath))
 			_ = c.Provide(persistance.ProvideDB)
 			_ = c.Provide(auth.ProvideKratos)
-			_ = c.Provide(auth.ProvideOAuthConfig)
+			//_ = c.Provide(auth.ProvideOAuthConfig)
 
 			if err = c.Invoke(func(router *gin.Engine, config *config.Config, ctx context.Context) {
 				srv := &http.Server{
