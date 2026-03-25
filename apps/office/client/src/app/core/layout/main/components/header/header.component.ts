@@ -29,6 +29,9 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
                         <li class="nav-item">
                             <a class="nav-link" routerLinkActive="active fw-bold" routerLink="/partners">Partners</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" routerLinkActive="active fw-bold" routerLink="/catalog">Catalog</a>
+                        </li>
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
