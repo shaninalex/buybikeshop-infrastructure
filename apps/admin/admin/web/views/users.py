@@ -8,7 +8,7 @@ from admin.web.templating import Templates
 class UsersPage(HTTPEndpoint):
     async def get(self, request):
         templates = resolve(Templates)
-        sk = resolve(ServiceKratos)
+        sk: ServiceKratos = resolve(ServiceKratos)
         return templates.TemplateResponse(request, "views/users.html", {
-            "users": sk.get_users()
+            "users": sk.get_identities(),
         })

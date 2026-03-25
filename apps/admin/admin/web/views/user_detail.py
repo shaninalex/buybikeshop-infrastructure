@@ -9,7 +9,15 @@ class UserDetailPage(HTTPEndpoint):
     async def get(self, request):
         templates = resolve(Templates)
         sk: ServiceKratos = resolve(ServiceKratos)
-        user = sk.get_user(request.path_params.get('id'))
+        user = sk.get_identity(request.path_params.get('id'))
+        return templates.TemplateResponse(request, "views/user-detail.html", {
+            "user": user,
+        })
+
+    async def post(self, request):
+        templates = resolve(Templates)
+        sk: ServiceKratos = resolve(ServiceKratos)
+        user = sk.get_identity(request.path_params.get('id'))
         return templates.TemplateResponse(request, "views/user-detail.html", {
             "user": user,
         })

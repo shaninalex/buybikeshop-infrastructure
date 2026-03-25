@@ -11,5 +11,5 @@ routes = [
     Mount("/static", app=StaticFiles(directory=os.environ.get("APP_ADMIN_WEB_STATIC_PATH")), name="static"),
     Route("/", HomePage, name="home"),
     Route("/users", UsersPage, name="users"),
-    Route("/users/{id:str}", UserDetailPage, name="user-detail"),
+    Route("/users/{id:str}", UserDetailPage, name="user-detail", methods=["GET", "POST"]),
 ]

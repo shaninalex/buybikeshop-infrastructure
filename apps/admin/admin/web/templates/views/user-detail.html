@@ -2,13 +2,18 @@
 
 {% block content %}
 
-<div class="d-flex align-items-center gap-2">
-    <h3>User</h3> ( <span class="badge text-bg-success">{{ user.state }}</span> )
-</div>
-<div>{{ user.id }}</div>
+<form action="{{ url_for('user-detail', id=user.id) }}" method="post">
+    <div class="mb-4">
+        <div class="d-flex align-items-center gap-2">
+            <h3>User</h3> ( <span class="badge text-bg-success">{{ user.state }}</span> )
+        </div>
+        <div>{{ user.id }}</div>
+    </div>
+    <div class="mb-4">
+        <h4>Traits:</h4>
+        <textarea class="form-control" id="" name="user.traits" rows="3">{{ user.traits }}</textarea>
+    </div>
 
-<h4>Traits:</h4>
-<pre>{{ user.traits }}</pre>
-
-
+    <button class="btn btn-sm btn-info" type="submit">update</button>
+</form>
 {% endblock %}

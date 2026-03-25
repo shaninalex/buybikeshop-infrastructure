@@ -1,7 +1,7 @@
 from typing import List
 
 import ory_kratos_client
-from ory_kratos_client import Identity
+from ory_kratos_client import Identity, UpdateIdentityBody
 
 
 class ServiceKratos:
@@ -11,17 +11,23 @@ class ServiceKratos:
         )
         self.root = url
 
-    def get_users(self) -> List[Identity]:
+    def get_identities(self) -> List[Identity]:
         with ory_kratos_client.ApiClient(self.configuration) as api_client:
             api_instance = ory_kratos_client.IdentityApi(api_client)
             per_page = 25
             page = 1
             page_size = 25
-            resp = api_instance.list_identities(per_page=per_page, page=page, page_size=page_size)
-            return resp
+            identities = api_instance.list_identities(per_page=per_page, page=page, page_size=page_size)
+            return identities
 
-    def get_user(self, user_id: str) -> Identity:
+    def get_identity(self, identity_id: str) -> Identity:
         with ory_kratos_client.ApiClient(self.configuration) as api_client:
             api_instance = ory_kratos_client.IdentityApi(api_client)
-            idn = api_instance.get_identity(user_id)
-            return idn
+            identity = api_instance.get_identity(identity_id)
+            return identity
+
+    def get_update(self, identity_id: str, payload: UpdateIdentityBody) -> Identity:
+        with ory_kratos_client.ApiClient(self.configuration) as api_client:
+            api_instance = ory_kratos_client.IdentityApi(api_client)
+            identity = api_instance.update_identity(identity_id, payload)
+            return identity
