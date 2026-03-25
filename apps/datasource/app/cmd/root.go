@@ -9,7 +9,7 @@ import (
 
 func NewRootCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use: "datasource",
+		Use: "buybikeshop-datasource",
 	}
 
 	cmd.AddCommand(commands.NewHttpRootCommand())

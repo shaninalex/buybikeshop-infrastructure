@@ -1,6 +1,5 @@
 port: 8001
 
-# that user should be able to read only warehouse schema
 database: "postgresql+psycopg2://postgres:postgres@postgres:5432/postgres"
 
 kratos:

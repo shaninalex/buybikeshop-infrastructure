@@ -2,7 +2,7 @@ from starlette.requests import Request
 from starlette.types import ASGIApp, Receive, Scope, Send
 
 # NOTE: this is not very beautiful or elegant... Better will be using separate admin-frontend-client and make
-#       proper API with all possible security measures from Ory Hydra, Ory Kratos etc...
+#       proper API requests with all possible security measures from Oathkeeper, Hydra, Kratos etc...
 
 class CSRFCookieToHeaderMiddleware:
     def __init__(self, app: ASGIApp, cookie_name: str = "csrftoken", header_name: str = "x-csrftoken"):

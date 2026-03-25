@@ -3,14 +3,14 @@ package cmd
 import (
 	"fmt"
 
-	"buybikeshop/apps/warehouse/app/cmd/commands"
+	"buybikeshop/apps/office/app/cmd/commands"
 
 	"github.com/spf13/cobra"
 )
 
 func NewRootCmd() (cmd *cobra.Command) {
 	cmd = &cobra.Command{
-		Use: "buybikeshop-warehouse",
+		Use: "buybikeshop-office",
 	}
 
 	cmd.AddCommand(commands.NewHttpRootCommand())
