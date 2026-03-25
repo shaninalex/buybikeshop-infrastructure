@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="d-flex align-items-center gap-2">
+    <h3>User</h3> ( <span class="badge text-bg-success">{{ user.state }}</span> )
+</div>
+<div>{{ user.id }}</div>
+
+<h4>Traits:</h4>
+<pre>{{ user.traits }}</pre>
+
+
+{% endblock %}

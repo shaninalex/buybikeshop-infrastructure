@@ -19,3 +19,9 @@ class ServiceKratos:
             page_size = 25
             resp = api_instance.list_identities(per_page=per_page, page=page, page_size=page_size)
             return resp
+
+    def get_user(self, user_id: str) -> Identity:
+        with ory_kratos_client.ApiClient(self.configuration) as api_client:
+            api_instance = ory_kratos_client.IdentityApi(api_client)
+            idn = api_instance.get_identity(user_id)
+            return idn
