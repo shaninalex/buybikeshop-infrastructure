@@ -139,24 +139,3 @@ CREATE TABLE partners.suppliers
     FOREIGN KEY (partner_id) REFERENCES partners.partner (id)
 );
 
---- DELIVERIES
-
-CREATE TABLE inventory.deliveries
-(
-    id           SERIAL PRIMARY KEY,
-    warehouse_id BIGINT    NOT NULL,
-    supplier_id  BIGINT    NOT NULL,
-    created_at   TIMESTAMP NOT NULL DEFAULT now(),
-
-    FOREIGN KEY (warehouse_id) REFERENCES inventory.warehouses (id),
-    FOREIGN KEY (supplier_id) REFERENCES partners.suppliers (id)
-);
-
-CREATE TABLE inventory.delivery_items
-(
-    delivery_id BIGINT REFERENCES inventory.deliveries (id),
-    variant_id  BIGINT REFERENCES catalog.product_variants (id),
-    quantity    BIGINT NOT NULL,
-
-    PRIMARY KEY (delivery_id, variant_id)
-);
