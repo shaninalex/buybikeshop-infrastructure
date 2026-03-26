@@ -3,7 +3,17 @@ import { Component } from '@angular/core';
 @Component({
     selector: 'app-purchase-order-page',
     imports: [],
+    styleUrl: "./purchase-order-page.css",
     template: `
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <button class="btn btn-primary">Save</button>
+            
+        </div>
+
+        <div class="p-4 rounded-3 mb-4 preview">
+            <p class="mb-0 text-muted">Add some products to preview</p>
+        </div>
+
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
                 <h2 class="mb-0">Add New Product / Variant</h2>
@@ -11,7 +21,7 @@ import { Component } from '@angular/core';
             </div>
             <div>
                 <button class="btn btn-outline-secondary me-2">Cancel</button>
-                <button class="btn btn-primary">Save Product</button>
+                <button class="btn btn-primary">Add Product</button>
             </div>
         </div>
 

@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"buybikeshop/apps/office/app/api"
+	"buybikeshop/apps/office/app/pkg"
 	"context"
 	"fmt"
 	"log"
@@ -33,22 +35,23 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 
 			appContext, appCancel := context.WithCancel(context.Background())
 			defer appCancel()
-
 			_ = c.Provide(func() context.Context { return appContext })
 			_ = c.Provide(config.ProvideConfig(configPath))
 			_ = c.Provide(persistance.ProvideDB)
 			_ = c.Provide(auth.ProvideKratos)
-			//_ = c.Provide(auth.ProvideOAuthConfig)
+
+			_ = c.Provide(pkg.Module)
+			_ = api.Module(c)
 
 			if err = c.Invoke(func(router *gin.Engine, config *config.Config, ctx context.Context) {
 				srv := &http.Server{
-					Addr:    fmt.Sprintf(":%d", 8001),
+					Addr:    fmt.Sprintf(":%d", config.Int("port")),
 					Handler: router,
 				}
 
-				log.Printf("Run server on :%d\n", 8001)
+				log.Printf("Run server on :%d\n", config.Int("port"))
 				go func() {
-					if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+					if err = srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 						log.Fatalf("listen: %s\n", err)
 					}
 				}()
@@ -63,7 +66,7 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 				ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 				defer cancel()
 
-				if err := srv.Shutdown(ctx); err != nil {
+				if err = srv.Shutdown(ctx); err != nil {
 					log.Fatal("Server forced to shutdown:", err)
 				}
 

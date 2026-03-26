@@ -6,11 +6,11 @@ PROJECT_ROOT="$(cd "$(dirname "$0")" && pwd)"
 
 COMPOSE_MAIN=(
   -f "$PROJECT_ROOT/docker/docker-compose.base.yml"
-  -f "$PROJECT_ROOT/docker/datasource.docker.yml"
-  -f "$PROJECT_ROOT/docker/warehouse.docker.yml"
-  -f "$PROJECT_ROOT/docker/market.docker.yml"
-  -f "$PROJECT_ROOT/docker/kratos.docker.yml"
-  -f "$PROJECT_ROOT/docker/keto.docker.yml"
+#  -f "$PROJECT_ROOT/docker/datasource.docker.yml"
+#  -f "$PROJECT_ROOT/docker/warehouse.docker.yml"
+#  -f "$PROJECT_ROOT/docker/market.docker.yml"
+#  -f "$PROJECT_ROOT/docker/kratos.docker.yml"
+#  -f "$PROJECT_ROOT/docker/keto.docker.yml"
 )
 
 COMPOSE_TEST=(
@@ -107,6 +107,7 @@ function generate_python_grpc() {
 function generate_grpc() {
   generate_go_grpc
   generate_python_grpc
+  echo "Completed."
 }
 
 function start_test_db() {

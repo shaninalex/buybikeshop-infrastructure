@@ -1,4 +1,4 @@
-package product
+package catalog
 
 import (
 	pb "buybikeshop/gen/grpc-buybikeshop-go/catalog"
@@ -14,7 +14,7 @@ var (
 	ErrorEmptyProductId = errors.New("empty catalog id")
 )
 
-func (s *ProductController) handleProductVariants(c *gin.Context) {
+func (s *Controller) handleProductVariants(c *gin.Context) {
 	strId := c.Param("product_id")
 	if strId == "" {
 		transport.Error(c, http.StatusInternalServerError, ErrorEmptyProductId)
