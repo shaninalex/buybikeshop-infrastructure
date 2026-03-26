@@ -1,0 +1,14 @@
+import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { {{.Module}}sAdapter, {{.EntityName}}State } from './{{.Module}}.reducer';
+
+export const select{{.EntityName}}sFeature = createFeatureSelector<{{.EntityName}}State>('{{.Module}}');
+export const {{.Module}}sSelectors = {{.Module}}sAdapter.getSelectors();
+
+export const select{{.EntityName}}s = createSelector(select{{.EntityName}}sFeature, (state) =>
+    {{.Module}}sSelectors.selectAll(state),
+);
+
+export const select{{.EntityName}}ByID = (id: number) =>
+    createSelector(select{{.EntityName}}sFeature, (state: {{.EntityName}}State) =>
+        {{.Module}}sSelectors.selectAll(state).find((p) => p.id === id),
+    );

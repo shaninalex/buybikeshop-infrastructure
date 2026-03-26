@@ -1,0 +1,25 @@
+import { inject, Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
+import { {{.EntityModel}} } from '@entities/{{.Module}}';
+import { APIResponse } from '@shared/models';
+import { HttpClient } from '@angular/common/http';
+
+interface {{.Module}}sResponse {
+    {{.Module}}s: {{.EntityModel}}[]
+}
+
+@Injectable({
+    providedIn: 'root',
+})
+export class {{.EntityName}}Api {
+    http = inject(HttpClient);
+
+    Get{{.EntityName}}s(): Observable<{{.EntityModel}}[]> {
+        return this.http
+            .get<APIResponse<{{.Module}}sResponse>>(`/api/v1/{{.Service}}/{{.Module}}s`)
+            .pipe(
+                map((response) => response.data),
+                map((response) => response.{{.Module}}s),
+            );
+    }
+}

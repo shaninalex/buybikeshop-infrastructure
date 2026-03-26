@@ -1,0 +1,16 @@
+import { createReducer, on } from '@ngrx/store';
+import { {{.EntityModel}} } from './{{.Module}}.model';
+import { createEntityAdapter, EntityState } from '@ngrx/entity';
+import { action{{.EntityName}}SetList } from './{{.Module}}.actions';
+
+export interface {{.EntityName}}State extends EntityState<{{.EntityModel}}> {
+}
+
+export const {{.Module}}sAdapter = createEntityAdapter<{{.EntityModel}}>();
+export const initialState = {{.Module}}sAdapter.getInitialState();
+
+export const {{.Module}}Reducer = createReducer(
+    initialState,
+    on(action{{.EntityName}}SetList, (state, action) => {{.Module}}sAdapter.addMany(action.{{.Module}}s, state)),
+);
+
