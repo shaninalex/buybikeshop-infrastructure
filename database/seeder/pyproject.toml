@@ -6,6 +6,7 @@ readme = "README.md"
 dependencies = [
     "psycopg2-binary>=2.9.11",
     "faker>=40.4.0",
+    "PyYAML"
 ]
 
 [build-system]

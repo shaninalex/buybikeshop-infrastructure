@@ -6,11 +6,11 @@ PROJECT_ROOT="$(cd "$(dirname "$0")" && pwd)"
 
 COMPOSE_MAIN=(
   -f "$PROJECT_ROOT/docker/docker-compose.base.yml"
-#  -f "$PROJECT_ROOT/docker/datasource.docker.yml"
-#  -f "$PROJECT_ROOT/docker/warehouse.docker.yml"
-#  -f "$PROJECT_ROOT/docker/market.docker.yml"
-#  -f "$PROJECT_ROOT/docker/kratos.docker.yml"
-#  -f "$PROJECT_ROOT/docker/keto.docker.yml"
+  -f "$PROJECT_ROOT/docker/datasource.docker.yml"
+  -f "$PROJECT_ROOT/docker/warehouse.docker.yml"
+  -f "$PROJECT_ROOT/docker/market.docker.yml"
+  -f "$PROJECT_ROOT/docker/kratos.docker.yml"
+  -f "$PROJECT_ROOT/docker/keto.docker.yml"
 )
 
 COMPOSE_TEST=(
@@ -131,6 +131,12 @@ function help() {
   echo "  generate_grpc"
 }
 
+function seed() {
+   uv run --package seeder python -m seeder.main \
+    --config ./database/seeder/config.yaml \
+    start
+}
+
 # --- Dispatcher ---
 cmd="$1"
 shift || true
@@ -150,6 +156,7 @@ case "$cmd" in
   generate_go_grpc) generate_go_grpc ;;
   generate_python_grpc) generate_python_grpc ;;
   generate_grpc) generate_grpc ;;
+  seed) seed ;;
   ""|help|-h|--help) help ;;
   *)
     echo "Unknown command: $cmd"
