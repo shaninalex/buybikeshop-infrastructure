@@ -37,9 +37,9 @@ def create_connection(config: Config):
 
 
 def execute_raw_sql(connection, sql):
-    connection.autocommit = True
     cursor = connection.cursor()
     cursor.execute(sql)
+    connection.commit()
 
 
 def generate_sequence(start, end) -> List[int]:

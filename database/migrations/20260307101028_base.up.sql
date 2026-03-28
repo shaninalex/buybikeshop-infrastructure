@@ -114,7 +114,7 @@ CREATE TABLE partners.roles
 
 CREATE TYPE partner_type AS ENUM ('person', 'company');
 
-CREATE TABLE partners.partner
+CREATE TABLE partners.partners
 (
     id         SERIAL PRIMARY KEY,
     active     BOOLEAN      default True,
@@ -127,8 +127,8 @@ CREATE TABLE partners.partner_roles
 (
     role_id    bigint NOT NULL,
     partner_id bigint NOT NULL,
-    FOREIGN KEY (partner_id) REFERENCES partners.partner (id),
-    FOREIGN KEY (role_id) REFERENCES partners.roles (id)
+    FOREIGN KEY (partner_id) REFERENCES partners.partners (id) ON DELETE CASCADE,
+    FOREIGN KEY (role_id) REFERENCES partners.roles (id) ON DELETE CASCADE
 );
 
 CREATE TABLE partners.partner_contacts
@@ -138,7 +138,7 @@ CREATE TABLE partners.partner_contacts
     partner_id bigint NOT NULL,
     created_at timestamp DEFAULT now(),
 
-    FOREIGN KEY (partner_id) REFERENCES partners.partner (id)
+    FOREIGN KEY (partner_id) REFERENCES partners.partners (id) ON DELETE CASCADE
 );
 
 CREATE TABLE partners.suppliers
@@ -146,6 +146,6 @@ CREATE TABLE partners.suppliers
     id         SERIAL PRIMARY KEY,
     created_at timestamp DEFAULT now(),
     partner_id bigint NOT NULL,
-    FOREIGN KEY (partner_id) REFERENCES partners.partner (id)
+    FOREIGN KEY (partner_id) REFERENCES partners.partners (id) ON DELETE CASCADE
 );
 
