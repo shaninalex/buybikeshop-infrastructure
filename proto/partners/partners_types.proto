@@ -22,7 +22,7 @@ message Partner {
   uint64 id = 1;
   string title = 2;
   string type = 3;
-  repeated PartnerRole roles = 4;
+  repeated uint64 roles = 4;
   repeated PartnerContact contacts = 5;
   google.protobuf.Timestamp created_at = 6;
   bool is_supplier = 7;

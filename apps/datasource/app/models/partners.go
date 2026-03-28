@@ -7,9 +7,14 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-type PartnerRole struct {
+type Role struct {
 	Id   uint64
 	Role string
+}
+
+type PartnerRole struct {
+	RoleId    uint64
+	PartnerId uint64
 }
 
 type PartnerType string
@@ -22,6 +27,7 @@ var (
 type PartnerContact struct {
 	Id        uint64
 	Contacts  string
+	PartnerId uint64
 	CreatedAt time.Time
 }
 
@@ -32,19 +38,16 @@ type Partner struct {
 	Active     bool
 	IsSupplier bool
 	CreatedAt  time.Time
-	Roles      []*PartnerRole
+	Roles      []uint64
 	Contacts   []*PartnerContact
 }
 
 func ToModelPartner(p *pb.Partner) *Partner {
-	roles := make([]*PartnerRole, len(p.Roles))
+	roles := make([]uint64, len(p.Roles))
 	contacts := make([]*PartnerContact, len(p.Contacts))
 
 	for i, role := range p.Roles {
-		roles[i] = &PartnerRole{
-			Role: role.Role,
-			Id:   role.Id,
-		}
+		roles[i] = role
 	}
 
 	for i, contact := range p.Contacts {
@@ -67,14 +70,11 @@ func ToModelPartner(p *pb.Partner) *Partner {
 }
 
 func ToPbPartner(p *Partner) *pb.Partner {
-	roles := make([]*pb.PartnerRole, len(p.Roles))
 	contacts := make([]*pb.PartnerContact, len(p.Contacts))
 
+	roleIds := make([]uint64, len(p.Roles))
 	for i, role := range p.Roles {
-		roles[i] = &pb.PartnerRole{
-			Role: role.Role,
-			Id:   role.Id,
-		}
+		roleIds[i] = role
 	}
 
 	for i, contact := range p.Contacts {
@@ -92,7 +92,7 @@ func ToPbPartner(p *Partner) *pb.Partner {
 		Type:       string(p.Type),
 		Active:     p.Active,
 		IsSupplier: p.IsSupplier,
-		Roles:      roles,
+		Roles:      roleIds,
 		Contacts:   contacts,
 		CreatedAt:  timestamppb.New(p.CreatedAt),
 	}

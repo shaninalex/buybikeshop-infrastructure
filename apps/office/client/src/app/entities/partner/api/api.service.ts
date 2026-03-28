@@ -4,10 +4,6 @@ import { PartnerModel } from '@entities/partner';
 import { APIResponse } from '@shared/models';
 import { HttpClient } from '@angular/common/http';
 
-interface partnersResponse {
-    partners: PartnerModel[]
-}
-
 @Injectable({
     providedIn: 'root',
 })
@@ -16,10 +12,7 @@ export class PartnerApi {
 
     GetPartners(): Observable<PartnerModel[]> {
         return this.http
-            .get<APIResponse<partnersResponse>>(`/api/v1/office/partners`)
-            .pipe(
-                map((response) => response.data),
-                map((response) => response.partners),
-            );
+            .get<APIResponse<PartnerModel[]>>(`/api/v1/office/partners`)
+            .pipe(map((response) => response.data));
     }
 }

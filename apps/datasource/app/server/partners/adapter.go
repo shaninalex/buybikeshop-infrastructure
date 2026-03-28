@@ -78,7 +78,7 @@ func (s Adapter) PartnerRoleList(ctx context.Context, request *pb.PartnerRoleLis
 }
 
 func (s Adapter) PartnerRoleSave(ctx context.Context, request *pb.PartnerRoleSaveRequest) (*pb.PartnerRoleSaveReply, error) {
-	r, err := s.repositoryRoles.RolesSave(ctx, &models.PartnerRole{
+	r, err := s.repositoryRoles.RolesSave(ctx, &models.Role{
 		Id:   request.Role.Id,
 		Role: request.Role.Role,
 	})

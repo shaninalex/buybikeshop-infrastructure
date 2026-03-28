@@ -1,12 +1,14 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from "@angular/router";
 import { Store } from '@ngrx/store';
-import { actionPartnerGetList } from '@entities/partner';
+import { actionPartnerGetList, selectPartners } from '@entities/partner';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'app-partners-list-page',
     imports: [
-        RouterLink
+        RouterLink,
+        AsyncPipe
     ],
     template: `
         <h3>Partners page</h3>
@@ -30,25 +32,22 @@ import { actionPartnerGetList } from '@entities/partner';
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td><a routerLink="/partners/1" class="text-body">Acme Corporation</a></td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td><a routerLink="/partners/2" class="text-body">Shimano ltd.</a></td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td><a routerLink="/partners/3" class="text-body">John Doe</a></td>
-            </tr>
+                @if (partners$ | async; as partners) {
+                    @for (partner of partners; track $index) {
+                        <tr>
+                            <th scope="row">1</th>
+                            <td><a [routerLink]='["/partners", partner.id]' class="text-body">{{ partner.title }}</a>
+                            </td>
+                        </tr>
+                    }
+                }
             </tbody>
         </table>
     `,
 })
 export class PartnersListPage implements OnInit {
     private store = inject(Store);
-
+    partners$ = this.store.select(selectPartners)
 
     ngOnInit(): void {
         this.store.dispatch(actionPartnerGetList())
