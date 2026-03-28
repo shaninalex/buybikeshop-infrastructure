@@ -1,16 +1,16 @@
 services:
-#  office-client:
-#    build:
-#      context: ../apps/office/client
-#      dockerfile: Dockerfile
-#    ports:
-#      - "4200:80"
-#    restart: unless-stopped
-#    depends_on:
-#      office:
-#        condition: service_started
-#    networks:
-#      - intranet
+  office-client:
+    build:
+      context: ../apps/office/client
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"
+    restart: unless-stopped
+    depends_on:
+      office:
+        condition: service_started
+    networks:
+      - intranet
 
   office:
     build:
