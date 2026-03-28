@@ -1,0 +1,34 @@
+services:
+#  office-client:
+#    build:
+#      context: ../apps/office/client
+#      dockerfile: Dockerfile
+#    ports:
+#      - "4200:80"
+#    restart: unless-stopped
+#    depends_on:
+#      office:
+#        condition: service_started
+#    networks:
+#      - intranet
+
+  office:
+    build:
+      context: ../
+      dockerfile: apps/office/Dockerfile
+    ports:
+      - "8005:8005"
+    volumes:
+      - type: bind
+        source: ../apps/office/config/config.yml
+        target: /root/config.yml
+    command: ["./office", "serve", "--config=/root/config.yml"]
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      datasource:
+        condition: service_started
+    networks:
+      - intranet
+      - datasource-net

@@ -10,7 +10,7 @@ import (
 
 func NewRootCmd() (cmd *cobra.Command) {
 	cmd = &cobra.Command{
-		Use: "lumna",
+		Use: "buybikeshop-warehouse",
 	}
 
 	cmd.AddCommand(commands.NewHttpRootCommand())

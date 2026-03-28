@@ -4,12 +4,29 @@ from pathlib import Path
 import yaml
 
 
-@dataclass
-class Config:
+@dataclass(frozen=True)
+class PartnerConfig:
+    amount: int
+
+@dataclass(frozen=True)
+class DatabaseConfig:
     database: str
+    user: str
+    password: str
+    host: str
+    port: int
+
+
+@dataclass(frozen=True)
+class Config:
+    database: DatabaseConfig
+    partners: PartnerConfig
 
 
 def read_config(path: Path) -> Config:
     with open(path, "r") as f:
-        fconf = yaml.safe_load(f)
-        return Config(**fconf)
+        fconf = yaml.unsafe_load(f)
+        return Config(
+            database=DatabaseConfig(**fconf['database']),
+            partners=PartnerConfig(**fconf['partners']),
+        )

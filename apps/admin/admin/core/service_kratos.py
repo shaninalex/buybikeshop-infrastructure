@@ -1,28 +1,33 @@
 from typing import List
 
 import ory_kratos_client
-from ory_kratos_client import Identity
+from ory_kratos_client import Identity, UpdateIdentityBody
 
-
-# TODO: move to libs?
 
 class ServiceKratos:
-    def __init__(self, url: str, api_key: str):
+    def __init__(self, url: str):
         self.configuration = ory_kratos_client.Configuration(
-            host=url,
-            # TODO: make kratos admin service api key
-            # api_key={
-            #     "oryAccessToken": ""
-            # },
+            host=url
         )
         self.root = url
 
-    def get_users(self) -> List[Identity]:
+    def get_identities(self) -> List[Identity]:
         with ory_kratos_client.ApiClient(self.configuration) as api_client:
             api_instance = ory_kratos_client.IdentityApi(api_client)
             per_page = 25
             page = 1
             page_size = 25
-            resp = api_instance.list_identities(per_page=per_page, page=page, page_size=page_size)
-            print(resp)
-            return resp
+            identities = api_instance.list_identities(per_page=per_page, page=page, page_size=page_size)
+            return identities
+
+    def get_identity(self, identity_id: str) -> Identity:
+        with ory_kratos_client.ApiClient(self.configuration) as api_client:
+            api_instance = ory_kratos_client.IdentityApi(api_client)
+            identity = api_instance.get_identity(identity_id)
+            return identity
+
+    def get_update(self, identity_id: str, payload: UpdateIdentityBody) -> Identity:
+        with ory_kratos_client.ApiClient(self.configuration) as api_client:
+            api_instance = ory_kratos_client.IdentityApi(api_client)
+            identity = api_instance.update_identity(identity_id, payload)
+            return identity

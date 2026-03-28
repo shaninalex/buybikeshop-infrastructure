@@ -1,0 +1,1 @@
+export { CatalogMainPage } from './catalog-main-page'

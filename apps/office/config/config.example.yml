@@ -1,0 +1,11 @@
+port: 8005
+
+database: "postgresql+psycopg2://postgres:postgres@postgres:5432/postgres"
+
+kratos:
+  url_browser: "http://kratos:4433"
+  url_admin: "http://kratos:4434"
+  login_url_browser: "http://localhost:4455"
+
+grpc:
+    host: "datasource:50051"

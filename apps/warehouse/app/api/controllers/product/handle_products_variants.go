@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	ErrorEmptyProductId = errors.New("empty product id")
+	ErrorEmptyProductId = errors.New("empty catalog id")
 )
 
 func (s *ProductController) handleProductVariants(c *gin.Context) {

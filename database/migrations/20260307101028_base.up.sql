@@ -105,20 +105,30 @@ CREATE TABLE inventory.inventory_levels
 
 -- PARTNERS
 
-CREATE TABLE partners.partner_roles
+
+CREATE TABLE partners.roles
 (
     id   SERIAL PRIMARY KEY,
     role varchar UNIQUE
 );
 
-CREATE TABLE partners.partner
+CREATE TYPE partner_type AS ENUM ('person', 'company');
+
+CREATE TABLE partners.partners
 (
     id         SERIAL PRIMARY KEY,
-    role_id    bigint  NOT NULL,
+    active     BOOLEAN      default True,
+    type       partner_type default 'company',
     title      varchar not null,
-    created_at timestamp DEFAULT now(),
+    created_at timestamp    DEFAULT now()
+);
 
-    FOREIGN KEY (role_id) REFERENCES partners.partner_roles (id)
+CREATE TABLE partners.partner_roles
+(
+    role_id    bigint NOT NULL,
+    partner_id bigint NOT NULL,
+    FOREIGN KEY (partner_id) REFERENCES partners.partners (id) ON DELETE CASCADE,
+    FOREIGN KEY (role_id) REFERENCES partners.roles (id) ON DELETE CASCADE
 );
 
 CREATE TABLE partners.partner_contacts
@@ -128,7 +138,7 @@ CREATE TABLE partners.partner_contacts
     partner_id bigint NOT NULL,
     created_at timestamp DEFAULT now(),
 
-    FOREIGN KEY (partner_id) REFERENCES partners.partner (id)
+    FOREIGN KEY (partner_id) REFERENCES partners.partners (id) ON DELETE CASCADE
 );
 
 CREATE TABLE partners.suppliers
@@ -136,27 +146,6 @@ CREATE TABLE partners.suppliers
     id         SERIAL PRIMARY KEY,
     created_at timestamp DEFAULT now(),
     partner_id bigint NOT NULL,
-    FOREIGN KEY (partner_id) REFERENCES partners.partner (id)
+    FOREIGN KEY (partner_id) REFERENCES partners.partners (id) ON DELETE CASCADE
 );
 
---- DELIVERIES
-
-CREATE TABLE inventory.deliveries
-(
-    id           SERIAL PRIMARY KEY,
-    warehouse_id BIGINT    NOT NULL,
-    supplier_id  BIGINT    NOT NULL,
-    created_at   TIMESTAMP NOT NULL DEFAULT now(),
-
-    FOREIGN KEY (warehouse_id) REFERENCES inventory.warehouses (id),
-    FOREIGN KEY (supplier_id) REFERENCES partners.suppliers (id)
-);
-
-CREATE TABLE inventory.delivery_items
-(
-    delivery_id BIGINT REFERENCES inventory.deliveries (id),
-    variant_id  BIGINT REFERENCES catalog.product_variants (id),
-    quantity    BIGINT NOT NULL,
-
-    PRIMARY KEY (delivery_id, variant_id)
-);

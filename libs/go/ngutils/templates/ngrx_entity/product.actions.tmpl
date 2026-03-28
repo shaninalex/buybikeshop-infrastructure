@@ -1,0 +1,8 @@
+import { createAction, props } from '@ngrx/store';
+import { {{.EntityName}}Model } from './{{.Module}}.model';
+
+export const action{{.EntityName}}GetList = createAction('[{{.EntityName}}] get list');
+export const action{{.EntityName}}SetList = createAction(
+    '[{{.EntityName}}] set list',
+    props<{ {{.Module}}s: {{.EntityName}}Model[] }>(),
+);

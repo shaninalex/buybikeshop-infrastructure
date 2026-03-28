@@ -1,1 +1,9 @@
-database: "postgresql+psycopg2://postgres:postgres@localhost:5432/postgres"
+database:
+  database: postgres
+  user: postgres
+  password: postgres
+  host: localhost
+  port: 5432
+
+partners:
+  amount: 10

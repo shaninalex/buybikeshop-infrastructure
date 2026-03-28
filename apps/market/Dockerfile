@@ -9,6 +9,7 @@ WORKDIR /app
 COPY pyproject.toml uv.lock .python-version ./
 COPY apps/market/pyproject.toml ./apps/market/pyproject.toml
 COPY gen/grpc_buybikeshop_python/pyproject.toml ./gen/grpc_buybikeshop_python/pyproject.toml
+COPY libs/python/common_tools/pyproject.toml ./libs/python/common_tools/pyproject.toml
 
 # Install external dependencies first (cached layer)
 RUN uv sync --frozen --no-dev --no-install-workspace --package market
@@ -16,6 +17,7 @@ RUN uv sync --frozen --no-dev --no-install-workspace --package market
 # Copy source code for workspace packages
 COPY apps/market ./apps/market
 COPY gen/grpc_buybikeshop_python ./gen/grpc_buybikeshop_python
+COPY libs/python/common_tools ./libs/python/common_tools
 
 # Install workspace packages as non-editable
 RUN uv sync --frozen --no-dev --no-editable --package market

@@ -6,7 +6,7 @@ from common_tools.di import Container
 
 
 def _configure(container: Container) -> None:
-    container.register(ServiceKratos, instance=ServiceKratos(os.environ.get("APP_ADMIN_KRATOS_ADMIN"), ""))
+    container.register(ServiceKratos, instance=ServiceKratos(os.environ.get("APP_ADMIN_KRATOS_ADMIN")))
     container.register(Templates, instance=Templates())
 
 

@@ -1,4 +1,3 @@
-"""Web app DI"""
 import os
 
 import grpc

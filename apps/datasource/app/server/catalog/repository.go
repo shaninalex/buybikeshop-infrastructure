@@ -10,11 +10,11 @@ import (
 )
 
 var (
-	ErrorUnableToSaveBrand      = errors.New("unable to save brand")
-	ErrorUnableToDeleteBrand    = errors.New("unable to delete brand")
-	ErrorUnableToSaveCategory   = errors.New("unable to save category")
-	ErrorUnableToDeleteCategory = errors.New("unable to delete category")
-	ErrorUnableToSaveProduct    = errors.New("unable to save product")
+	ErrorCatalogUnableToSaveBrand      = errors.New("unable to save brand")
+	ErrorCatalogUnableToDeleteBrand    = errors.New("unable to delete brand")
+	ErrorCatalogUnableToSaveCategory   = errors.New("unable to save category")
+	ErrorCatalogUnableToDeleteCategory = errors.New("unable to delete category")
+	ErrorCatalogUnableToSaveProduct    = errors.New("unable to save catalog")
 )
 
 type Repository struct {
@@ -79,7 +79,7 @@ func (s *Repository) ProductSave(ctx context.Context, product models.Product) (*
 		}
 	}
 	if query == "" {
-		return nil, ErrorUnableToSaveProduct
+		return nil, ErrorCatalogUnableToSaveProduct
 	}
 	var id uint64
 	err = s.db.QueryRowContext(ctx, query).Scan(&id)
@@ -198,7 +198,7 @@ func (s *Repository) BrandSave(ctx context.Context, brand models.Brand) (*models
 		}
 	}
 	if query == "" {
-		return nil, ErrorUnableToSaveBrand
+		return nil, ErrorCatalogUnableToSaveBrand
 	}
 	var id uint64
 	err = s.db.QueryRowContext(ctx, query).Scan(&id)
@@ -225,7 +225,7 @@ func (s *Repository) BrandDelete(ctx context.Context, id uint64) error {
 		return err
 	}
 	if r == 0 {
-		return ErrorUnableToDeleteBrand
+		return ErrorCatalogUnableToDeleteBrand
 	}
 	return nil
 }
@@ -270,7 +270,7 @@ func (s *Repository) CategorySave(ctx context.Context, category models.Category)
 		}
 	}
 	if query == "" {
-		return nil, ErrorUnableToSaveCategory
+		return nil, ErrorCatalogUnableToSaveCategory
 	}
 	var id uint64
 	err = s.db.QueryRowContext(ctx, query).Scan(&id)
@@ -297,7 +297,7 @@ func (s *Repository) CategoryDelete(ctx context.Context, id uint64) error {
 		return err
 	}
 	if r == 0 {
-		return ErrorUnableToDeleteCategory
+		return ErrorCatalogUnableToDeleteCategory
 	}
 	return nil
 }

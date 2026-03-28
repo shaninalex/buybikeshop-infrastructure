@@ -1,0 +1,7 @@
+export type { {{.EntityName}}Model } from './{{.Module}}.model'
+export type { {{.EntityName}}State } from './{{.Module}}.reducer'
+
+export { {{.EntityName}}Effects } from './{{.Module}}.effects'
+export { action{{.EntityName}}GetList } from './{{.Module}}.actions'
+export { select{{.EntityName}}s, select{{.EntityName}}ByID } from './{{.Module}}.selectors'
+export { {{.Module}}Reducer } from './{{.Module}}.reducer'

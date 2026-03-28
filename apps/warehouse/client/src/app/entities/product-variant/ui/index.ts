@@ -1,1 +1,1 @@
-// export * from './product-card';
+// export * from './catalog-card';
