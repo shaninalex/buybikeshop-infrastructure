@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from "@angular/router";
+import { Store } from '@ngrx/store';
+import { actionPartnerGetList } from '@entities/partner';
 
 @Component({
     selector: 'app-partners-list-page',
@@ -44,5 +46,11 @@ import { RouterLink } from "@angular/router";
         </table>
     `,
 })
-export class PartnersListPage {
+export class PartnersListPage implements OnInit {
+    private store = inject(Store);
+
+
+    ngOnInit(): void {
+        this.store.dispatch(actionPartnerGetList())
+    }
 }

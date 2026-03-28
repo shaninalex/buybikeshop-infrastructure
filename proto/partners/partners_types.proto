@@ -20,11 +20,13 @@ message PartnerContact {
 
 message Partner {
   uint64 id = 1;
-  PartnerRole role = 2;
-  string title = 3;
-  repeated PartnerContact contacts = 4;
-  google.protobuf.Timestamp created_at = 5;
-  bool is_supplier = 6;
+  string title = 2;
+  string type = 3;
+  repeated PartnerRole roles = 4;
+  repeated PartnerContact contacts = 5;
+  google.protobuf.Timestamp created_at = 6;
+  bool is_supplier = 7;
+  bool active = 8;
 }
 
 message PartnersListRequest {
@@ -38,7 +40,7 @@ message PartnersListRequest {
 
 message PartnersListReply {
   repeated Partner partners = 1;
-  uint64 total = 2;
+  int64 total = 2;
 }
 
 message PartnersSaveRequest {
@@ -77,7 +79,7 @@ message PartnerRoleSaveReply {
 }
 
 message PartnerRoleDeleteRequest {
-  uint64 partner_id = 1;
+  uint64 role_id = 1;
 }
 
 message PartnerRoleDeleteReply {

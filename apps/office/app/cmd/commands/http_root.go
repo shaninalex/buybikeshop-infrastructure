@@ -40,7 +40,7 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 			_ = c.Provide(persistance.ProvideDB)
 			_ = c.Provide(auth.ProvideKratos)
 
-			_ = c.Provide(pkg.Module)
+			_ = pkg.Module(c)
 			_ = api.Module(c)
 
 			if err = c.Invoke(func(router *gin.Engine, config *config.Config, ctx context.Context) {

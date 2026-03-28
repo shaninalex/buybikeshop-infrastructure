@@ -4,7 +4,6 @@ import (
 	"buybikeshop/apps/office"
 	"buybikeshop/apps/office/app/api/controllers/catalog"
 	"buybikeshop/apps/office/app/api/controllers/partners"
-	"buybikeshop/libs/go/auth"
 	"buybikeshop/libs/go/config"
 	"net/http"
 
@@ -47,7 +46,7 @@ func ProvideAPI(deps ApiDeps) *gin.Engine {
 	router := ProvideRouter()
 	router.Use(gin.Recovery())
 
-	router.Use(auth.AuthMiddleware(deps.KratosAPIClient, deps.Config))
+	//router.Use(auth.AuthMiddleware(deps.KratosAPIClient, deps.Config))
 
 	v1 := router.Group("/api/v1/office")
 	deps.CatalogController.Register(v1)
