@@ -86,3 +86,11 @@ message PartnerRoleDeleteReply {
   bool status = 1;
   string message = 3;
 }
+
+message PartnerReply {
+  Partner partner = 1;
+}
+
+message PartnerRequest {
+  uint64 partnerId = 1;
+}

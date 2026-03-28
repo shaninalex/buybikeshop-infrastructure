@@ -14,7 +14,8 @@ selfservice:
   default_browser_return_url: http://127.0.0.1:4455/ # default kratos ui node
   allowed_return_urls:
     - http://127.0.0.1:4455 # default kratos ui client
-    - http://127.0.0.1:4200 # warehouse ui client
+    - http://127.0.0.1:4200 # office ui client
+    - http://127.0.0.1:4201 # warehouse ui client
 
   methods:
     password:
