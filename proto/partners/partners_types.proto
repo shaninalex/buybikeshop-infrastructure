@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package partners;
+
+option go_package = "grpc-buybikeshop-go/partners";
+
+import "google/protobuf/timestamp.proto";
+
+message PartnerRole {
+  uint64 id = 1;
+  string role = 2;
+}
+
+message PartnerContact {
+  uint64 id = 1;
+  string contacts = 2;
+  uint64 partner_id = 3;
+  google.protobuf.Timestamp created_at = 4;
+}
+
+message Partner {
+  uint64 id = 1;
+  PartnerRole role = 2;
+  string title = 3;
+  repeated PartnerContact contacts = 4;
+  google.protobuf.Timestamp created_at = 5;
+  bool is_supplier = 6;
+}
+
+message PartnersListRequest {
+  string query = 1; // <= example ?name=acme&role[]=company&role[]=supplier
+  repeated uint64 roles = 2;
+
+  // Pagination
+  uint32 limit = 9;
+  uint32 offset = 10;
+}
+
+message PartnersListReply {
+  repeated Partner partners = 1;
+  uint64 total = 2;
+}
+
+message PartnersSaveRequest {
+  Partner partner = 1;
+}
+
+message PartnersSaveReply {
+  Partner partner = 1;
+  bool status = 2;
+}
+
+message PartnersDeleteRequest {
+  uint64 partner_id = 1;
+}
+
+message PartnersDeleteReply {
+  bool status = 2;
+}
+
+message PartnerRoleListRequest {
+  string query = 1; // <= example ?name=acme
+}
+
+message PartnerRoleListReply {
+  repeated PartnerRole roles = 1;
+}
+
+message PartnerRoleSaveRequest {
+  PartnerRole role = 1;
+}
+
+message PartnerRoleSaveReply {
+  PartnerRole role = 1;
+  bool status = 2;
+  string message = 3;
+}
+
+message PartnerRoleDeleteRequest {
+  uint64 partner_id = 1;
+}
+
+message PartnerRoleDeleteReply {
+  bool status = 1;
+  string message = 3;
+}

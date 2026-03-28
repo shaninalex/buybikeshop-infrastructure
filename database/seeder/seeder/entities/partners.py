@@ -1,3 +1,4 @@
+from random import randint
 from typing import List
 
 from faker import Faker
@@ -60,7 +61,6 @@ class PartnerRolesSeeder:
         for row in result:
             ids.append(int(row[0]))
 
-
         utils.execute_raw_sql(connection, self._sql)
 
     def clear(self, connection):
@@ -79,12 +79,11 @@ class PartnerContacts:
         cursor.execute("select id from partners.partner;")
         result = cursor.fetchall()
         for row in result:
-            for i in utils.generate_sequence(1, 3):
+            for i in range(randint(1, 3)):
                 values = (row[0], self._generate_contacts())
                 cursor.execute(f"""
                     insert into partners.partner_contacts (partner_id, contacts) values {values};
                 """, values)
-
 
     def clear(self, connection):
         utils.execute_raw_sql(connection, self._sql_clear)
