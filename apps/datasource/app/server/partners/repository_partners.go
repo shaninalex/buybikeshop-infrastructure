@@ -24,6 +24,35 @@ func ProvideRepositoryPartners(db *sql.DB) *RepositoryPartners {
 	}
 }
 
+func (s RepositoryPartners) Partner(ctx context.Context, partnerId uint64) (*models.Partner, error) {
+	q, _, err := goqu.From("partners.partners").
+		Select("id", "active", "type", "title", "created_at").
+		Where(goqu.Ex{"id": partnerId}).
+		ToSQL()
+	if err != nil {
+		return nil, err
+	}
+	rows := s.db.QueryRowContext(ctx, q)
+	var partner models.Partner
+	if err = rows.Scan(&partner.Id, &partner.Active, &partner.Type, &partner.Title, &partner.CreatedAt); err != nil {
+		return nil, err
+	}
+
+	if err = s.setPartnerRole(ctx, &partner); err != nil {
+		return nil, err
+	}
+
+	if err = s.setPartnerContacts(ctx, &partner); err != nil {
+		return nil, err
+	}
+
+	if err = s.setSupplier(ctx, &partner); err != nil {
+		return nil, err
+	}
+
+	return &partner, nil
+}
+
 func (s RepositoryPartners) PartnersList(ctx context.Context) ([]*models.Partner, error) {
 	q, _, err := goqu.From("partners.partners").
 		Select("id", "active", "type", "title", "created_at").
@@ -148,6 +177,63 @@ func (s RepositoryPartners) getSuppliers(ctx context.Context, partners map[uint6
 		}
 	}
 
+	return nil
+}
+
+func (s RepositoryPartners) setPartnerRole(ctx context.Context, partner *models.Partner) error {
+	q, _, _ := goqu.From("partners.partner_roles").
+		Select("role_id").
+		Where(goqu.Ex{"partner_id": partner.Id}).
+		ToSQL()
+
+	partnerRoles := []uint64{}
+	rows, err := s.db.QueryContext(ctx, q)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var id uint64
+		if err = rows.Scan(&id); err != nil {
+			return err
+		}
+		partnerRoles = append(partnerRoles, id)
+	}
+	partner.Roles = partnerRoles
+	return nil
+}
+
+func (s RepositoryPartners) setPartnerContacts(ctx context.Context, partner *models.Partner) error {
+	q, _, _ := goqu.From("partners.partner_contacts").
+		Select("id", "contacts", "partner_id", "created_at").
+		Where(goqu.Ex{"partner_id": partner.Id}).ToSQL()
+	partnerContacts := []*models.PartnerContact{}
+	rows, err := s.db.QueryContext(ctx, q)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var pc models.PartnerContact
+		err = rows.Scan(&pc.Id, &pc.Contacts, &pc.PartnerId, &pc.CreatedAt)
+		if err != nil {
+			return err
+		}
+		partnerContacts = append(partnerContacts, &pc)
+	}
+	partner.Contacts = partnerContacts
+	return nil
+}
+
+func (s RepositoryPartners) setSupplier(ctx context.Context, partner *models.Partner) error {
+	q, _, _ := goqu.From("partners.suppliers").
+		Select(goqu.COUNT("*")).
+		Where(goqu.Ex{"partner_id": partner.Id}).ToSQL()
+	var c int
+	if err := s.db.QueryRowContext(ctx, q).Scan(&c); err != nil {
+		return err
+	}
+	partner.IsSupplier = c > 0
 	return nil
 }
 

@@ -27,17 +27,32 @@ import { AsyncPipe } from '@angular/common';
         <table class="table">
             <thead>
             <tr>
-                <th scope="col" style="width: 20px">#</th>
-                <th scope="col">Name</th>
+                <th scope="col">Type</th>
+                <th scope="col" style="width: 100%">Name</th>
+                <th scope="col">Supplier</th>
             </tr>
             </thead>
             <tbody>
                 @if (partners$ | async; as partners) {
                     @for (partner of partners; track $index) {
                         <tr>
-                            <th scope="row">1</th>
-                            <td><a [routerLink]='["/partners", partner.id]' class="text-body">{{ partner.title }}</a>
+                            <th scope="row">
+                                @if (partner.type === 'company') {
+                                    <i class="fa-regular fa-building"></i>
+                                } @else {
+                                    <i class="fa-solid fa-person"></i>
+                                }
+                            </th>
+                            <td>
+                                <a [routerLink]='["/partners", partner.id]' class="text-body">{{ partner.title }}</a>
                             </td>
+                            <th scope="row">
+                                @if (partner.is_supplier) {
+                                    <i class="fa-solid fa-truck-field"></i>
+                                } @else {
+                                    <span>-</span>
+                                }
+                            </th>
                         </tr>
                     }
                 }

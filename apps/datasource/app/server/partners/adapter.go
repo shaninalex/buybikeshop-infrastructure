@@ -18,6 +18,16 @@ func ProvideAdapter(repositoryRoles *RepositoryRoles, repositoryPartners *Reposi
 	}
 }
 
+func (s Adapter) Partner(ctx context.Context, request *pb.PartnerRequest) (*pb.PartnerReply, error) {
+	partner, err := s.repositoryPartners.Partner(ctx, request.PartnerId)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.PartnerReply{
+		Partner: models.ToPbPartner(partner),
+	}, err
+}
+
 func (s Adapter) PartnersList(ctx context.Context, request *pb.PartnersListRequest) (*pb.PartnersListReply, error) {
 	partners, err := s.repositoryPartners.PartnersList(ctx)
 	if err != nil {

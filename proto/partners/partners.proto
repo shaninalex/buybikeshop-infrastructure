@@ -7,6 +7,7 @@ option go_package = "grpc-buybikeshop-go/partners";
 import "partners/partners_types.proto";
 
 service Partners {
+  rpc Partner(PartnerRequest) returns (PartnerReply) {}
   rpc PartnersList(PartnersListRequest) returns (PartnersListReply) {}
   rpc PartnersSave(PartnersSaveRequest) returns (PartnersSaveReply) {} // create/update
   rpc PartnersDelete(PartnersDeleteRequest) returns (PartnersDeleteReply) {}

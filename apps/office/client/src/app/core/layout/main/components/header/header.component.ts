@@ -9,7 +9,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     ],
     template: `
         <div class="mb-4" style="height: 56px;"></div>
-        <nav class="navbar navbar-expand-lg bg-dark position-fixed top-0 left-0 w-100" data-bs-theme="dark">
+        <nav class="navbar navbar-expand-lg bg-dark position-fixed top-0 left-0 w-100 z-3" data-bs-theme="dark">
             <div class="container">
                 <a class="navbar-brand" routerLink="/">
                     <img src="images/logo.png" alt="BuyBikeShop Office" style="width: 2rem">
