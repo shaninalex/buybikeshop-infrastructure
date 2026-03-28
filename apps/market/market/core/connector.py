@@ -1,5 +1,6 @@
 import grpc.aio
 
+from catalog.catalog_pb2_grpc import CatalogStub
 from catalog.product_pb2 import (
     ProductGetReply,
     ProductGetRequest,
@@ -10,7 +11,6 @@ from catalog.product_pb2 import (
     ProductVariantListReply,
     ProductVariantListRequest,
 )
-from catalog_pb2_grpc import CatalogStub
 
 
 class CatalogConnector:
