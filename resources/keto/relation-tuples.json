@@ -1,1 +1,32 @@
-{}
+[
+  {
+    "namespace": "PurchaseOrder",
+    "object": "global",
+    "relation": "viewer",
+    "subject_set": {
+      "namespace": "Role",
+      "object": "manager",
+      "relation": "member"
+    }
+  },
+  {
+    "namespace": "PurchaseOrder",
+    "object": "global",
+    "relation": "creator",
+    "subject_set": {
+      "namespace": "Role",
+      "object": "manager",
+      "relation": "member"
+    }
+  },
+  {
+    "namespace": "PurchaseOrder",
+    "object": "global",
+    "relation": "editor",
+    "subject_set": {
+      "namespace": "Role",
+      "object": "manager",
+      "relation": "member"
+    }
+  }
+]

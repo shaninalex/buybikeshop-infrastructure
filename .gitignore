@@ -225,3 +225,4 @@ config.yml
 !config.example.yml
 
 resources/database/bin
+node_modules
