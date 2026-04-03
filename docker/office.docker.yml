@@ -1,28 +1,28 @@
 services:
-  warehouse-client:
+  office-client:
     build:
-      context: ../apps/warehouse/client
+      context: ../apps/office/client
       dockerfile: Dockerfile
     ports:
-      - "4201:80"
+      - "4200:80"
     restart: unless-stopped
     depends_on:
-      warehouse:
+      office:
         condition: service_started
     networks:
       - intranet
 
-  warehouse:
+  office:
     build:
       context: ../
-      dockerfile: apps/warehouse/Dockerfile
+      dockerfile: apps/office/Dockerfile
     ports:
-      - "8001:8001"
+      - "8005:8005"
     volumes:
       - type: bind
-        source: ../apps/warehouse/config/config.yml
+        source: ../apps/office/config/config.yml
         target: /root/config.yml
-    command: ["./warehouse", "serve", "--config=/root/config.yml"]
+    command: ["./office", "serve", "--config=/root/config.yml"]
     restart: unless-stopped
     depends_on:
       postgres:

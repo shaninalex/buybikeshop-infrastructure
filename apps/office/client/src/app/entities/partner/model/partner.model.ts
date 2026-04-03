@@ -13,6 +13,8 @@ export interface PartnerModel {
     id: number;
     role: PartnerRole;
     title: string;
+    type: string;
+    active: boolean;
     is_supplier: boolean;
     contacts: PartnerContact[];
     created_at: Date;

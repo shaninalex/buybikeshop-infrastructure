@@ -7,29 +7,69 @@ import (
 )
 
 type Adapter struct {
-	repository *Repository
+	repositoryRoles    *RepositoryRoles
+	repositoryPartners *RepositoryPartners
 }
 
-func ProvideAdapter(repository *Repository) *Adapter {
+func ProvideAdapter(repositoryRoles *RepositoryRoles, repositoryPartners *RepositoryPartners) *Adapter {
 	return &Adapter{
-		repository: repository,
+		repositoryRoles:    repositoryRoles,
+		repositoryPartners: repositoryPartners,
 	}
 }
 
+func (s Adapter) Partner(ctx context.Context, request *pb.PartnerRequest) (*pb.PartnerReply, error) {
+	partner, err := s.repositoryPartners.Partner(ctx, request.PartnerId)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.PartnerReply{
+		Partner: models.ToPbPartner(partner),
+	}, err
+}
+
 func (s Adapter) PartnersList(ctx context.Context, request *pb.PartnersListRequest) (*pb.PartnersListReply, error) {
-	panic("implement me")
+	partners, err := s.repositoryPartners.PartnersList(ctx)
+	if err != nil {
+		return &pb.PartnersListReply{
+			Partners: []*pb.Partner{},
+			Total:    0,
+		}, err
+	}
+	return &pb.PartnersListReply{
+		Partners: models.ToPbPartners(partners),
+		Total:    int64(len(partners)),
+	}, err
 }
 
 func (s Adapter) PartnersSave(ctx context.Context, request *pb.PartnersSaveRequest) (*pb.PartnersSaveReply, error) {
-	panic("implement me")
+	payload := models.ToModelPartner(request.Partner)
+	partner, err := s.repositoryPartners.PartnersSave(ctx, payload)
+	if err != nil {
+		return &pb.PartnersSaveReply{
+			Partner: nil,
+			Status:  false,
+		}, err
+	}
+	return &pb.PartnersSaveReply{
+		Partner: models.ToPbPartner(partner),
+		Status:  false,
+	}, err
 }
 
 func (s Adapter) PartnersDelete(ctx context.Context, request *pb.PartnersDeleteRequest) (*pb.PartnersDeleteReply, error) {
-	panic("implement me")
+	if err := s.repositoryPartners.PartnersDelete(ctx, request.PartnerId); err != nil {
+		return &pb.PartnersDeleteReply{
+			Status: false,
+		}, err
+	}
+	return &pb.PartnersDeleteReply{
+		Status: true,
+	}, nil
 }
 
 func (s Adapter) PartnerRoleList(ctx context.Context, request *pb.PartnerRoleListRequest) (*pb.PartnerRoleListReply, error) {
-	pr, err := s.repository.RolesGet(ctx)
+	pr, err := s.repositoryRoles.RolesGet(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +88,7 @@ func (s Adapter) PartnerRoleList(ctx context.Context, request *pb.PartnerRoleLis
 }
 
 func (s Adapter) PartnerRoleSave(ctx context.Context, request *pb.PartnerRoleSaveRequest) (*pb.PartnerRoleSaveReply, error) {
-	r, err := s.repository.RolesSave(ctx, &models.PartnerRole{
+	r, err := s.repositoryRoles.RolesSave(ctx, &models.Role{
 		Id:   request.Role.Id,
 		Role: request.Role.Role,
 	})
@@ -64,7 +104,7 @@ func (s Adapter) PartnerRoleSave(ctx context.Context, request *pb.PartnerRoleSav
 }
 
 func (s Adapter) PartnerRoleDelete(ctx context.Context, request *pb.PartnerRoleDeleteRequest) (*pb.PartnerRoleDeleteReply, error) {
-	if err := s.repository.RolesDelete(ctx, request.PartnerId); err != nil {
+	if err := s.repositoryRoles.RolesDelete(ctx, request.RoleId); err != nil {
 		return &pb.PartnerRoleDeleteReply{
 			Status:  false,
 			Message: err.Error(),

@@ -20,6 +20,10 @@ type Server struct {
 
 var _ pb.PartnersServer = &Server{}
 
+func (s Server) Partner(ctx context.Context, request *pb.PartnerRequest) (*pb.PartnerReply, error) {
+	return s.adapter.Partner(ctx, request)
+}
+
 func (s Server) PartnersList(ctx context.Context, request *pb.PartnersListRequest) (*pb.PartnersListReply, error) {
 	return s.adapter.PartnersList(ctx, request)
 }

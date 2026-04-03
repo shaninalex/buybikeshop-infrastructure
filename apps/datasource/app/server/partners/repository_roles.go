@@ -14,25 +14,25 @@ var (
 	ErrorPartnerUnableToDeleteRole = errors.New("unable to delete role")
 )
 
-type Repository struct {
+type RepositoryRoles struct {
 	db *sql.DB
 }
 
-func ProvideRepository(db *sql.DB) *Repository {
-	return &Repository{
+func ProvideRepositoryRoles(db *sql.DB) *RepositoryRoles {
+	return &RepositoryRoles{
 		db: db,
 	}
 }
 
-func (s Repository) RolesGet(ctx context.Context) ([]models.PartnerRole, error) {
+func (s RepositoryRoles) RolesGet(ctx context.Context) ([]models.Role, error) {
 	q, _, _ := goqu.From("partners.roles").Select("id", "role").ToSQL()
 	result, err := s.db.QueryContext(ctx, q)
 	if err != nil {
 		return nil, err
 	}
-	var roles []models.PartnerRole
+	var roles []models.Role
 	for result.Next() {
-		var role models.PartnerRole
+		var role models.Role
 		if err = result.Scan(&role.Id, &role.Role); err != nil {
 			return nil, err
 		}
@@ -41,7 +41,7 @@ func (s Repository) RolesGet(ctx context.Context) ([]models.PartnerRole, error) 
 	return roles, nil
 }
 
-func (s Repository) RolesSave(ctx context.Context, role *models.PartnerRole) (*models.PartnerRole, error) {
+func (s RepositoryRoles) RolesSave(ctx context.Context, role *models.Role) (*models.Role, error) {
 	record := goqu.Record{
 		"role": role.Role,
 	}
@@ -74,7 +74,7 @@ func (s Repository) RolesSave(ctx context.Context, role *models.PartnerRole) (*m
 	return role, nil
 }
 
-func (s Repository) RolesDelete(ctx context.Context, id uint64) error {
+func (s RepositoryRoles) RolesDelete(ctx context.Context, id uint64) error {
 	q, _, err := goqu.Delete("partners.roles").Where(goqu.Ex{"id": id}).ToSQL()
 	if err != nil {
 		return err
