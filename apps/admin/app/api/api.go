@@ -3,7 +3,7 @@ package api
 import (
 	// "buybikeshop/apps/admin/app/api/middlewares"
 	"buybikeshop/apps/admin"
-	"buybikeshop/apps/admin/app/api/employee"
+	"buybikeshop/apps/admin/app/api/controllers/employee"
 	"buybikeshop/libs/go/config"
 	"net/http"
 
@@ -50,7 +50,7 @@ func ProvideAPI(deps ApiDeps) *gin.Engine {
 
 	// router.Use(middlewares.AuthMiddleware(deps.KratosAPIClient, deps.Config))
 
-	v1 := router.Group("/api/v1/warehouse")
+	v1 := router.Group("/api/v1/admin")
 	deps.EmployeeController.Register(v1)
 
 	return router

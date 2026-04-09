@@ -1,7 +1,7 @@
 package api
 
 import (
-	"buybikeshop/apps/admin/app/api/employee"
+	"buybikeshop/apps/admin/app/api/controllers/employee"
 
 	"go.uber.org/dig"
 )

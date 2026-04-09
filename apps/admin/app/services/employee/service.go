@@ -1,6 +1,7 @@
 package employee
 
 import (
+	"buybikeshop/apps/admin/app/models"
 	"context"
 	"encoding/json"
 	"errors"
@@ -14,10 +15,9 @@ import (
 )
 
 type Service interface {
-	Create(ctx context.Context, dataPath string) (*ory.Identity, error)
-	List(ctx context.Context) ([]ory.Identity, error)
+	Create(ctx context.Context, dataPath string) (*models.Employee, error)
+	List(ctx context.Context) ([]models.Employee, error)
 	Delete(ctx context.Context, id uuid.UUID) error
-	EditIdentity(ctx context.Context, id uuid.UUID, patch ory.UpdateIdentityBody) (*ory.Identity, error)
 }
 
 func ProvideEmployeeService(c *ory.APIClient) Service {
@@ -31,7 +31,7 @@ type serviceImpl struct {
 	client *ory.APIClient
 }
 
-func (s serviceImpl) Create(ctx context.Context, dataPath string) (*ory.Identity, error) {
+func (s serviceImpl) Create(ctx context.Context, dataPath string) (*models.Employee, error) {
 	f, err := os.Open(dataPath)
 	if err != nil {
 		return nil, err
@@ -60,15 +60,20 @@ func (s serviceImpl) Create(ctx context.Context, dataPath string) (*ory.Identity
 		return nil, errors.New(string(b))
 	}
 
-	return i, nil
+	return &models.Employee{Identity: *i}, nil
 }
 
-func (s serviceImpl) List(ctx context.Context) ([]ory.Identity, error) {
+func (s serviceImpl) List(ctx context.Context) (employees []models.Employee, err error) {
 	identities, _, err := s.client.IdentityAPI.ListIdentitiesExecute(s.client.IdentityAPI.ListIdentities(ctx))
 	if err != nil {
 		return nil, err
 	}
-	return identities, nil
+
+	for _, i := range identities {
+		employees = append(employees, models.Employee{Identity: i})
+	}
+
+	return employees, nil
 }
 
 func (s serviceImpl) Delete(ctx context.Context, id uuid.UUID) error {
@@ -78,13 +83,4 @@ func (s serviceImpl) Delete(ctx context.Context, id uuid.UUID) error {
 		return err
 	}
 	return nil
-}
-
-func (s serviceImpl) EditIdentity(ctx context.Context, id uuid.UUID, patch ory.UpdateIdentityBody) (*ory.Identity, error) {
-	d := s.client.IdentityAPI.UpdateIdentity(ctx, id.String()).UpdateIdentityBody(patch)
-	identity, _, err := s.client.IdentityAPI.UpdateIdentityExecute(d)
-	if err != nil {
-		return nil, err
-	}
-	return identity, nil
 }

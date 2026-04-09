@@ -4,10 +4,6 @@ import { EmployeeModel } from '@entities/employee';
 import { APIResponse } from '@shared/models';
 import { HttpClient } from '@angular/common/http';
 
-interface employeesResponse {
-    employees: EmployeeModel[]
-}
-
 @Injectable({
     providedIn: 'root',
 })
@@ -16,10 +12,7 @@ export class EmployeeApi {
 
     GetEmployees(): Observable<EmployeeModel[]> {
         return this.http
-            .get<APIResponse<employeesResponse>>(`/api/v1/admin/employees`)
-            .pipe(
-                map((response) => response.data),
-                map((response) => response.employees),
-            );
+            .get<APIResponse<EmployeeModel[]>>(`/api/v1/admin/employees`)
+            .pipe(map((response) => response.data));
     }
 }

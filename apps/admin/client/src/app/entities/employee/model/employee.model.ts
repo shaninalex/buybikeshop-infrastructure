@@ -1,4 +1,5 @@
+import { Identity } from '@ory/client';
+
 export interface EmployeeModel {
-    id: number;
-    created_at: Date;
+    identity: Identity;
 }

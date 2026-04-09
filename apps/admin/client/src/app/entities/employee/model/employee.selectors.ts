@@ -8,7 +8,7 @@ export const selectEmployees = createSelector(selectEmployeesFeature, (state) =>
     employeesSelectors.selectAll(state),
 );
 
-export const selectEmployeeByID = (id: number) =>
+export const selectEmployeeByID = (id: string) =>
     createSelector(selectEmployeesFeature, (state: EmployeeState) =>
-        employeesSelectors.selectAll(state).find((p) => p.id === id),
+        employeesSelectors.selectAll(state).find((p) => p.identity.id === id),
     );
