@@ -43,7 +43,7 @@ type Partner struct {
 }
 
 func ToModelPartner(p *pb.Partner) *Partner {
-	roles := make([]uint64, len(p.Roles))
+	roles := make([]uint64, len(p.Role))
 	contacts := make([]*PartnerContact, len(p.Contacts))
 
 	for i, role := range p.Roles {

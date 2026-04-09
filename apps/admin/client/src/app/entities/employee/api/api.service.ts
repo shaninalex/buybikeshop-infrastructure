@@ -1,25 +1,25 @@
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { WorkerModel } from '@entities/worker';
+import { EmployeeModel } from '@entities/employee';
 import { APIResponse } from '@shared/models';
 import { HttpClient } from '@angular/common/http';
 
-interface workersResponse {
-    workers: WorkerModel[]
+interface employeesResponse {
+    employees: EmployeeModel[]
 }
 
 @Injectable({
     providedIn: 'root',
 })
-export class WorkerApi {
+export class EmployeeApi {
     http = inject(HttpClient);
 
-    GetWorkers(): Observable<WorkerModel[]> {
+    GetEmployees(): Observable<EmployeeModel[]> {
         return this.http
-            .get<APIResponse<workersResponse>>(`/api/v1/admin/workers`)
+            .get<APIResponse<employeesResponse>>(`/api/v1/admin/employees`)
             .pipe(
                 map((response) => response.data),
-                map((response) => response.workers),
+                map((response) => response.employees),
             );
     }
 }

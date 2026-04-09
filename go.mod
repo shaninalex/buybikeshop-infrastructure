@@ -5,6 +5,7 @@ go 1.25.6
 require (
 	github.com/doug-martin/goqu/v9 v9.19.0
 	github.com/gin-gonic/gin v1.11.0
+	github.com/google/uuid v1.6.0
 	github.com/lib/pq v1.11.2
 	github.com/ory/kratos-client-go v1.3.8
 	github.com/spf13/cobra v1.10.2
