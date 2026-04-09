@@ -12,6 +12,7 @@ COMPOSE_MAIN=(
   -f "$PROJECT_ROOT/docker/kratos.docker.yml"
   -f "$PROJECT_ROOT/docker/keto.docker.yml"
   -f "$PROJECT_ROOT/docker/office.docker.yml"
+  -f "$PROJECT_ROOT/docker/admin.docker.yml"
 )
 
 COMPOSE_TEST=(
