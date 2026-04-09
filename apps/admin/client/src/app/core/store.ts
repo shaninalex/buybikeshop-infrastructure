@@ -1,6 +1,7 @@
-import { WorkerEffects, workerReducer } from "@entities/worker";
+import { EmployeeEffects, employeeReducer } from '@entities/employee';
 
-export const effects = [WorkerEffects];
+export const effects = [EmployeeEffects];
+
 export const reducers = {
-    workers: workerReducer,
+    employee: employeeReducer,
 };

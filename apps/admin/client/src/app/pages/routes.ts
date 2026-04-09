@@ -1,16 +1,12 @@
 import { Routes } from '@angular/router';
 import { PageContainer } from './page.container';
-import { HomePage } from './static';
+import { employee_routes } from './employee';
+import { static_routes } from './static/routes';
 
 export const routes: Routes = [
     {
         path: '',
         component: PageContainer,
-        children: [
-            {
-                path: '',
-                component: HomePage,
-            },
-        ]
-    }
+        children: [...static_routes, ...employee_routes],
+    },
 ];

@@ -1,0 +1,79 @@
+<!-- Search and Filters -->
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <div class="row g-3 align-items-center">
+            <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="Search by name or email..." />
+            </div>
+            <div class="col-md-3">
+                <select class="form-select">
+                    <option selected>All Roles</option>
+                    <option>Admin</option>
+                    <option>Manager</option>
+                    <option>User</option>
+                </select>
+            </div>
+            <div class="col-md-3 text-md-end">
+                <button class="btn btn-primary me-3">
+                    <i class="fa-solid fa-plus"></i> Add User
+                </button>
+                <button class="btn btn-outline-secondary">
+                    <i class="fa-solid fa-magnifying-glass"></i> Filter
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Users Table -->
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">User</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Status</th>
+                        <th scope="col" class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (employees | async; as employees) {
+                        @for (employee of employees; track $index) {
+                            <tr app-employee-item [employee]="employee"></tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="card-footer">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="text-muted">Showing 1 to 3 of 50 entries</div>
+            <nav>
+                <ul class="pagination mb-0">
+                    <li class="page-item disabled">
+                        <a class="page-link">Previous</a>
+                    </li>
+                    <li class="page-item active">
+                        <a class="page-link">1</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link">2</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link">3</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
