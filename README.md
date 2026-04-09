@@ -1,5 +1,7 @@
 ## Buybikeshop
 
+> It's a playground, a place to test ideas and practice.
+
 Organization infrastructure - db, apps, servers, ui, etc...
 
 ### Run:
@@ -16,7 +18,7 @@ cp apps/warehouse/config/config.example.yml apps/warehouse/config/config.yml
 ./run.sh generate_grpc
 ./run.sh start
 
-# TODO: create users 
+# TODO: create users
 # ( currently I use Postman, see docs/ory_hydra-ory_kratos_api_integration.json)
 
 # generate mock data
