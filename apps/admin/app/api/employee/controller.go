@@ -1,14 +1,21 @@
 package employee
 
-import "github.com/gin-gonic/gin"
+import (
+	"buybikeshop/apps/admin/app/services/employee"
+
+	"github.com/gin-gonic/gin"
+)
 
 type EmployeeController struct {
+	employeeService employee.Service
 }
 
-func NewEmployeeController() *EmployeeController {
-	return &EmployeeController{}
+func NewEmployeeController(employeeService employee.Service) *EmployeeController {
+	return &EmployeeController{
+		employeeService: employeeService,
+	}
 }
 
 func (s *EmployeeController) Register(router *gin.RouterGroup) {
-	router.GET("inventory", nil)
+	router.GET("employees", s.handleList)
 }

@@ -10,6 +10,7 @@ import (
 	"syscall"
 	"time"
 
+	"buybikeshop/apps/admin/app/api"
 	"buybikeshop/apps/admin/app/services"
 	"buybikeshop/libs/go/auth"
 	"buybikeshop/libs/go/config"
@@ -42,7 +43,7 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 			_ = c.Provide(auth.ProvideKratos)
 
 			//_ = pkg.Module(c)
-			//_ = api.Module(c)
+			_ = api.Module(c)
 			_ = services.Module(c)
 
 			if err = c.Invoke(func(router *gin.Engine, config *config.Config, ctx context.Context) {
