@@ -43,12 +43,7 @@ type Partner struct {
 }
 
 func ToModelPartner(p *pb.Partner) *Partner {
-	roles := make([]uint64, len(p.Role))
 	contacts := make([]*PartnerContact, len(p.Contacts))
-
-	for i, role := range p.Roles {
-		roles[i] = role
-	}
 
 	for i, contact := range p.Contacts {
 		contacts[i] = &PartnerContact{
@@ -61,10 +56,8 @@ func ToModelPartner(p *pb.Partner) *Partner {
 	return &Partner{
 		Id:         p.Id,
 		Title:      p.Title,
-		Type:       PartnerType(p.Type),
-		Active:     p.Active,
+		Active:     true,
 		IsSupplier: p.IsSupplier,
-		Roles:      roles,
 		Contacts:   contacts,
 	}
 }
@@ -89,10 +82,7 @@ func ToPbPartner(p *Partner) *pb.Partner {
 	return &pb.Partner{
 		Id:         p.Id,
 		Title:      p.Title,
-		Type:       string(p.Type),
-		Active:     p.Active,
 		IsSupplier: p.IsSupplier,
-		Roles:      roleIds,
 		Contacts:   contacts,
 		CreatedAt:  timestamppb.New(p.CreatedAt),
 	}
