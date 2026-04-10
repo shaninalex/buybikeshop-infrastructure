@@ -4,7 +4,7 @@ services:
       context: ../apps/office/client
       dockerfile: Dockerfile
     ports:
-      - "4200:80"
+      - "8085:80"
     restart: unless-stopped
     depends_on:
       office:

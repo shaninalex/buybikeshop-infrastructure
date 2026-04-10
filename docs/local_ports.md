@@ -10,4 +10,5 @@
 # clients
 8083 - admin-client
 8085 - office-client
+8081 - warehouse-client
 ```
