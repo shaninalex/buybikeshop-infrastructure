@@ -4,7 +4,7 @@ services:
       context: ../apps/warehouse/client
       dockerfile: Dockerfile
     ports:
-      - "4201:80"
+      - "8081:80"
     restart: unless-stopped
     depends_on:
       warehouse:
