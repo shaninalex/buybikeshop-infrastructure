@@ -5,9 +5,8 @@ import (
 	"buybikeshop/apps/admin"
 	"buybikeshop/apps/admin/app/api/controllers/employee"
 	"buybikeshop/libs/go/config"
+	"buybikeshop/libs/go/kratos"
 	"net/http"
-
-	ory "github.com/ory/kratos-client-go"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/dig"
@@ -36,7 +35,7 @@ func HealthRoute(c *gin.Context) {
 type ApiDeps struct {
 	dig.In
 
-	KratosAPIClient *ory.APIClient
+	KratosAPIClient kratos.ApiClient
 	Config          *config.Config
 
 	EmployeeController *employee.EmployeeController

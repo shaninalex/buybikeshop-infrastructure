@@ -2,13 +2,11 @@ package employee
 
 import (
 	"buybikeshop/apps/admin/app/models"
+	"buybikeshop/libs/go/kratos"
 	"context"
 	"errors"
-	"io"
-	"net/http"
 
 	"github.com/google/uuid"
-	ory "github.com/ory/kratos-client-go"
 )
 
 type Service interface {
@@ -17,7 +15,7 @@ type Service interface {
 	Delete(ctx context.Context, id uuid.UUID) error
 }
 
-func ProvideEmployeeService(c *ory.APIClient) Service {
+func ProvideEmployeeService(c kratos.ApiClient) Service {
 	s := serviceImpl{client: c}
 	return &s
 }
@@ -25,7 +23,7 @@ func ProvideEmployeeService(c *ory.APIClient) Service {
 var _ Service = (*serviceImpl)(nil)
 
 type serviceImpl struct {
-	client *ory.APIClient
+	client kratos.ApiClient
 }
 
 var (
@@ -33,27 +31,16 @@ var (
 )
 
 func (s serviceImpl) Create(ctx context.Context, data models.EmployeeCreate) (*models.Employee, error) {
-	d := s.client.IdentityAPI.CreateIdentity(ctx).CreateIdentityBody(data.Identity)
-	identity, r, err := s.client.IdentityAPI.CreateIdentityExecute(d)
+	identity, err := s.client.CreateIdentity(ctx, data.Identity)
 	if err != nil {
 		return nil, err
-	}
-	defer r.Body.Close()
-
-	if r.StatusCode != http.StatusOK {
-		b, _ := io.ReadAll(r.Body)
-		return nil, errors.New(string(b))
-	}
-
-	if identity == nil {
-		return nil, ErrorCreate
 	}
 
 	return &models.Employee{Identity: *identity}, nil
 }
 
 func (s serviceImpl) List(ctx context.Context) (employees []models.Employee, err error) {
-	identities, _, err := s.client.IdentityAPI.ListIdentitiesExecute(s.client.IdentityAPI.ListIdentities(ctx))
+	identities, err := s.client.ListIdentities(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -66,10 +53,12 @@ func (s serviceImpl) List(ctx context.Context) (employees []models.Employee, err
 }
 
 func (s serviceImpl) Delete(ctx context.Context, id uuid.UUID) error {
-	r, err := s.client.IdentityAPI.DeleteIdentityExecute(s.client.IdentityAPI.DeleteIdentity(ctx, id.String()))
-	defer r.Body.Close()
+	r, err := s.client.DeleteIdentity(ctx, id)
 	if err != nil {
 		return err
+	}
+	if !r {
+		return ErrorCreate
 	}
 	return nil
 }

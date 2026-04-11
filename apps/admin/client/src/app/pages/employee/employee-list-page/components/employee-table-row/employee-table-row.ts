@@ -21,14 +21,6 @@ import {IdentityTraits} from '@entities/employee/model/employee.model';
         <td>{{ traits.email }}</td>
         <td><span class="badge bg-info text-dark">User</span></td>
         <td><span class="badge bg-warning text-dark">Pending</span></td>
-        <td class="text-end">
-            <a
-                class="btn btn-sm btn-outline-secondary"
-                [routerLink]="['/employee', employee.identity.id]"
-            >
-                <i class="fa-solid fa-person"></i>
-            </a>
-        </td>
     `,
 })
 export class EmployeeTableRow implements OnInit {

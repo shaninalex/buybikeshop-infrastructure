@@ -2,8 +2,8 @@ package commands
 
 import (
 	"buybikeshop/apps/admin/app/services"
-	"buybikeshop/libs/go/auth"
 	"buybikeshop/libs/go/config"
+	"buybikeshop/libs/go/kratos"
 	"context"
 
 	"github.com/spf13/cobra"
@@ -29,7 +29,7 @@ func NewEmployeeCreateCmd() *cobra.Command {
 
 			_ = c.Provide(func() context.Context { return appContext })
 			_ = c.Provide(config.ProvideConfig(configPath))
-			_ = c.Provide(auth.ProvideKratos)
+			_ = c.Provide(kratos.ProvideKratos)
 
 			_ = services.Module(c)
 

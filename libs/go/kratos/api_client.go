@@ -12,8 +12,8 @@ import (
 
 type ApiClient interface {
 	CreateIdentity(ctx context.Context, data ory.CreateIdentityBody) (*ory.Identity, error)
-	ListIdentitiesExecute(ctx context.Context) ([]ory.Identity, error)
-	DeleteIdentityExecute(ctx context.Context, id uuid.UUID) (bool, error)
+	ListIdentities(ctx context.Context) ([]ory.Identity, error)
+	DeleteIdentity(ctx context.Context, id uuid.UUID) (bool, error)
 }
 
 var (
@@ -51,7 +51,7 @@ func (s KratosApiClient) CreateIdentity(ctx context.Context, data ory.CreateIden
 	return identity, nil
 }
 
-func (s KratosApiClient) ListIdentitiesExecute(ctx context.Context) ([]ory.Identity, error) {
+func (s KratosApiClient) ListIdentities(ctx context.Context) ([]ory.Identity, error) {
 	identities, _, err := s.client.IdentityAPI.ListIdentitiesExecute(s.client.IdentityAPI.ListIdentities(ctx))
 	if err != nil {
 		return nil, err
@@ -59,7 +59,7 @@ func (s KratosApiClient) ListIdentitiesExecute(ctx context.Context) ([]ory.Ident
 	return identities, nil
 }
 
-func (s KratosApiClient) DeleteIdentityExecute(ctx context.Context, id uuid.UUID) (bool, error) {
+func (s KratosApiClient) DeleteIdentity(ctx context.Context, id uuid.UUID) (bool, error) {
 	r, err := s.client.IdentityAPI.DeleteIdentityExecute(s.client.IdentityAPI.DeleteIdentity(ctx, id.String()))
 	defer r.Body.Close()
 	if err != nil {

@@ -23,7 +23,7 @@ type KratosApiClient struct {
 var _ kratos.ApiClient = (*KratosApiClient)(nil)
 
 func ProvideKratosApiClient() kratos.ApiClient {
-	f, err := os.Open("data/identities.json")
+	f, err := os.Open("libs/go/mock/data/identities.json")
 	if err != nil {
 		panic(err)
 	}
@@ -70,14 +70,14 @@ func (m *KratosApiClient) CreateIdentity(ctx context.Context, data ory.CreateIde
 	return identity, nil
 }
 
-func (m *KratosApiClient) ListIdentitiesExecute(ctx context.Context) ([]ory.Identity, error) {
+func (m *KratosApiClient) ListIdentities(ctx context.Context) ([]ory.Identity, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
 	return slices.Collect(maps.Values(m.identities)), nil
 }
 
-func (m *KratosApiClient) DeleteIdentityExecute(ctx context.Context, id uuid.UUID) (bool, error) {
+func (m *KratosApiClient) DeleteIdentity(ctx context.Context, id uuid.UUID) (bool, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
