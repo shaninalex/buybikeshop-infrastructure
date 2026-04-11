@@ -6,7 +6,7 @@
     "state": "active",
     "state_changed_at": "2026-04-11T06:36:07.85786Z",
     "traits": {
-      "dob": "12-01-2000",
+      "dob": "1991-04-11",
       "name": "Garry Modeson",
       "email": "garry.modeson@buybike.shop",
       "phone": "+1234567890",
@@ -25,7 +25,7 @@
     "state": "active",
     "state_changed_at": "2026-04-10T12:37:06.799824Z",
     "traits": {
-      "dob": "28-12-2026",
+      "dob": "1992-04-11",
       "name": "John Doe",
       "email": "employee1@buybike.shop",
       "photo": "/images/default-avatar.png",
@@ -44,7 +44,7 @@
     "state": "active",
     "state_changed_at": "2026-04-11T06:37:08.890679Z",
     "traits": {
-      "dob": "25-02-1995",
+      "dob": "1993-04-11",
       "name": "Alfred Johnes",
       "email": "alfred.johnes@buybike.shop",
       "phone": "+12093239823",

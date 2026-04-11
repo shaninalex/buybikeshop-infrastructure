@@ -8,7 +8,7 @@ import {IdentityTraits} from '@entities/employee/model/employee.model';
     imports: [RouterLink],
     template: `
         <td>
-            <a class="d-flex align-items-center" [routerLink]="['/employee', employee.identity.id]">
+            <a class="d-flex align-items-center" [routerLink]="['/employees', employee.identity.id]">
                 <img
                     [src]="traits.photo"
                     class="rounded-circle me-2"
@@ -20,7 +20,13 @@ import {IdentityTraits} from '@entities/employee/model/employee.model';
         </td>
         <td>{{ traits.email }}</td>
         <td><span class="badge bg-info text-dark">User</span></td>
-        <td><span class="badge bg-warning text-dark">Pending</span></td>
+        <td>
+            @if (employee.identity.state === "active") {
+                <span class="badge bg-warning text-dark">{{ employee.identity.state }}</span>
+            } @else if (employee.identity.state === "inactive") {
+                <span class="badge bg-warning text-dark">{{ employee.identity.state }}</span>
+            }
+        </td>
     `,
 })
 export class EmployeeTableRow implements OnInit {
