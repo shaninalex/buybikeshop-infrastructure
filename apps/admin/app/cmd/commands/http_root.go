@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"buybikeshop/libs/go/kratos"
+	"buybikeshop/libs/go/mock"
 	"context"
 	"fmt"
 	"log"
@@ -12,7 +14,6 @@ import (
 
 	"buybikeshop/apps/admin/app/api"
 	"buybikeshop/apps/admin/app/services"
-	"buybikeshop/libs/go/auth"
 	"buybikeshop/libs/go/config"
 	"buybikeshop/libs/go/persistance"
 
@@ -34,13 +35,20 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 				panic(err)
 			}
 
+			isDevMode, _ := cmd.Flags().GetBool("dev")
 			appContext, appCancel := context.WithCancel(context.Background())
 			defer appCancel()
 
 			_ = c.Provide(func() context.Context { return appContext })
 			_ = c.Provide(config.ProvideConfig(configPath))
 			_ = c.Provide(persistance.ProvideDB)
-			_ = c.Provide(auth.ProvideKratos)
+
+			if isDevMode {
+				_ = c.Provide(mock.ProvideKratosApiClient)
+			} else {
+				_ = c.Provide(kratos.ProvideKratos)
+				_ = c.Provide(kratos.ProvideApiClient)
+			}
 
 			//_ = pkg.Module(c)
 			_ = api.Module(c)

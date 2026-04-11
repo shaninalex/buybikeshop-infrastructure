@@ -1,0 +1,8 @@
+linters-settings:
+  errcheck:
+    check-type-assertions: false
+    check-blank: false
+    exclude-functions:
+      - (*net/http.Response).Body.Close
+      - (io.Closer).Close
+      - (*os.File).Close

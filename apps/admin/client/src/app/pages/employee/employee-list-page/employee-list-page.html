@@ -43,7 +43,7 @@
                 <tbody>
                     @if (employees | async; as employees) {
                         @for (employee of employees; track $index) {
-                            <tr app-employee-item [employee]="employee"></tr>
+                            <tr app-employee-table-row [employee]="employee"></tr>
                         }
                     }
                 </tbody>

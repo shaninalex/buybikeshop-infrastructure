@@ -1,0 +1,59 @@
+{
+  "02235705-1ee4-4ee6-b628-ecee53402be7": {
+    "id": "02235705-1ee4-4ee6-b628-ecee53402be7",
+    "schema_id": "default",
+    "schema_url": "http://127.0.0.1:4433/schemas/ZGVmYXVsdA",
+    "state": "active",
+    "state_changed_at": "2026-04-11T06:36:07.85786Z",
+    "traits": {
+      "dob": "12-01-2000",
+      "name": "Garry Modeson",
+      "email": "garry.modeson@buybike.shop",
+      "phone": "+1234567890",
+      "photo": "/images/default-avatar.png"
+    },
+    "metadata_public": null,
+    "metadata_admin": null,
+    "created_at": "2026-04-11T06:36:07.858724Z",
+    "updated_at": "2026-04-11T06:36:07.858724Z",
+    "organization_id": null
+  },
+  "21186a5e-e046-4745-a7fd-674cb0b0bc53": {
+    "id": "21186a5e-e046-4745-a7fd-674cb0b0bc53",
+    "schema_id": "default",
+    "schema_url": "http://127.0.0.1:4433/schemas/ZGVmYXVsdA",
+    "state": "active",
+    "state_changed_at": "2026-04-10T12:37:06.799824Z",
+    "traits": {
+      "dob": "28-12-2026",
+      "name": "John Doe",
+      "email": "employee1@buybike.shop",
+      "photo": "/images/default-avatar.png",
+      "phone": "+12093239824"
+    },
+    "metadata_public": null,
+    "metadata_admin": null,
+    "created_at": "2026-04-10T12:37:06.800616Z",
+    "updated_at": "2026-04-10T12:37:06.800616Z",
+    "organization_id": null
+  },
+  "e70238a5-fea3-4812-845d-fb90e4fba9e4": {
+    "id": "e70238a5-fea3-4812-845d-fb90e4fba9e4",
+    "schema_id": "default",
+    "schema_url": "http://127.0.0.1:4433/schemas/ZGVmYXVsdA",
+    "state": "active",
+    "state_changed_at": "2026-04-11T06:37:08.890679Z",
+    "traits": {
+      "dob": "25-02-1995",
+      "name": "Alfred Johnes",
+      "email": "alfred.johnes@buybike.shop",
+      "phone": "+12093239823",
+      "photo": "/images/default-avatar.png"
+    },
+    "metadata_public": null,
+    "metadata_admin": null,
+    "created_at": "2026-04-11T06:37:08.891473Z",
+    "updated_at": "2026-04-11T06:37:08.891473Z",
+    "organization_id": null
+  }
+]
