@@ -3,6 +3,7 @@ package commands
 import (
 	"buybikeshop/apps/office/app/api"
 	"buybikeshop/apps/office/app/pkg"
+	"buybikeshop/libs/go/kratos"
 	"context"
 	"fmt"
 	"log"
@@ -12,7 +13,6 @@ import (
 	"syscall"
 	"time"
 
-	"buybikeshop/libs/go/auth"
 	"buybikeshop/libs/go/config"
 	"buybikeshop/libs/go/persistance"
 
@@ -38,7 +38,8 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 			_ = c.Provide(func() context.Context { return appContext })
 			_ = c.Provide(config.ProvideConfig(configPath))
 			_ = c.Provide(persistance.ProvideDB)
-			_ = c.Provide(auth.ProvideKratos)
+			_ = c.Provide(kratos.ProvideApiClient)
+			_ = c.Provide(kratos.ProvideKratos)
 
 			_ = pkg.Module(c)
 			_ = api.Module(c)

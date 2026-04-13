@@ -2,17 +2,23 @@ package employee
 
 import (
 	"buybikeshop/apps/admin/app/services/employee"
+	"buybikeshop/libs/go/keto"
 
 	"github.com/gin-gonic/gin"
 )
 
 type EmployeeController struct {
-	employeeService employee.Service
+	employeeService   employee.Service
+	permissionService keto.KetoWriter
 }
 
-func NewEmployeeController(employeeService employee.Service) *EmployeeController {
+func NewEmployeeController(
+	employeeService employee.Service,
+	permissionService keto.KetoWriter,
+) *EmployeeController {
 	return &EmployeeController{
-		employeeService: employeeService,
+		employeeService:   employeeService,
+		permissionService: permissionService,
 	}
 }
 

@@ -1,7 +1,7 @@
 package kratos
 
 import (
-	"buybikeshop/libs/go/ptrs"
+	"buybikeshop/libs/go/ptr"
 	"context"
 	"errors"
 	"io"
@@ -61,7 +61,7 @@ func (s KratosApiClient) CreateIdentity(ctx context.Context, data EmployeeCreate
 	creds := ory.NewIdentityWithCredentials()
 	pswd := ory.NewIdentityWithCredentialsPassword()
 	pswd.SetConfig(ory.IdentityWithCredentialsPasswordConfig{
-		Password: ptrs.Ptr(data.Password),
+		Password: ptr.Ptr(data.Password),
 	})
 
 	creds.Password = pswd

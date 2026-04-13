@@ -4,10 +4,7 @@ log:
   level: debug
 
 namespaces:
-  - id: 0
-    name: warehouse
-  - id: 2
-    name: market
+  location: file:///home/ory/namespaces/namespaces.keto.ts
 
 serve:
   read:
@@ -16,5 +13,3 @@ serve:
   write:
     host: 0.0.0.0
     port: 4467
-
-dsn: memory
