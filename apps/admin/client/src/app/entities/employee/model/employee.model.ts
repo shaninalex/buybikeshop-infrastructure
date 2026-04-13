@@ -28,7 +28,7 @@ export interface EmployeeCreateFormModel {
     email: string;
     name: string;
     photo: string;
-    dob: Date | string;
+    dob: string;
     phone: string;
     password: string;
 }
