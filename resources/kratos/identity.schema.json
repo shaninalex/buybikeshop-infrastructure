@@ -34,6 +34,11 @@
           "type": "string",
           "format": "string",
           "title": "Birthdate"
+        },
+        "phone": {
+          "type": "string",
+          "format": "string",
+          "title": "Phone"
         }
       },
       "required": [

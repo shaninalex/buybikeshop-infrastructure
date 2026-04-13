@@ -14,9 +14,9 @@
                 </select>
             </div>
             <div class="col-md-3 text-md-end">
-                <button class="btn btn-primary me-3">
+                <a [routerLink]="['/employees', 'create']" class="btn btn-primary me-3">
                     <i class="fa-solid fa-plus"></i> Add User
-                </button>
+                </a>
                 <button class="btn btn-outline-secondary">
                     <i class="fa-solid fa-magnifying-glass"></i> Filter
                 </button>
@@ -32,18 +32,16 @@
             <table class="table table-hover align-middle mb-0">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
                         <th scope="col">User</th>
                         <th scope="col">Email</th>
                         <th scope="col">Role</th>
                         <th scope="col">Status</th>
-                        <th scope="col" class="text-end">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @if (employees | async; as employees) {
                         @for (employee of employees; track $index) {
-                            <tr app-employee-item [employee]="employee"></tr>
+                            <tr app-employee-table-row [employee]="employee"></tr>
                         }
                     }
                 </tbody>

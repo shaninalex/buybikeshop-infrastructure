@@ -1,6 +1,11 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject, Injectable } from '@angular/core';
-import { actionEmployeeGetList, actionEmployeeSetList, } from './employee.actions';
+import {
+    actionEmployeeCreate,
+    actionEmployeeCreateComplete,
+    actionEmployeeGetList,
+    actionEmployeeSetList,
+} from './employee.actions';
 import { exhaustMap, of, switchMap } from 'rxjs';
 import { EmployeeApi } from '../api/api.service';
 
@@ -16,6 +21,18 @@ export class EmployeeEffects {
                 this.employeesApi
                     .GetEmployees()
                     .pipe(switchMap((data) => of(actionEmployeeSetList({ employees: data })))),
+            ),
+        ),
+    );
+
+    create_employees$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(actionEmployeeCreate),
+            exhaustMap(action =>
+                this.employeesApi
+                    .CreateEmployee(action.data)
+                    // TODO: handle error
+                    .pipe(switchMap((data) => of(actionEmployeeCreateComplete({ employee: data })))),
             ),
         ),
     );

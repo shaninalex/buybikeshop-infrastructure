@@ -16,7 +16,7 @@ import { RouterLink } from '@angular/router';
             <div class="d-flex flex-column justify-content-between flex-grow-1">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" routerLink="/employee">
+                        <a class="nav-link active" aria-current="page" routerLink="/employees">
                             Employees
                         </a>
                     </li>

@@ -7,3 +7,7 @@ kratos:
 
 grpc:
   host: "datasource:50051"
+
+keto:
+  read: "http://keto:4466"
+  write: "http://keto:4467"
