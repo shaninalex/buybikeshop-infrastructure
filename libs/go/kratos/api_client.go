@@ -1,6 +1,7 @@
 package kratos
 
 import (
+	"buybikeshop/libs/go/ptrs"
 	"context"
 	"errors"
 	"io"
@@ -10,8 +11,23 @@ import (
 	ory "github.com/ory/kratos-client-go"
 )
 
+type EmployeeCreate struct {
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Phone    string `json:"phone"`
+	Dob      string `json:"dob"`
+	Photo    string `json:"photo"`
+	Password string `json:"password"`
+}
+
+func (s *EmployeeCreate) ApplyDefaults() {
+	if s.Photo == "" {
+		s.Photo = "/images/default-avatar.png"
+	}
+}
+
 type ApiClient interface {
-	CreateIdentity(ctx context.Context, data ory.CreateIdentityBody) (*ory.Identity, error)
+	CreateIdentity(ctx context.Context, data EmployeeCreate) (*ory.Identity, error)
 	ListIdentities(ctx context.Context) ([]ory.Identity, error)
 	DeleteIdentity(ctx context.Context, id uuid.UUID) (bool, error)
 }
@@ -32,15 +48,33 @@ type KratosApiClient struct {
 	client *ory.APIClient
 }
 
-func (s KratosApiClient) CreateIdentity(ctx context.Context, data ory.CreateIdentityBody) (*ory.Identity, error) {
-	d := s.client.IdentityAPI.CreateIdentity(ctx).CreateIdentityBody(data)
+func (s KratosApiClient) CreateIdentity(ctx context.Context, data EmployeeCreate) (*ory.Identity, error) {
+	body := ory.NewCreateIdentityBodyWithDefaults()
+	body.Traits = map[string]any{
+		"name":  data.Name,
+		"email": data.Email,
+		"phone": data.Phone,
+		"dob":   data.Dob,
+		"photo": data.Photo,
+	}
+
+	creds := ory.NewIdentityWithCredentials()
+	pswd := ory.NewIdentityWithCredentialsPassword()
+	pswd.SetConfig(ory.IdentityWithCredentialsPasswordConfig{
+		Password: ptrs.Ptr(data.Password),
+	})
+
+	creds.Password = pswd
+	body.SetCredentials(*creds)
+
+	d := s.client.IdentityAPI.CreateIdentity(ctx).CreateIdentityBody(*body)
 	identity, r, err := s.client.IdentityAPI.CreateIdentityExecute(d)
 	if err != nil {
 		return nil, err
 	}
 	defer r.Body.Close()
 
-	if r.StatusCode != http.StatusOK {
+	if r.StatusCode != http.StatusCreated {
 		b, _ := io.ReadAll(r.Body)
 		return nil, errors.New(string(b))
 	}

@@ -42,23 +42,27 @@ func ProvideKratosApiClient() kratos.ApiClient {
 	}
 }
 
-func (m *KratosApiClient) CreateIdentity(ctx context.Context, data ory.CreateIdentityBody) (*ory.Identity, error) {
+func (m *KratosApiClient) CreateIdentity(ctx context.Context, data kratos.EmployeeCreate) (*ory.Identity, error) {
 	created_at := time.Now()
 	id := uuid.New()
-	email, ok := data.Traits["email"].(string)
-	if !ok {
-		return nil, kratos.IdentityApiErrorMissingEmail
+
+	traits := map[string]any{
+		"name":  data.Name,
+		"email": data.Email,
+		"phone": data.Phone,
+		"dob":   data.Dob,
+		"photo": data.Photo,
 	}
 
 	identity := &ory.Identity{
 		Id:        id.String(),
-		Traits:    data.Traits,
+		Traits:    traits,
 		CreatedAt: &created_at,
 	}
 
 	cred := ory.NewIdentityCredentials()
 	cred.SetType("password")
-	cred.SetIdentifiers([]string{email})
+	cred.SetIdentifiers([]string{data.Email})
 	cred.SetVersion(0)
 
 	identity.SetCredentials(map[string]ory.IdentityCredentials{"password": *cred})

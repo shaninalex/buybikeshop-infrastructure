@@ -7,7 +7,3 @@ import (
 type Employee struct {
 	Identity ory.Identity `json:"identity"`
 }
-
-type EmployeeCreate struct {
-	Identity ory.CreateIdentityBody `json:"identity"`
-}

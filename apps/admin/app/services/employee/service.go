@@ -10,7 +10,7 @@ import (
 )
 
 type Service interface {
-	Create(ctx context.Context, data models.EmployeeCreate) (*models.Employee, error)
+	Create(ctx context.Context, data kratos.EmployeeCreate) (*models.Employee, error)
 	List(ctx context.Context) ([]models.Employee, error)
 	Delete(ctx context.Context, id uuid.UUID) error
 }
@@ -30,8 +30,8 @@ var (
 	ErrorCreate = errors.New("unable to create identity")
 )
 
-func (s serviceImpl) Create(ctx context.Context, data models.EmployeeCreate) (*models.Employee, error) {
-	identity, err := s.client.CreateIdentity(ctx, data.Identity)
+func (s serviceImpl) Create(ctx context.Context, data kratos.EmployeeCreate) (*models.Employee, error) {
+	identity, err := s.client.CreateIdentity(ctx, data)
 	if err != nil {
 		return nil, err
 	}
