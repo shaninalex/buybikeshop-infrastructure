@@ -9,10 +9,27 @@ import (
 	"github.com/google/uuid"
 )
 
+type EmployeeCreate struct {
+	Name     string `json:"name" validate:"required"`
+	Email    string `json:"email" validate:"required,email"`
+	Phone    string `json:"phone"`
+	Dob      string `json:"dob"`
+	Photo    string `json:"photo"`
+	Password string `json:"password"`
+	Role     string `json:"role"`
+}
+
+func (s *EmployeeCreate) ApplyDefaults() {
+	if s.Photo == "" {
+		s.Photo = "/images/default-avatar.png"
+	}
+}
+
 type Service interface {
-	Create(ctx context.Context, data kratos.EmployeeCreate) (*models.Employee, error)
+	Create(ctx context.Context, data EmployeeCreate) (*models.Employee, error)
 	List(ctx context.Context) ([]models.Employee, error)
 	Delete(ctx context.Context, id uuid.UUID) error
+	Validate(ctx context.Context, data EmployeeCreate) error
 }
 
 func ProvideEmployeeService(c kratos.ApiClient) Service {
@@ -30,8 +47,15 @@ var (
 	ErrorCreate = errors.New("unable to create identity")
 )
 
-func (s serviceImpl) Create(ctx context.Context, data kratos.EmployeeCreate) (*models.Employee, error) {
-	identity, err := s.client.CreateIdentity(ctx, data)
+func (s serviceImpl) Create(ctx context.Context, data EmployeeCreate) (*models.Employee, error) {
+	identity, err := s.client.CreateIdentity(ctx, kratos.IdentityCreate{
+		Name:     data.Name,
+		Email:    data.Email,
+		Phone:    data.Phone,
+		Dob:      data.Dob,
+		Photo:    data.Photo,
+		Password: data.Password,
+	})
 	if err != nil {
 		return nil, err
 	}

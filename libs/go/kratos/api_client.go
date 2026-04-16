@@ -11,7 +11,7 @@ import (
 	ory "github.com/ory/kratos-client-go"
 )
 
-type EmployeeCreate struct {
+type IdentityCreate struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Phone    string `json:"phone"`
@@ -20,14 +20,8 @@ type EmployeeCreate struct {
 	Password string `json:"password"`
 }
 
-func (s *EmployeeCreate) ApplyDefaults() {
-	if s.Photo == "" {
-		s.Photo = "/images/default-avatar.png"
-	}
-}
-
 type ApiClient interface {
-	CreateIdentity(ctx context.Context, data EmployeeCreate) (*ory.Identity, error)
+	CreateIdentity(ctx context.Context, data IdentityCreate) (*ory.Identity, error)
 	ListIdentities(ctx context.Context) ([]ory.Identity, error)
 	DeleteIdentity(ctx context.Context, id uuid.UUID) (bool, error)
 }
@@ -48,7 +42,7 @@ type KratosApiClient struct {
 	client *ory.APIClient
 }
 
-func (s KratosApiClient) CreateIdentity(ctx context.Context, data EmployeeCreate) (*ory.Identity, error) {
+func (s KratosApiClient) CreateIdentity(ctx context.Context, data IdentityCreate) (*ory.Identity, error) {
 	body := ory.NewCreateIdentityBodyWithDefaults()
 	body.Traits = map[string]any{
 		"name":  data.Name,

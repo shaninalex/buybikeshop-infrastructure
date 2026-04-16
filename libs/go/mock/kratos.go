@@ -42,7 +42,7 @@ func ProvideKratosApiClient() kratos.ApiClient {
 	}
 }
 
-func (m *KratosApiClient) CreateIdentity(ctx context.Context, data kratos.EmployeeCreate) (*ory.Identity, error) {
+func (m *KratosApiClient) CreateIdentity(ctx context.Context, data kratos.IdentityCreate) (*ory.Identity, error) {
 	created_at := time.Now()
 	id := uuid.New()
 
