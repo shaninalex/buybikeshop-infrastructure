@@ -179,10 +179,7 @@ export class ManualForm implements OnInit {
 
         this.actions$.pipe(
             ofType(actionEmployeeCreateError),
-            tap(action => {
-                console.log(action.errors);
-                this.errors.set(action.errors)
-            }),
+            tap(action => this.errors.set(action.errors)),
             finalize(() => this.loading.set(false)),
             takeUntilDestroyed(this.destroyRef),
         ).subscribe();
