@@ -12,10 +12,12 @@ export const actionEmployeeCreate = createAction(
     '[Employee] create',
     props<{ data: EmployeeCreateFormModel }>(),
 );
+
 export const actionEmployeeCreateError = createAction(
     '[Employee] create error',
     props<{ errors: any }>(),
 );
+
 export const actionEmployeeCreateComplete = createAction(
     '[Employee] create complete',
     props<{ employee: EmployeeModel }>(),

@@ -9,7 +9,7 @@
 <hr class="mb-4">
 
 <!-- Creation Method -->
-<form [formGroup]="form" class="mb-4">
+<div class="mb-4">
     <div class="form-label fw-bold">Creation Method</div>
 
     <div class="form-check">
@@ -18,7 +18,7 @@
             type="radio"
             id="manual"
             value="manual"
-            formControlName="creationMethod"
+            [(ngModel)]="creationMethod"
         />
         <label class="form-check-label" for="manual">
             Create Manually
@@ -31,13 +31,13 @@
             type="radio"
             id="google"
             value="google"
-            formControlName="creationMethod"
+            [(ngModel)]="creationMethod"
         />
         <label class="form-check-label" for="google">
             Create via Google Workspace
         </label>
     </div>
-</form>
+</div>
 
 @if (creationMethod === 'google') {
     <app-employee-create-google-form/>

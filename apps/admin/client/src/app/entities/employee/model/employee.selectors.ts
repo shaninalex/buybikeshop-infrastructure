@@ -20,6 +20,7 @@ export const selectEmployeeViewModel = (id: string) =>
 
         const traits = employee.identity.traits as IdentityTraits;
         const created_at = employee.identity.created_at? new Date(employee.identity.created_at) : null;
+
         return {
             id: employee.identity.id,
             email: traits.email,
