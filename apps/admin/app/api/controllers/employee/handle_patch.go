@@ -1,16 +1,15 @@
 package employee
 
 import (
-	"buybikeshop/apps/admin/app/models"
 	"buybikeshop/apps/admin/app/services/employee"
 	"buybikeshop/libs/go/transport"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
-func (s EmployeeController) handleCreate(ctx *gin.Context) {
+func (s EmployeeController) handlePatch(ctx *gin.Context) {
 	data := employee.EmployeeCreate{}
 	if err := ctx.ShouldBindJSON(&data); err != nil {
 		transport.Error(ctx, http.StatusBadRequest, err)
@@ -23,20 +22,17 @@ func (s EmployeeController) handleCreate(ctx *gin.Context) {
 		return
 	}
 
-	empl, err := s.employeeService.Create(ctx, data)
+	id, err := uuid.Parse(ctx.Param("id"))
+	if err != nil {
+		transport.Error(ctx, http.StatusBadRequest, err)
+		return
+	}
+
+	empl, err := s.employeeService.Patch(ctx, id, data)
 	if err != nil {
 		transport.Error(ctx, http.StatusInternalServerError, err)
 		return
 	}
-
-	// TODO:
-	// 	publish event instead
-	go func(employee *models.Employee) {
-		_, err = s.permissionService.Write(ctx, "Role", data.Role, "member", employee.Id())
-		if err != nil {
-			fmt.Println(err)
-		}
-	}(empl)
 
 	transport.Success(ctx, empl)
 }

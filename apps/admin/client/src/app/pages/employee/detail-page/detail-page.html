@@ -1,172 +1,121 @@
 @if (employee$ | async; as employee) {
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div class="d-flex align-items-center gap-3">
-            <button class="btn btn-outline-secondary btn-sm" [routerLink]="['/employees']">
-                ← Back
-            </button>
-            <h2 class="mb-0">Employee Details</h2>
-        </div>
+    <form (submit)="submit($event)" class="mb-4">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-outline-secondary btn-sm" [routerLink]="['/employees']">
+                    ← Back
+                </button>
+                <h2 class="mb-0">Employee Details</h2>
+            </div>
 
-        <div class="btn-group">
-            <button class="btn btn-primary btn-sm">
-                <i class="bi bi-pencil"></i> Edit
-            </button>
-            <button class="btn btn-outline-danger btn-sm">
-                <i class="bi bi-trash"></i> Delete
-            </button>
-        </div>
-    </div>
-
-    <!-- Employee Card -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-body">
-            <div class="row align-items-center">
-                <!-- Avatar -->
-                <div class="col-md-2 text-center">
-                    <img
-                        src="images/default-avatar.png"
-                        alt="Employee Avatar"
-                        class="img-fluid rounded-circle"
-                    />
-                </div>
-
-                <!-- Basic Info -->
-                <div class="col-md-10">
-                    <h4 class="mb-1">{{ employee.name }}</h4>
-                    <p class="text-muted mb-2">Senior Software Engineer</p>
-
-                    @if (employee.state === "active") {
-                        <span class="badge bg-success me-2">Active</span>
-                    } @else if (employee.state === "inactive") {
-                        <span class="badge bg-secondary me-2">Inactive</span>
-                    }
-                </div>
+            <div class="btn-group">
+                <button class="btn btn-primary" [disabled]="!employeeForm().dirty() || employeeForm().errorSummary().length > 0">
+                    <i class="bi bi-pencil"></i> Save
+                </button>
             </div>
         </div>
-    </div>
 
-    <!-- Details -->
-    <div class="row g-4">
-        <!-- Personal Information -->
-        <div class="col-lg-6">
-            <div class="card shadow-sm h-100">
-                <div class="card-header">
-                    <h5 class="mb-0">Personal Information</h5>
-                </div>
-                <div class="card-body">
-                    <table class="table table-borderless mb-0">
-                        <tbody>
-                        <tr>
-                            <th class="text-muted w-50">Name</th>
-                            <td>{{ employee.name }}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-muted">Email</th>
-                            <td>{{ employee.email }}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-muted">Phone</th>
-                            <td>{{ employee.phone }}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-muted">Date of Birth</th>
-                            <td>{{ employee.dob | date }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
+        <!-- Employee Card -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <!-- Avatar -->
+                    <div class="col-md-2 text-center">
+                        <img
+                            src="images/default-avatar.png"
+                            alt="Employee Avatar"
+                            class="img-fluid rounded-circle"
+                        />
+                    </div>
+
+                    <!-- Basic Info -->
+                    <div class="col-md-10">
+                        <h4 class="mb-1">{{ employee.name }}</h4>
+                        <p class="text-muted mb-2">Senior Software Engineer</p>
+
+                        @if (employee.state === "active") {
+                            <span class="badge bg-success me-2">Active</span>
+                        } @else if (employee.state === "inactive") {
+                            <span class="badge bg-secondary me-2">Inactive</span>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Employment Information -->
-        <div class="col-lg-6">
-            <div class="card shadow-sm h-100">
-                <div class="card-header">
-                    <h5 class="mb-0">Employment Information</h5>
-                </div>
-                <div class="card-body">
-                    <table class="table table-borderless mb-0">
-                        <tbody>
-                        <tr>
-                            <th class="text-muted w-50">Employee ID</th>
-                            <td>EMP-001</td>
-                        </tr>
-                        <tr>
-                            <th class="text-muted">Department</th>
-                            <td>Engineering</td>
-                        </tr>
-                        <tr>
-                            <th class="text-muted">Position</th>
-                            <td>Senior Software Engineer</td>
-                        </tr>
-                        <tr>
-                            <th class="text-muted">Hire Date</th>
-                            <td>2020-03-15</td>
-                        </tr>
-                        <tr>
-                            <th class="text-muted">Manager</th>
-                            <td>Jane Smith</td>
-                        </tr>
-                        <tr>
-                            <th class="text-muted">Salary</th>
-                            <td>$5,000 / month</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Address -->
-        <div class="col-lg-6">
-            <div class="card shadow-sm h-100">
-                <div class="card-header">
-                    <h5 class="mb-0">Address</h5>
-                </div>
-                <div class="card-body">
-                    <p class="mb-1">123 Main Street</p>
-                    <p class="mb-1">New York, NY 10001</p>
-                    <p class="mb-0">United States</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Additional Information -->
-        <div class="col-lg-6">
-            <div class="card shadow-sm h-100">
-                <div class="card-header">
-                    <h5 class="mb-0">Additional Information</h5>
-                </div>
-                <div class="card-body">
-                    <p>
-                        John is a highly experienced software engineer specializing in
-                        backend development and cloud-native applications.
-                    </p>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">✔ Team Lead</li>
-                        <li class="list-group-item">✔ Scrum Master</li>
-                        <li class="list-group-item">✔ AWS Certified</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Audit Information -->
-    <div class="card shadow-sm mt-4">
+        <div class="card">
             <div class="card-header">
-                <h5 class="mb-0">Audit Information</h5>
+                <h5 class="mb-0">Personal Information</h5>
             </div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <strong>Created At:</strong> 2024-01-10 14:32
-                    </div>
-                    <div class="col-md-6">
-                        <strong>Last Updated:</strong> 2024-05-22 09:15
-                    </div>
-                </div>
+                <table class="table table-borderless mb-0">
+                    <tbody>
+                    <tr>
+                        <th class="text-muted w-25">Name</th>
+                        <td>
+                            <input
+                                type="text"
+                                id="name"
+                                class="form-control"
+                                [formField]="employeeForm.name"
+                                placeholder="Enter a name"
+                            />
+                            <app-form-input-error [inputField]="employeeForm.name"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">Email</th>
+                        <td>
+                            <input
+                                type="email"
+                                id="email"
+                                class="form-control"
+                                [formField]="employeeForm.email"
+                                placeholder="john.doe@company.com"
+                            />
+                            <app-form-input-error [inputField]="employeeForm.email"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">Phone</th>
+                        <td>
+                            <input
+                                type="tel"
+                                id="phone"
+                                class="form-control"
+                                [formField]="employeeForm.phone"
+                            />
+                            <app-form-input-error [inputField]="employeeForm.phone"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">Date of Birth</th>
+                        <td>
+                            <div class="d-flex align-items-center justify-content-start gap-2">
+                                <button class="btn btn-outline-secondary" type="button" (click)="picker.open()">
+                                    <i class="fa-regular fa-calendar-days"></i>
+                                </button>
+                                <input class="form-control"
+                                       [formField]="employeeForm.dob"
+                                       [matDatepicker]="picker"
+                                       (click)="picker.open()"
+                                />
+                                <mat-datepicker #picker></mat-datepicker>
+                            </div>
+                            <app-form-input-error [inputField]="employeeForm.dob"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
+    </form>
+
+    <hr>
+
+    <div class="alert alert-danger">
+        <h4>Danger zone</h4>
+        <button type="button" class="btn btn-danger">Delete employee</button>
+    </div>
 }

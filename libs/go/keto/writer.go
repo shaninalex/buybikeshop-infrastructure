@@ -3,6 +3,7 @@ package keto
 import (
 	"buybikeshop/libs/go/config"
 	"buybikeshop/libs/go/ptr"
+	"buybikeshop/libs/go/transport"
 	"context"
 	"fmt"
 	"io"
@@ -39,7 +40,7 @@ func (s KetoWriter) Write(ctx context.Context, role, object, relation, subjectId
 	rel, resp, err := s.APIClient.RelationshipApi.CreateRelationshipExecute(r)
 	defer resp.Body.Close()
 	if err != nil {
-		return nil, err
+		return nil, transport.FromOryError(err)
 	}
 
 	if resp.StatusCode != http.StatusCreated {

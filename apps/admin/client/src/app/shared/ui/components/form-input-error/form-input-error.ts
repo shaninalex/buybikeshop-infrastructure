@@ -16,6 +16,6 @@ import { FieldTree } from '@angular/forms/signals';
         }
     `,
 })
-export class FormInputError {
-    @Input() inputField: FieldTree<string, string>
+export class FormInputError<T = unknown> {
+    @Input() inputField!: FieldTree<T, string>
 }

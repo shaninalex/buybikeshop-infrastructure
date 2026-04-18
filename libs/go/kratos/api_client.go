@@ -2,6 +2,7 @@ package kratos
 
 import (
 	"buybikeshop/libs/go/ptr"
+	"buybikeshop/libs/go/transport"
 	"context"
 	"errors"
 	"io"
@@ -11,7 +12,7 @@ import (
 	ory "github.com/ory/kratos-client-go"
 )
 
-type EmployeeCreate struct {
+type IdentityCreate struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Phone    string `json:"phone"`
@@ -20,16 +21,12 @@ type EmployeeCreate struct {
 	Password string `json:"password"`
 }
 
-func (s *EmployeeCreate) ApplyDefaults() {
-	if s.Photo == "" {
-		s.Photo = "/images/default-avatar.png"
-	}
-}
-
 type ApiClient interface {
-	CreateIdentity(ctx context.Context, data EmployeeCreate) (*ory.Identity, error)
+	CreateIdentity(ctx context.Context, data IdentityCreate) (*ory.Identity, error)
 	ListIdentities(ctx context.Context) ([]ory.Identity, error)
 	DeleteIdentity(ctx context.Context, id uuid.UUID) (bool, error)
+	GetIdentity(ctx context.Context, id uuid.UUID) (*ory.Identity, error)
+	PatchIdentity(ctx context.Context, id uuid.UUID, data IdentityCreate) (*ory.Identity, error)
 }
 
 var (
@@ -48,7 +45,16 @@ type KratosApiClient struct {
 	client *ory.APIClient
 }
 
-func (s KratosApiClient) CreateIdentity(ctx context.Context, data EmployeeCreate) (*ory.Identity, error) {
+func (s KratosApiClient) GetIdentity(ctx context.Context, id uuid.UUID) (*ory.Identity, error) {
+	r := s.client.IdentityAPI.GetIdentity(ctx, id.String())
+	identity, _, err := s.client.IdentityAPI.GetIdentityExecute(r)
+	if err != nil {
+		return nil, transport.FromOryError(err)
+	}
+	return identity, nil
+}
+
+func (s KratosApiClient) CreateIdentity(ctx context.Context, data IdentityCreate) (*ory.Identity, error) {
 	body := ory.NewCreateIdentityBodyWithDefaults()
 	body.Traits = map[string]any{
 		"name":  data.Name,
@@ -70,7 +76,7 @@ func (s KratosApiClient) CreateIdentity(ctx context.Context, data EmployeeCreate
 	d := s.client.IdentityAPI.CreateIdentity(ctx).CreateIdentityBody(*body)
 	identity, r, err := s.client.IdentityAPI.CreateIdentityExecute(d)
 	if err != nil {
-		return nil, err
+		return nil, transport.FromOryError(err)
 	}
 	defer r.Body.Close()
 
@@ -88,7 +94,7 @@ func (s KratosApiClient) CreateIdentity(ctx context.Context, data EmployeeCreate
 func (s KratosApiClient) ListIdentities(ctx context.Context) ([]ory.Identity, error) {
 	identities, _, err := s.client.IdentityAPI.ListIdentitiesExecute(s.client.IdentityAPI.ListIdentities(ctx))
 	if err != nil {
-		return nil, err
+		return nil, transport.FromOryError(err)
 	}
 	return identities, nil
 }
@@ -97,7 +103,24 @@ func (s KratosApiClient) DeleteIdentity(ctx context.Context, id uuid.UUID) (bool
 	r, err := s.client.IdentityAPI.DeleteIdentityExecute(s.client.IdentityAPI.DeleteIdentity(ctx, id.String()))
 	defer r.Body.Close()
 	if err != nil {
-		return false, err
+		return false, transport.FromOryError(err)
 	}
 	return r.StatusCode == http.StatusNoContent, nil
+}
+
+func (s KratosApiClient) PatchIdentity(ctx context.Context, id uuid.UUID, data IdentityCreate) (*ory.Identity, error) {
+	patches := []ory.JsonPatch{
+		{Op: "replace", Path: "/traits/name", Value: data.Name},
+		{Op: "replace", Path: "/traits/email", Value: data.Email},
+		{Op: "replace", Path: "/traits/phone", Value: data.Phone},
+		{Op: "replace", Path: "/traits/dob", Value: data.Dob},
+		{Op: "replace", Path: "/traits/photo", Value: data.Photo},
+	}
+
+	r := s.client.IdentityAPI.PatchIdentity(ctx, id.String()).JsonPatch(patches)
+	identity, _, err := s.client.IdentityAPI.PatchIdentityExecute(r)
+	if err != nil {
+		return nil, transport.FromOryError(err)
+	}
+	return identity, nil
 }

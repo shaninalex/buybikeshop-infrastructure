@@ -18,7 +18,7 @@ export interface EmployeeViewModel {
     email: string;
     name: string;
     photo: string;
-    dob: Date | string;
+    dob: Date;
     phone: string;
     state?: IdentityStateEnum;
     created_at: Date | null;
@@ -28,7 +28,7 @@ export interface EmployeeCreateFormModel {
     email: string;
     name: string;
     photo: string;
-    dob: string;
+    dob: Date;
     phone: string;
-    password: string;
+    password?: string;
 }

@@ -25,4 +25,5 @@ func NewEmployeeController(
 func (s *EmployeeController) Register(router *gin.RouterGroup) {
 	router.GET("employees", s.handleList)
 	router.POST("employees/create", s.handleCreate)
+	router.PATCH("employees/:id", s.handlePatch)
 }

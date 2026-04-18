@@ -5,6 +5,7 @@ go 1.25.6
 require (
 	github.com/doug-martin/goqu/v9 v9.19.0
 	github.com/gin-gonic/gin v1.12.0
+	github.com/go-playground/validator/v10 v10.30.2
 	github.com/google/uuid v1.6.0
 	github.com/lib/pq v1.12.3
 	github.com/ory/keto-client-go v0.11.0-alpha.0
@@ -29,7 +30,6 @@ require (
 	github.com/gin-contrib/sse v1.1.1 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
-	github.com/go-playground/validator/v10 v10.30.2 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
 	github.com/goccy/go-json v0.10.6 // indirect
 	github.com/goccy/go-yaml v1.19.2 // indirect
