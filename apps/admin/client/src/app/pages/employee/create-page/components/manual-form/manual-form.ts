@@ -20,6 +20,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
+import { ApiError } from '@shared/models';
 
 @Component({
     selector: 'app-employee-create-manual-form',
@@ -50,6 +51,18 @@ import { Router } from '@angular/router';
                     </button>
                 </div>
             </div>
+
+            @if (errors().length > 0) {
+                <div class="row">
+                    <div class="col">
+                        <div class="alert alert-danger">
+                            @for (err of errors(); track $index) {
+                                <p class="mb-0">{{ err.reason }}</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
 
             <div class="row g-3">
                 <div class="col-md-6">
@@ -126,15 +139,15 @@ import { Router } from '@angular/router';
                         <label class="form-label" for="password">Password *</label>
                         <div class="d-flex align-items-center justify-content-start gap-2">
                             <input
-                                [type]="passwordType ? 'password' : 'text'"
+                                [type]="togglePasswordTypeInput() ? 'password' : 'text'"
                                 id="password"
                                 class="form-control"
                                 [formField]="employeeForm.password"
                                 placeholder="Enter password"
                             />
                             <button class="btn btn-sm btn-outline-secondary" type="button"
-                                    (click)="passwordTypeToggle()">
-                                @if (passwordType) {
+                                    (click)="togglePasswordTypeInput.set(!togglePasswordTypeInput())">
+                                @if (togglePasswordTypeInput()) {
                                     <i class="fa-regular fa-eye"></i>
                                 } @else {
                                     <i class="fa-solid fa-eye-slash"></i>
@@ -155,9 +168,6 @@ export class ManualForm implements OnInit {
     private actions$ = inject(Actions);
     private destroyRef = inject(DestroyRef);
 
-    loading = signal(false);
-    passwordType = true;
-
     ngOnInit() {
         this.actions$.pipe(
             ofType(actionEmployeeCreateComplete),
@@ -170,13 +180,17 @@ export class ManualForm implements OnInit {
         this.actions$.pipe(
             ofType(actionEmployeeCreateError),
             tap(action => {
-                console.log(action.errors)
+                console.log(action.errors);
+                this.errors.set(action.errors)
             }),
             finalize(() => this.loading.set(false)),
             takeUntilDestroyed(this.destroyRef),
         ).subscribe();
     }
 
+    errors = signal<ApiError[]>([]);
+    loading = signal(false);
+    togglePasswordTypeInput = signal(true);
     employeeFormModel = signal<EmployeeCreateFormModel>({
         name: '',
         email: '',
@@ -198,9 +212,5 @@ export class ManualForm implements OnInit {
 
     passwordGenerated(pswd: string) {
         this.employeeForm.password?.().value.set(pswd);
-    }
-
-    passwordTypeToggle() {
-        this.passwordType = !this.passwordType;
     }
 }

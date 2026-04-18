@@ -9,6 +9,7 @@ import {
 import { catchError, exhaustMap, map, of, switchMap } from 'rxjs';
 import { EmployeeApi } from '../api/api.service';
 import { ApiError } from '@shared/models';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class EmployeeEffects {
@@ -33,7 +34,7 @@ export class EmployeeEffects {
             exhaustMap(action =>
                 this.employeesApi.CreateEmployee(action.data).pipe(
                     map(employee => actionEmployeeCreateComplete({ employee })),
-                    catchError((errors: ApiError[]) => of(actionEmployeeCreateError({ errors: errors ?? [] }))),
+                    catchError((errors: HttpErrorResponse) => of(actionEmployeeCreateError({errors: errors.error.errors ?? []}))),
                 ),
             ),
         ),

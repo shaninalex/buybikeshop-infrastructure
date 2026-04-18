@@ -46,6 +46,8 @@ func ReturnJSON(c *gin.Context, status int, data any, params ...any) {
 		case ApiError:
 			resp.Errors = make([]ApiError, 0)
 			resp.Errors = append(resp.Errors, v)
+		case []ApiError:
+			resp.Errors = v
 		case error:
 			resp.Errors = make([]ApiError, 0)
 			resp.Errors = append(resp.Errors, ApiError{
