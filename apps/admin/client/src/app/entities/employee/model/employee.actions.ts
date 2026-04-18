@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { EmployeeCreateFormModel, EmployeeModel } from './employee.model';
+import { ApiError } from '@shared/models';
 
 export const actionEmployeeGetList = createAction('[Employee] get list');
 export const actionEmployeeSetList = createAction(
@@ -15,7 +16,7 @@ export const actionEmployeeCreate = createAction(
 
 export const actionEmployeeCreateError = createAction(
     '[Employee] create error',
-    props<{ errors: any }>(),
+    props<{ errors: ApiError[] }>(),
 );
 
 export const actionEmployeeCreateComplete = createAction(

@@ -8,11 +8,10 @@ import (
 
 // APIResponse standard response structure
 type APIResponse[T any] struct {
-	Status   bool     `json:"status"`
-	Data     T        `json:"data,omitempty"`
-	Messages []string `json:"messages,omitempty"`
-
-	Errors []string `json:"errors,omitempty"`
+	Status   bool       `json:"status"`
+	Data     T          `json:"data,omitempty"`
+	Messages []string   `json:"messages,omitempty"`
+	Errors   []ApiError `json:"errors,omitempty"`
 }
 
 // NewAPIResponse - new api response.
@@ -44,8 +43,14 @@ func ReturnJSON(c *gin.Context, status int, data any, params ...any) {
 		switch v := p.(type) {
 		case string:
 			resp.Messages = append(resp.Messages, v)
+		case ApiError:
+			resp.Errors = make([]ApiError, 0)
+			resp.Errors = append(resp.Errors, v)
 		case error:
-			resp.Errors = append(resp.Errors, v.Error())
+			resp.Errors = make([]ApiError, 0)
+			resp.Errors = append(resp.Errors, ApiError{
+				Message: v.Error(),
+			})
 		}
 	}
 

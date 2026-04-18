@@ -9,7 +9,7 @@ import {
     actionEmployeeCreateError
 } from '@entities/employee/model/employee.actions';
 import { Actions, ofType } from '@ngrx/effects';
-import { tap } from 'rxjs';
+import { finalize, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormInputError, PasswordGenerator } from '@shared/ui';
 import { employeeFormValidation } from '@entities/employee';
@@ -42,7 +42,7 @@ import { Router } from '@angular/router';
                         Cancel
                     </button>
                     <button type="submit" class="btn btn-primary btn-sm"
-                            [disabled]="employeeForm().invalid()">
+                            [disabled]="employeeForm().invalid() || loading()">
                         @if (loading()) {
                             <i class="fa-solid fa-circle-notch fa-spin"></i>
                         }
@@ -172,8 +172,9 @@ export class ManualForm implements OnInit {
             tap(action => {
                 console.log(action.errors)
             }),
+            finalize(() => this.loading.set(false)),
             takeUntilDestroyed(this.destroyRef),
-        ).subscribe(() => this.loading.set(false));
+        ).subscribe();
     }
 
     employeeFormModel = signal<EmployeeCreateFormModel>({

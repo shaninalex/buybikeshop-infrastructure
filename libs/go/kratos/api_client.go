@@ -2,6 +2,7 @@ package kratos
 
 import (
 	"buybikeshop/libs/go/ptr"
+	"buybikeshop/libs/go/transport"
 	"context"
 	"errors"
 	"io"
@@ -64,7 +65,7 @@ func (s KratosApiClient) CreateIdentity(ctx context.Context, data IdentityCreate
 	d := s.client.IdentityAPI.CreateIdentity(ctx).CreateIdentityBody(*body)
 	identity, r, err := s.client.IdentityAPI.CreateIdentityExecute(d)
 	if err != nil {
-		return nil, err
+		return nil, transport.FromOryError(err)
 	}
 	defer r.Body.Close()
 
@@ -82,7 +83,7 @@ func (s KratosApiClient) CreateIdentity(ctx context.Context, data IdentityCreate
 func (s KratosApiClient) ListIdentities(ctx context.Context) ([]ory.Identity, error) {
 	identities, _, err := s.client.IdentityAPI.ListIdentitiesExecute(s.client.IdentityAPI.ListIdentities(ctx))
 	if err != nil {
-		return nil, err
+		return nil, transport.FromOryError(err)
 	}
 	return identities, nil
 }
@@ -91,7 +92,7 @@ func (s KratosApiClient) DeleteIdentity(ctx context.Context, id uuid.UUID) (bool
 	r, err := s.client.IdentityAPI.DeleteIdentityExecute(s.client.IdentityAPI.DeleteIdentity(ctx, id.String()))
 	defer r.Body.Close()
 	if err != nil {
-		return false, err
+		return false, transport.FromOryError(err)
 	}
 	return r.StatusCode == http.StatusNoContent, nil
 }
