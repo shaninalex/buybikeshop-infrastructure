@@ -4,6 +4,7 @@ import (
 	"buybikeshop/libs/go/kratos"
 	"context"
 	"encoding/json"
+	"errors"
 	"io"
 	"maps"
 	"os"
@@ -91,4 +92,35 @@ func (m *KratosApiClient) DeleteIdentity(ctx context.Context, id uuid.UUID) (boo
 
 	delete(m.identities, id)
 	return true, nil
+}
+
+func (m *KratosApiClient) GetIdentity(ctx context.Context, id uuid.UUID) (*ory.Identity, error) {
+	identity, ok := m.identities[id]
+	if !ok {
+		return nil, errors.New("identity not found")
+	}
+	return &identity, nil
+}
+
+func (m *KratosApiClient) PatchIdentity(ctx context.Context, id uuid.UUID, data kratos.IdentityCreate) (*ory.Identity, error) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	identity, ok := m.identities[id]
+	if !ok {
+		return nil, kratos.IdentityApiErrorNotFound
+	}
+
+	identity.Traits = map[string]any{
+		"name":  data.Name,
+		"email": data.Email,
+		"phone": data.Phone,
+		"dob":   data.Dob,
+		"photo": data.Photo,
+	}
+	updated := time.Now()
+	identity.UpdatedAt = &updated
+
+	m.identities[id] = identity
+	return &identity, nil
 }

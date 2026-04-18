@@ -31,4 +31,16 @@ export class EmployeeApi {
                 catchError((errors: ApiError[]) => throwError(() => errors)),
             );
     }
+
+    UpdateEmployee(id: string, data: EmployeeCreateFormModel): Observable<EmployeeModel> {
+        return this.http
+            .patch<APIResponse<EmployeeModel>>(`/api/v1/admin/employees/${id}`, data, {withCredentials: true})
+            .pipe(
+                map((response) => {
+                    if (!response.status) throw response.errors;
+                    return response.data;
+                }),
+                catchError((errors: ApiError[]) => throwError(() => errors)),
+            );
+    }
 }

@@ -1,36 +1,54 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { UiService } from '@shared/ui';
+import { FormInputError, UiService } from '@shared/ui';
 import { filter, map, Observable, tap } from 'rxjs';
-import { AsyncPipe, DatePipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { EmployeeCreateFormModel, EmployeeViewModel } from '@entities/employee/model/employee.model';
-import { form } from '@angular/forms/signals';
-import { actionEmployeeCreate } from '@entities/employee/model/employee.actions';
+import { form, FormField } from '@angular/forms/signals';
+import {
+    actionEmployeeCreate,
+    actionEmployeeUpdate,
+    actionEmployeeUpdateComplete
+} from '@entities/employee/model/employee.actions';
 import { Store } from '@ngrx/store';
 import { employeeFormValidation } from '@entities/employee';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { Actions, ofType } from '@ngrx/effects';
 
 @Component({
     selector: 'app-employee-detail-page',
     imports: [
         AsyncPipe,
         RouterLink,
-        DatePipe,
+        FormsModule,
+        ReactiveFormsModule,
+        FormField,
+        FormInputError,
+        MatFormFieldModule, MatInputModule, MatDatepickerModule, MatButtonModule
     ],
+    providers: [provideNativeDateAdapter()],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './detail-page.html',
 })
-export class DetailPage {
+export class DetailPage implements OnInit {
+    private actions$ = inject(Actions);
     private route = inject(ActivatedRoute);
     private store = inject(Store);
     private ui = inject(UiService);
+    private id: string;
     loading = false;
-    tmpState: EmployeeViewModel;
 
     employee$: Observable<EmployeeViewModel> = this.route.data.pipe(
         filter((data) => !!data['employee']),
         map((data) => data['employee'] as EmployeeViewModel),
         tap((employee) => {
-            this.tmpState = {...employee};
             this.ui.setPageTitle(`Employee: ${employee.name}`);
+            this.id = employee.id;
             this.employeeFormModel.set({
                 name: employee.name,
                 email: employee.email,
@@ -49,13 +67,29 @@ export class DetailPage {
         photo: '',
     })
 
+    ngOnInit() {
+        this.actions$.pipe(
+            ofType(actionEmployeeUpdateComplete),
+            tap((action) => {
+                this.employeeForm().reset()
+                this.employeeFormModel.set({
+                    name: action.employee.identity.traits.name,
+                    email: action.employee.identity.traits.email,
+                    phone: action.employee.identity.traits.phone,
+                    dob: action.employee.identity.traits.dob,
+                    photo: action.employee.identity.traits.photo,
+                })
+            })
+        ).subscribe()
+    }
+
     employeeForm = form(this.employeeFormModel, (schemaPath) => employeeFormValidation(schemaPath));
 
     submit(event: Event): void {
         event.preventDefault();
         this.loading = true;
         this.store.dispatch(
-            actionEmployeeCreate({data: this.employeeFormModel()}),
+            actionEmployeeUpdate({id: this.id, data: this.employeeFormModel()}),
         );
     }
 }

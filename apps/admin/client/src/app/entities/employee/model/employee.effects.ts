@@ -4,7 +4,7 @@ import {
     actionEmployeeCreate,
     actionEmployeeCreateComplete, actionEmployeeCreateError,
     actionEmployeeGetList,
-    actionEmployeeSetList,
+    actionEmployeeSetList, actionEmployeeUpdate, actionEmployeeUpdateComplete, actionEmployeeUpdateError,
 } from './employee.actions';
 import { catchError, exhaustMap, map, of, switchMap } from 'rxjs';
 import { EmployeeApi } from '../api/api.service';
@@ -35,6 +35,18 @@ export class EmployeeEffects {
                 this.employeesApi.CreateEmployee(action.data).pipe(
                     map(employee => actionEmployeeCreateComplete({ employee })),
                     catchError((errors: HttpErrorResponse) => of(actionEmployeeCreateError({errors: errors.error.errors ?? []}))),
+                ),
+            ),
+        ),
+    );
+
+    update_employees$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(actionEmployeeUpdate),
+            exhaustMap(action =>
+                this.employeesApi.UpdateEmployee(action.id, action.data).pipe(
+                    map(employee => actionEmployeeUpdateComplete({ employee })),
+                    catchError((errors: HttpErrorResponse) => of(actionEmployeeUpdateError({errors: errors.error.errors ?? []}))),
                 ),
             ),
         ),

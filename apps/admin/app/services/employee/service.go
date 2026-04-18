@@ -30,6 +30,8 @@ type Service interface {
 	List(ctx context.Context) ([]models.Employee, error)
 	Delete(ctx context.Context, id uuid.UUID) error
 	Validate(ctx context.Context, data EmployeeCreate) error
+	Patch(ctx context.Context, id uuid.UUID, data EmployeeCreate) (*models.Employee, error)
+	Get(ctx context.Context, id uuid.UUID) (*models.Employee, error)
 }
 
 func ProvideEmployeeService(c kratos.ApiClient) Service {
@@ -85,4 +87,27 @@ func (s serviceImpl) Delete(ctx context.Context, id uuid.UUID) error {
 		return ErrorCreate
 	}
 	return nil
+}
+
+func (s serviceImpl) Get(ctx context.Context, id uuid.UUID) (*models.Employee, error) {
+	identity, err := s.client.GetIdentity(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return &models.Employee{Identity: *identity}, nil
+}
+
+func (s serviceImpl) Patch(ctx context.Context, id uuid.UUID, data EmployeeCreate) (*models.Employee, error) {
+	identity, err := s.client.PatchIdentity(ctx, id, kratos.IdentityCreate{
+		Name:     data.Name,
+		Email:    data.Email,
+		Phone:    data.Phone,
+		Dob:      data.Dob,
+		Photo:    data.Photo,
+		Password: data.Password,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &models.Employee{Identity: *identity}, nil
 }

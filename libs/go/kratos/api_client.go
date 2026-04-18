@@ -25,6 +25,8 @@ type ApiClient interface {
 	CreateIdentity(ctx context.Context, data IdentityCreate) (*ory.Identity, error)
 	ListIdentities(ctx context.Context) ([]ory.Identity, error)
 	DeleteIdentity(ctx context.Context, id uuid.UUID) (bool, error)
+	GetIdentity(ctx context.Context, id uuid.UUID) (*ory.Identity, error)
+	PatchIdentity(ctx context.Context, id uuid.UUID, data IdentityCreate) (*ory.Identity, error)
 }
 
 var (
@@ -41,6 +43,15 @@ func ProvideApiClient(client *ory.APIClient) ApiClient {
 
 type KratosApiClient struct {
 	client *ory.APIClient
+}
+
+func (s KratosApiClient) GetIdentity(ctx context.Context, id uuid.UUID) (*ory.Identity, error) {
+	r := s.client.IdentityAPI.GetIdentity(ctx, id.String())
+	identity, _, err := s.client.IdentityAPI.GetIdentityExecute(r)
+	if err != nil {
+		return nil, transport.FromOryError(err)
+	}
+	return identity, nil
 }
 
 func (s KratosApiClient) CreateIdentity(ctx context.Context, data IdentityCreate) (*ory.Identity, error) {
@@ -95,4 +106,21 @@ func (s KratosApiClient) DeleteIdentity(ctx context.Context, id uuid.UUID) (bool
 		return false, transport.FromOryError(err)
 	}
 	return r.StatusCode == http.StatusNoContent, nil
+}
+
+func (s KratosApiClient) PatchIdentity(ctx context.Context, id uuid.UUID, data IdentityCreate) (*ory.Identity, error) {
+	patches := []ory.JsonPatch{
+		{Op: "replace", Path: "/traits/name", Value: data.Name},
+		{Op: "replace", Path: "/traits/email", Value: data.Email},
+		{Op: "replace", Path: "/traits/phone", Value: data.Phone},
+		{Op: "replace", Path: "/traits/dob", Value: data.Dob},
+		{Op: "replace", Path: "/traits/photo", Value: data.Photo},
+	}
+
+	r := s.client.IdentityAPI.PatchIdentity(ctx, id.String()).JsonPatch(patches)
+	identity, _, err := s.client.IdentityAPI.PatchIdentityExecute(r)
+	if err != nil {
+		return nil, transport.FromOryError(err)
+	}
+	return identity, nil
 }
