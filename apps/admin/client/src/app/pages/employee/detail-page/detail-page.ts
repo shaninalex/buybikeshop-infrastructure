@@ -1,15 +1,11 @@
-import { ChangeDetectionStrategy, Component, effect, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormInputError, UiService } from '@shared/ui';
 import { filter, map, Observable, tap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { EmployeeCreateFormModel, EmployeeViewModel } from '@entities/employee/model/employee.model';
 import { form, FormField } from '@angular/forms/signals';
-import {
-    actionEmployeeCreate,
-    actionEmployeeUpdate,
-    actionEmployeeUpdateComplete
-} from '@entities/employee/model/employee.actions';
+import { actionEmployeeUpdate, actionEmployeeUpdateComplete } from '@entities/employee/model/employee.actions';
 import { Store } from '@ngrx/store';
 import { employeeFormValidation } from '@entities/employee';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';

@@ -1,0 +1,13 @@
+port: 8003
+
+kratos:
+  url_browser: "http://localhost:4433"
+  url_admin: "http://localhost:4434"
+  login_url_browser: "http://localhost:4455"
+
+grpc:
+  host: "localhost:50051"
+
+keto:
+  read: "http://localhost:4466"
+  write: "http://localhost:4467"

@@ -46,7 +46,6 @@ type ApiDeps struct {
 func ProvideAPI(deps ApiDeps) *gin.Engine {
 	router := ProvideRouter()
 	router.Use(gin.Recovery())
-
 	router.Use(auth.AuthMiddleware(deps.KratosAPIClient, deps.Config))
 
 	v1 := router.Group("/api/v1/office")

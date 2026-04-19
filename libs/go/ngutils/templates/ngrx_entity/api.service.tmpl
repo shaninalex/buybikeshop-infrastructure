@@ -4,10 +4,6 @@ import { {{.EntityModel}} } from '@entities/{{.Module}}';
 import { APIResponse } from '@shared/models';
 import { HttpClient } from '@angular/common/http';
 
-interface {{.Module}}sResponse {
-    {{.Module}}s: {{.EntityModel}}[]
-}
-
 @Injectable({
     providedIn: 'root',
 })
@@ -16,10 +12,9 @@ export class {{.EntityName}}Api {
 
     Get{{.EntityName}}s(): Observable<{{.EntityModel}}[]> {
         return this.http
-            .get<APIResponse<{{.Module}}sResponse>>(`/api/v1/{{.Service}}/{{.Module}}s`)
+            .get<APIResponse<{{.EntityModel}}[]>>(`/api/v1/{{.Service}}/{{.Module}}s`, { withCredentials: true })
             .pipe(
                 map((response) => response.data),
-                map((response) => response.{{.Module}}s),
             );
     }
 }

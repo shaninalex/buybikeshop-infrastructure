@@ -220,7 +220,6 @@ gen/grpc_buybikeshop_python/*
 !gen/grpc_buybikeshop_python/pyproject.toml
 
 var
-config.*.yml
 config.yml
 !config.example.yml
 
