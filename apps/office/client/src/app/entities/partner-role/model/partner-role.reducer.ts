@@ -1,7 +1,11 @@
 import { createReducer, on } from '@ngrx/store';
 import { PartnerRoleModel } from './partner-role.model';
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
-import { actionPartnerRoleSetList } from './partner-role.actions';
+import {
+    actionPartnerRoleCreateComplete,
+    actionPartnerRolePatchComplete,
+    actionPartnerRoleSetList
+} from './partner-role.actions';
 
 export interface PartnerRoleState extends EntityState<PartnerRoleModel> {
 }
@@ -11,6 +15,8 @@ export const initialState = PartnerRolesAdapter.getInitialState();
 
 export const partnerRoleReducer = createReducer(
     initialState,
-    on(actionPartnerRoleSetList, (state, action) => PartnerRolesAdapter.addMany(action.PartnerRoles, state)),
+    on(actionPartnerRoleSetList, (state, action) => PartnerRolesAdapter.addMany(action.roles, state)),
+    on(actionPartnerRoleCreateComplete, (state, action) => PartnerRolesAdapter.addOne(action.role, state)),
+    on(actionPartnerRolePatchComplete, (state, action) => PartnerRolesAdapter.upsertOne(action.role, state)),
 );
 

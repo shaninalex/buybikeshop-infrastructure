@@ -5,7 +5,7 @@ export const selectPartnerRolesFeature = createFeatureSelector<PartnerRoleState>
 export const PartnerRolesSelectors = PartnerRolesAdapter.getSelectors();
 
 export const selectPartnerRoles = createSelector(selectPartnerRolesFeature, (state) =>
-    PartnerRolesSelectors.selectAll(state),
+    PartnerRolesSelectors.selectAll(state).sort((a, b) => a.id - b.id),
 );
 
 export const selectPartnerRoleByID = (id: number) =>
