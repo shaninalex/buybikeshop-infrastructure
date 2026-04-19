@@ -18,7 +18,7 @@ func NewController(datasource *connector.DatasourceClient) *Controller {
 
 func (s *Controller) Register(router *gin.RouterGroup) {
 	router.GET("partners", s.handlePartnersList)
+	router.GET("partners/roles", s.handleRolesList)
 	router.GET("partners/:partnerId", s.handlePartner)
 	router.POST("partners", s.handlePartnersCreate)
-	router.GET("roles", s.handleRolesList)
 }

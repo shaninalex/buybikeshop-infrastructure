@@ -1,0 +1,9 @@
+port: 8005
+
+kratos:
+  url_browser: "http://localhost:4433"
+  url_admin: "http://localhost:4434"
+  login_url_browser: "http://localhost:4455"
+
+grpc:
+    host: "localhost:50051"

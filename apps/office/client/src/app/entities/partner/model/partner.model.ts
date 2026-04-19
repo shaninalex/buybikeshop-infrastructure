@@ -11,7 +11,7 @@ export interface PartnerContact {
 
 export interface PartnerModel {
     id: number;
-    role: PartnerRole;
+    role: PartnerRole; // TODO: replace with entities/partner-role
     title: string;
     type: string;
     active: boolean;
