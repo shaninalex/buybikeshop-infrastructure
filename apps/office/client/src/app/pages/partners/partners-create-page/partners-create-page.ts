@@ -1,17 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { PartnerRoleSelector } from '@entities/partner-role';
+import { form, FormField, required } from '@angular/forms/signals';
+import { NewPartnerModel, PartnerModel } from '@entities/partner';
+import { FormsModule } from '@angular/forms';
+import { Store } from '@ngrx/store';
 
 @Component({
     selector: 'app-partners-create-page',
-    imports: [],
+    imports: [
+        PartnerRoleSelector,
+        FormField,
+        FormsModule
+    ],
     template: `
-        <div class="container py-4">
+        <form (submit)="submit($event)" class="container py-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <h2 class="mb-0">Create New Partner</h2>
                     <small class="text-muted">Company or Person</small>
                 </div>
-                <div>
-                    <button class="btn btn-outline-secondary me-2">Cancel</button>
+                <div class="btn-group">
+                    <button class="btn btn-outline-secondary">Cancel</button>
                     <button class="btn btn-primary">Save Partner</button>
                 </div>
             </div>
@@ -45,24 +54,7 @@ import { Component } from '@angular/core';
                     <div class="card mt-4">
                         <div class="card-header">Roles</div>
                         <div class="card-body">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="roleSupplier">
-                                <label class="form-check-label" for="roleSupplier">
-                                    Supplier
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="roleCustomer">
-                                <label class="form-check-label" for="roleCustomer">
-                                    Customer
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="roleContractor">
-                                <label class="form-check-label" for="roleContractor">
-                                    3rd Party Worker
-                                </label>
-                            </div>
+                            <app-partner-role-selector [formField]="partnerForm.roles"/>
                         </div>
                     </div>
 
@@ -156,10 +148,21 @@ import { Component } from '@angular/core';
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     `,
 })
 export class PartnersCreatePage {
+    private store = inject(Store);
+    partnerFormModel = signal<PartnerModel>(NewPartnerModel());
+
+    partnerForm = form(this.partnerFormModel, (schemaPath) => {
+        required(schemaPath.title, {message: "Role name is required"});
+    });
+
+    submit(event: Event): void {
+        event.preventDefault();
+        // this.store.dispatch(/* TODO: create partner form */);
+    }
 }
 
 
