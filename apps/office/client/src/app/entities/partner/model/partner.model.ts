@@ -29,6 +29,6 @@ export function NewPartnerModel(): PartnerModel {
         contacts: [],
         created_at: new Date(),
         is_supplier: false,
-        active: false,
+        active: true,
     }
 }

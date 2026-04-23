@@ -20,7 +20,13 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
         @if (roles$ | async; as roles) {
             @for (role of roles; track role.id) {
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" [id]="'role-' + role.id">
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        [id]="'role-' + role.id"
+                        [checked]="selectedIds.has(role.id)"
+                        (change)="onToggle(role.id, $any($event.target).checked)" />
+
                     <label class="form-check-label" [for]="'role-' + role.id">
                         {{ role.role }}
                     </label>
@@ -67,4 +73,6 @@ export class PartnerRoleSelector implements OnInit {
         this.onChange(Array.from(this.selectedIds));
         this.onTouched();
     }
+
+    protected readonly HTMLInputElement = HTMLInputElement;
 }

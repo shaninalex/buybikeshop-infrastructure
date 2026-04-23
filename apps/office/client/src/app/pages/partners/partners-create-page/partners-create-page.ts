@@ -4,6 +4,8 @@ import { form, FormField, required } from '@angular/forms/signals';
 import { NewPartnerModel, PartnerModel } from '@entities/partner';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { actionPartnerCreate } from '@entities/partner/model/partner.actions';
+import { PartnerType } from '@entities/partner/model/partner.model';
 
 @Component({
     selector: 'app-partners-create-page',
@@ -31,22 +33,28 @@ import { Store } from '@ngrx/store';
                         <div class="card-header">General Info</div>
                         <div class="card-body">
                             <div class="mb-3">
-                                <label class="form-label">Type</label>
-                                <select class="form-select">
-                                    <option selected>Company</option>
-                                    <option>Person</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
                                 <label class="form-label">Name</label>
-                                <input type="text" class="form-control" placeholder="Enter name">
+                                <input type="text"
+                                       class="form-control"
+                                       placeholder="Enter name"
+                                       [formField]="partnerForm.title"
+                                />
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Status</label>
-                                <select class="form-select">
-                                    <option selected>Active</option>
-                                    <option>Inactive</option>
+                                <label class="form-label">Type</label>
+                                <select class="form-select" [formField]="partnerForm.type">
+                                    <option selected [value]="PartnerType.COMPANY">Company</option>
+                                    <option [value]="PartnerType.PERSON">Person</option>
                                 </select>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="status"
+                                           [formField]="partnerForm.active">
+                                    <label class="form-check-label" for="status">
+                                        Status (active/inactive)
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -63,7 +71,8 @@ import { Store } from '@ngrx/store';
                         <div class="card-body">
 
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="flagSupplier">
+                                <input class="form-check-input" type="checkbox" id="flagSupplier"
+                                       [formField]="partnerForm.is_supplier">
                                 <label class="form-check-label" for="flagSupplier">
                                     Supplier Enabled
                                 </label>
@@ -137,9 +146,10 @@ import { Store } from '@ngrx/store';
                     <div class="card mt-4">
                         <div class="card-header">Notes</div>
                         <div class="card-body">
-                            <textarea class="form-control" rows="3" placeholder="Add initial note..."></textarea>
+                            <textarea disabled class="form-control" rows="3"
+                                      placeholder="Add initial note..."></textarea>
                             <div class="d-flex justify-content-end mt-2">
-                                <button class="btn btn-primary btn-sm">Add Note</button>
+                                <button disabled class="btn btn-primary btn-sm">Add Note</button>
                             </div>
                             <div class="text-muted mt-3">
                                 No notes yet
@@ -161,8 +171,10 @@ export class PartnersCreatePage {
 
     submit(event: Event): void {
         event.preventDefault();
-        // this.store.dispatch(/* TODO: create partner form */);
+        this.store.dispatch(actionPartnerCreate({payload: this.partnerFormModel()}));
     }
+
+    protected readonly PartnerType = PartnerType;
 }
 
 

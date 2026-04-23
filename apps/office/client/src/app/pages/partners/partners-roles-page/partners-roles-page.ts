@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { actionPartnerRoleGetList, selectPartnerRoles } from '@entities/partner-role';
-import { AsyncPipe, NgClass } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { PartnerListItem } from '@pages/partners/partners-roles-page/components';
 import {
     actionPartnerRoleCreate,
@@ -22,7 +22,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
         FormInputError,
         FormsModule,
         FormField,
-        NgClass
     ],
     template: `
         <ul class="list-group">
