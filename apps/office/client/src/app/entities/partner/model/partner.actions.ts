@@ -27,7 +27,7 @@ export const actionPartnerCreate = createAction(
 
 export const actionPartnerCreateComplete = createAction(
     '[Partner] create complete',
-    props<{ partners: PartnerModel }>(),
+    props<{ partner: PartnerModel }>(),
 );
 
 export const actionPartnerCreateError = createAction(
