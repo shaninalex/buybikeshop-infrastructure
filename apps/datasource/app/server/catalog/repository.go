@@ -158,15 +158,14 @@ func (s *Repository) ProductVariantGet(ctx context.Context, productId uint64) (*
 	return &p, nil
 }
 
-func (s *Repository) BrandList(ctx context.Context) ([]models.Brand, error) {
-	brands := []models.Brand{}
+func (s *Repository) BrandList(ctx context.Context) (brands []models.Brand, err error) {
 	q, _, err := goqu.From("catalog.brands").Select("id", "title").ToSQL()
 	if err != nil {
 		return nil, err
 	}
 	rows, err := s.db.QueryContext(ctx, q)
 	if err != nil {
-		return nil, err
+		return brands, err
 	}
 	defer rows.Close()
 

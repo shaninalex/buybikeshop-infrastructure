@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { filter, map, Observable, tap } from 'rxjs';
 import { PartnerRoleModel } from '@entities/partner-role';
 import { APIResponse } from '@shared/models';
 import { HttpClient } from '@angular/common/http';
@@ -14,7 +14,10 @@ export class PartnerRoleApi {
     GetPartnerRoles(): Observable<PartnerRoleModel[]> {
         return this.http
             .get<APIResponse<PartnerRoleModel[]>>(`/api/v1/office/partners/roles`, { withCredentials: true })
-            .pipe(map((response) => response.data));
+            .pipe(
+                map((response) => response.data),
+                filter(roles => !!roles),
+            );
     }
 
     PatchPartnerRoles(id: number, payload: PartnerRolePayloadModel): Observable<PartnerRoleModel> {

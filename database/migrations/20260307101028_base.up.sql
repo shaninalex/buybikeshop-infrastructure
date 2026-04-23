@@ -111,7 +111,7 @@ CREATE TABLE partners.roles
     id   SERIAL PRIMARY KEY,
     role varchar UNIQUE
 );
-
+-- 'Supplier', 'Customer', '3rd Party Worker'
 CREATE TYPE partner_type AS ENUM ('person', 'company');
 
 CREATE TABLE partners.partners

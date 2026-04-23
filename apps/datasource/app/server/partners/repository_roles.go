@@ -30,6 +30,7 @@ func (s RepositoryRoles) RolesGet(ctx context.Context) ([]models.Role, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer result.Close()
 	var roles []models.Role
 	for result.Next() {
 		var role models.Role
