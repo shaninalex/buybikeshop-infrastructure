@@ -99,36 +99,45 @@ func (s RepositoryPartners) PartnersList(ctx context.Context) ([]*models.Partner
 func (s RepositoryPartners) PartnersSave(ctx context.Context, partner *models.Partner) (*models.Partner, error) {
 	record := goqu.Record{
 		"title":  partner.Title,
-		"type":   partner.Type,
+		"type":   string(partner.Type),
 		"active": partner.Active,
 	}
 
 	query := ""
 	var err error
 	if partner.Id == 0 {
-		query, _, err = goqu.Insert("partners.partners").Rows(record).Returning("partners.partners.id").ToSQL()
-		if err != nil {
-			return nil, err
-		}
+		query, _, _ = goqu.Insert("partners.partners").Rows(record).Returning("partners.partners.id").ToSQL()
+
 	} else {
-		query, _, err = goqu.Update("catalog.products").Set(record).Where(goqu.Ex{"id": partner.Id}).
-			Returning("catalog.products.id").
+		query, _, _ = goqu.Update("partners.partners").Set(record).Where(goqu.Ex{"id": partner.Id}).
+			Returning("partners.partners.id").
 			ToSQL()
-		if err != nil {
-			return nil, err
-		}
-	}
-	if query == "" {
-		return nil, ErrorPartnersUnableToSavePartner
 	}
 	var id uint64
-	err = s.db.QueryRowContext(ctx, query).Scan(&id)
-	if err != nil {
+	if err = s.db.QueryRowContext(ctx, query).Scan(&id); err != nil {
 		return nil, err
 	}
 
 	// TODO: save/update contacts
-	// TODO: save/update roles
+
+	deleteRolesQuery, _, _ := goqu.Delete("partners.partner_roles").Where(goqu.Ex{"partner_id": partner.Id}).ToSQL()
+	if _, err = s.db.ExecContext(ctx, deleteRolesQuery); err != nil {
+		return nil, err
+	}
+	roles := make([]models.PartnerRole, len(partner.Roles))
+	for i, r := range partner.Roles {
+		roles[i] = models.PartnerRole{
+			PartnerId: id,
+			RoleId:    r,
+		}
+	}
+	if len(roles) > 0 {
+		insertRolesQuery, _, _ := goqu.Insert("partners.partner_roles").Rows(roles).ToSQL()
+		if _, err = s.db.ExecContext(ctx, insertRolesQuery); err != nil {
+			return nil, err
+		}
+	}
+
 	// TODO: update supplier state ( create or delete one )
 
 	partner.Id = id

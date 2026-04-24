@@ -32,5 +32,5 @@ export const actionPartnerCreateComplete = createAction(
 
 export const actionPartnerCreateError = createAction(
     '[Partner] create error',
-    props<{ error: any }>(),
+    props<{ errors: any }>(),
 );

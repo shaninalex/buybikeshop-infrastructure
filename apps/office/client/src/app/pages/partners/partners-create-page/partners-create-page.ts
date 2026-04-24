@@ -1,11 +1,20 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { PartnerRoleSelector } from '@entities/partner-role';
 import { form, FormField, required } from '@angular/forms/signals';
 import { NewPartnerModel, PartnerModel } from '@entities/partner';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { actionPartnerCreate } from '@entities/partner/model/partner.actions';
+import {
+    actionPartnerCreate,
+    actionPartnerCreateComplete,
+    actionPartnerCreateError
+} from '@entities/partner/model/partner.actions';
 import { PartnerType } from '@entities/partner/model/partner.model';
+import { Actions, ofType } from '@ngrx/effects';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
+import { finalize, tap } from 'rxjs';
+import { ApiError } from '@shared/models';
 
 @Component({
     selector: 'app-partners-create-page',
@@ -28,6 +37,20 @@ import { PartnerType } from '@entities/partner/model/partner.model';
             </div>
 
             <div class="row g-4">
+                <div class="col-12">
+                    @if (errors().length > 0) {
+                        <div class="row">
+                            <div class="col">
+                                <div class="alert alert-danger">
+                                    @for (err of errors(); track $index) {
+                                        <p class="mb-0">{{ err.reason }}</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-header">General Info</div>
@@ -163,6 +186,29 @@ import { PartnerType } from '@entities/partner/model/partner.model';
 })
 export class PartnersCreatePage {
     private store = inject(Store);
+    private router = inject(Router);
+    private actions$ = inject(Actions);
+    private destroyRef = inject(DestroyRef);
+
+    constructor() {
+        this.actions$.pipe(
+            ofType(actionPartnerCreateComplete),
+            takeUntilDestroyed(this.destroyRef)
+        ).subscribe(data => {
+            this.loading.set(false);
+            this.router.navigate(['/partners', data.partner.id]);
+        });
+
+        this.actions$.pipe(
+            ofType(actionPartnerCreateError),
+            tap(action => this.errors.set(action.errors)),
+            finalize(() => this.loading.set(false)),
+            takeUntilDestroyed(this.destroyRef),
+        ).subscribe();
+    }
+
+    errors = signal<ApiError[]>([]);
+    loading = signal(false);
     partnerFormModel = signal<PartnerModel>(NewPartnerModel());
 
     partnerForm = form(this.partnerFormModel, (schemaPath) => {
