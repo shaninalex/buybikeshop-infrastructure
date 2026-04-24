@@ -6,11 +6,11 @@ import (
 	ory "github.com/ory/keto-client-go"
 )
 
-type KetoChecker struct {
+type Checker struct {
 	ory.APIClient
 }
 
-func ProvideKetoChecker(config *config.Config) KetoChecker {
+func ProvideKetoChecker(config *config.Config) Checker {
 	if config.String("keto.read") == "" {
 		panic("keto.read is required")
 	}
@@ -21,5 +21,5 @@ func ProvideKetoChecker(config *config.Config) KetoChecker {
 		},
 	}
 	readClient := ory.NewAPIClient(configuration)
-	return KetoChecker{APIClient: *readClient}
+	return Checker{APIClient: *readClient}
 }

@@ -120,6 +120,7 @@ func (s RepositoryPartners) PartnersSave(ctx context.Context, partner *models.Pa
 
 	// TODO: save/update contacts
 
+	// --- update role array
 	deleteRolesQuery, _, _ := goqu.Delete("partners.partner_roles").Where(goqu.Ex{"partner_id": partner.Id}).ToSQL()
 	if _, err = s.db.ExecContext(ctx, deleteRolesQuery); err != nil {
 		return nil, err
@@ -138,7 +139,20 @@ func (s RepositoryPartners) PartnersSave(ctx context.Context, partner *models.Pa
 		}
 	}
 
-	// TODO: update supplier state ( create or delete one )
+	// update supplier state ( create or delete one )
+	if partner.IsSupplier {
+		query, _, _ = goqu.Insert("partners.suppliers").Rows(goqu.Record{
+			"partner_id": id,
+		}).ToSQL()
+		if _, err = s.db.ExecContext(ctx, query); err != nil {
+			return nil, err
+		}
+	} else {
+		query, _, _ = goqu.Delete("partners.suppliers").Where(goqu.Ex{"partner_id": id}).ToSQL()
+		if _, err = s.db.ExecContext(ctx, query); err != nil {
+			return nil, err
+		}
+	}
 
 	partner.Id = id
 	return partner, nil

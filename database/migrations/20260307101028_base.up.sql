@@ -141,9 +141,10 @@ CREATE TABLE partners.partner_contacts
     FOREIGN KEY (partner_id) REFERENCES partners.partners (id) ON DELETE CASCADE
 );
 
+
 CREATE TABLE partners.suppliers
 (
-    id         SERIAL PRIMARY KEY,
+    id         SERIAL PRIMARY KEY, -- NOTE: Why not make partner_id as a primary key? Partner could not have multiple suppliers.
     created_at timestamp DEFAULT now(),
     partner_id bigint NOT NULL,
     FOREIGN KEY (partner_id) REFERENCES partners.partners (id) ON DELETE CASCADE

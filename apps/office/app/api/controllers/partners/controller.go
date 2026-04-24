@@ -2,12 +2,14 @@ package partners
 
 import (
 	"buybikeshop/apps/office/app/pkg/connector"
+	"buybikeshop/libs/go/keto"
 
 	"github.com/gin-gonic/gin"
 )
 
 type Controller struct {
 	datasource *connector.DatasourceClient
+	permission keto.Checker
 }
 
 func NewController(datasource *connector.DatasourceClient) *Controller {

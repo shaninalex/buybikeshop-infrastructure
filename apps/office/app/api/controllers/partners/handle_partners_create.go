@@ -11,6 +11,7 @@ import (
 )
 
 func (s *Controller) handlePartnersCreate(c *gin.Context) {
+
 	body, err := io.ReadAll(c.Request.Body)
 	if err != nil {
 		transport.Error(c, http.StatusBadRequest, err)
