@@ -1,10 +1,8 @@
 package employee
 
 import (
-	"buybikeshop/apps/admin/app/models"
 	"buybikeshop/apps/admin/app/services/employee"
 	"buybikeshop/libs/go/transport"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -31,12 +29,13 @@ func (s EmployeeController) handleCreate(ctx *gin.Context) {
 
 	// TODO:
 	// 	publish event instead
-	go func(employee *models.Employee) {
-		_, err = s.permissionService.Write(ctx, "Role", data.Role, "member", employee.Id())
-		if err != nil {
-			fmt.Println(err)
-		}
-	}(empl)
+	//go func(employee *models.Employee) {
+	id := empl.Id()
+	if err = s.permissionService.Assign(ctx, "manager", &id, nil); err != nil {
+		transport.Error(ctx, http.StatusInternalServerError, err)
+		return
+	}
+	//}(empl)
 
 	transport.Success(ctx, empl)
 }

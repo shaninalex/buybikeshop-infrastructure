@@ -9,12 +9,12 @@ import (
 
 type EmployeeController struct {
 	employeeService   employee.Service
-	permissionService keto.KetoWriter
+	permissionService *keto.Manager
 }
 
 func NewEmployeeController(
 	employeeService employee.Service,
-	permissionService keto.KetoWriter,
+	permissionService *keto.Manager,
 ) *EmployeeController {
 	return &EmployeeController{
 		employeeService:   employeeService,
