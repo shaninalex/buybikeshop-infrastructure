@@ -27,6 +27,9 @@ func AuthMiddleware(kratos *ory.APIClient, cnf *config.Config) func(c *gin.Conte
 			return
 		}
 
+		c.Set(config.SessionId, session.GetId())
+		c.Set(config.IdentityId, session.Identity.GetId())
+
 		c.Next()
 	}
 }

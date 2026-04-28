@@ -8,21 +8,30 @@ import (
 )
 
 type Controller struct {
-	datasource *connector.DatasourceClient
-	permission keto.Checker
+	datasource        *connector.DatasourceClient
+	permissionService *keto.Manager
 }
 
-func NewController(datasource *connector.DatasourceClient) *Controller {
+func NewController(permissionService *keto.Manager, datasource *connector.DatasourceClient) *Controller {
 	return &Controller{
-		datasource: datasource,
+		permissionService: permissionService,
+		datasource:        datasource,
 	}
 }
 
+func (s *Controller) GetObject() string {
+	return "Partner"
+}
+
 func (s *Controller) Register(router *gin.RouterGroup) {
-	router.GET("partners", s.handlePartnersList)
+	router.GET("partners", s.check("read"), s.handlePartnersList)
 	router.GET("partners/roles", s.handleRolesList)
 	router.POST("partners/roles", s.handleRolesPost)
 	router.PATCH("partners/roles/:roleId", s.handleRolesPatch)
-	router.GET("partners/:partnerId", s.handlePartner)
-	router.POST("partners", s.handlePartnersCreate)
+	router.GET("partners/:partnerId", s.check("read"), s.handlePartner)
+	router.POST("partners", s.check("create"), s.handlePartnersCreate)
+}
+
+func (s *Controller) check(action string) gin.HandlerFunc {
+	return keto.PermissionMiddleware(s.permissionService, s.GetObject(), action)
 }

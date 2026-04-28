@@ -43,7 +43,6 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 			_ = c.Provide(func() context.Context { return appContext })
 			_ = c.Provide(config.ProvideConfig(configPath))
 			_ = c.Provide(persistance.ProvideDB)
-			_ = c.Provide(keto.ProvideKetoChecker)
 			_ = c.Provide(keto.ProvideManager)
 
 			if isDevMode {

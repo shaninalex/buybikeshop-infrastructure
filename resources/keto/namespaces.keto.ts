@@ -19,5 +19,5 @@ class Partner implements Namespace {
 }
 
 class PartnerRoles implements Namespace {
-
+    // TODO: parent of Partner namespace, so it have to inherit permissions
 }
