@@ -31,3 +31,23 @@ services:
     restart: on-failure
     networks:
       - intranet
+
+#  keto-seed:
+#    image: oryd/keto:v26.2.0
+#    volumes:
+#      - type: bind
+#        source: ../resources/keto/relation-tuples.json
+#        target: /home/ory/tuples.json
+#        read_only: true
+#    command:
+#      - relation-tuple
+#      - create
+#      - //home/ory/tuples.json
+#      - --write-remote=keto:4467
+#      - --insecure-disable-transport-security
+#      - --block
+#    depends_on:
+#      - keto
+#    networks:
+#      - intranet
+#    restart: "no"

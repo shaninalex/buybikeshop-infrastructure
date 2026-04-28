@@ -1,4 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+
 html, body {
     font-size: 0.95rem;
+}
+
+.list-style-type-none {
+    list-style-type: none;
 }

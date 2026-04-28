@@ -13,8 +13,8 @@ type Role struct {
 }
 
 type PartnerRole struct {
-	RoleId    uint64
-	PartnerId uint64
+	RoleId    uint64 `db:"role_id"`
+	PartnerId uint64 `db:"partner_id"`
 }
 
 type PartnerType string
@@ -56,6 +56,8 @@ func ToModelPartner(p *pb.Partner) *Partner {
 	return &Partner{
 		Id:         p.Id,
 		Title:      p.Title,
+		Type:       PartnerType(p.Type),
+		Roles:      p.Roles,
 		Active:     true,
 		IsSupplier: p.IsSupplier,
 		Contacts:   contacts,
@@ -85,6 +87,9 @@ func ToPbPartner(p *Partner) *pb.Partner {
 		IsSupplier: p.IsSupplier,
 		Contacts:   contacts,
 		CreatedAt:  timestamppb.New(p.CreatedAt),
+		Type:       string(p.Type),
+		Active:     p.Active,
+		Roles:      roleIds,
 	}
 }
 

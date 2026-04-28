@@ -4,7 +4,7 @@ log:
   level: debug
 
 namespaces:
-  location: file:///home/ory/namespaces/namespaces.keto.ts
+  location: file:///home/ory/namespaces.keto.ts
 
 serve:
   read:

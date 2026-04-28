@@ -27,4 +27,13 @@ export class PartnerApi {
                 filter((partner) => partner !== null),
             );
     }
+
+    CreatePartner(partner: PartnerModel): Observable<PartnerModel> {
+        return this.http
+            .post<APIResponse<PartnerModel>>(`/api/v1/office/partners`, partner, { withCredentials: true })
+            .pipe(
+                map((response) => response.data),
+                filter((partner) => partner !== null),
+            );
+    }
 }

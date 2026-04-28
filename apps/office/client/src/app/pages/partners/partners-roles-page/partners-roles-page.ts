@@ -21,7 +21,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
         PartnerListItem,
         FormInputError,
         FormsModule,
-        FormField
+        FormField,
     ],
     template: `
         <ul class="list-group">
@@ -40,12 +40,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
                             [formField]="roleForm.role"
                             placeholder="Enter a name"
                         />
-                        <app-form-input-error [inputField]="roleForm.role"/>
                     </div>
                     <div class="btn-group">
                         <button type="button" class="btn btn-outline-secondary" (click)="cancel()">Cancel</button>
                         <button type="submit" class="btn btn-outline-success">Create</button>
                     </div>
+                    <app-form-input-error [inputField]="roleForm.role"/>
                 </form>
             } @else {
                 <button class="list-group-item list-group-item-action" (click)="create()">

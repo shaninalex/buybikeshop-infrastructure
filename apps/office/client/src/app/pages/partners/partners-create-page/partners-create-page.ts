@@ -1,43 +1,83 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { PartnerRoleSelector } from '@entities/partner-role';
+import { form, FormField, required } from '@angular/forms/signals';
+import { NewPartnerModel, PartnerModel } from '@entities/partner';
+import { FormsModule } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import {
+    actionPartnerCreate,
+    actionPartnerCreateComplete,
+    actionPartnerCreateError
+} from '@entities/partner/model/partner.actions';
+import { PartnerType } from '@entities/partner/model/partner.model';
+import { Actions, ofType } from '@ngrx/effects';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
+import { finalize, tap } from 'rxjs';
+import { ApiError } from '@shared/models';
 
 @Component({
     selector: 'app-partners-create-page',
-    imports: [],
+    imports: [
+        PartnerRoleSelector,
+        FormField,
+        FormsModule
+    ],
     template: `
-        <div class="container py-4">
+        <form (submit)="submit($event)" class="container py-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <h2 class="mb-0">Create New Partner</h2>
                     <small class="text-muted">Company or Person</small>
                 </div>
-                <div>
-                    <button class="btn btn-outline-secondary me-2">Cancel</button>
+                <div class="btn-group">
+                    <button class="btn btn-outline-secondary">Cancel</button>
                     <button class="btn btn-primary">Save Partner</button>
                 </div>
             </div>
 
             <div class="row g-4">
+                <div class="col-12">
+                    @if (errors().length > 0) {
+                        <div class="row">
+                            <div class="col">
+                                <div class="alert alert-danger">
+                                    @for (err of errors(); track $index) {
+                                        <p class="mb-0">{{ err.reason }}</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-header">General Info</div>
                         <div class="card-body">
                             <div class="mb-3">
-                                <label class="form-label">Type</label>
-                                <select class="form-select">
-                                    <option selected>Company</option>
-                                    <option>Person</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
                                 <label class="form-label">Name</label>
-                                <input type="text" class="form-control" placeholder="Enter name">
+                                <input type="text"
+                                       class="form-control"
+                                       placeholder="Enter name"
+                                       [formField]="partnerForm.title"
+                                />
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Status</label>
-                                <select class="form-select">
-                                    <option selected>Active</option>
-                                    <option>Inactive</option>
+                                <label class="form-label">Type</label>
+                                <select class="form-select" [formField]="partnerForm.type">
+                                    <option selected [value]="PartnerType.COMPANY">Company</option>
+                                    <option [value]="PartnerType.PERSON">Person</option>
                                 </select>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="status"
+                                           [formField]="partnerForm.active">
+                                    <label class="form-check-label" for="status">
+                                        Status (active/inactive)
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -45,24 +85,7 @@ import { Component } from '@angular/core';
                     <div class="card mt-4">
                         <div class="card-header">Roles</div>
                         <div class="card-body">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="roleSupplier">
-                                <label class="form-check-label" for="roleSupplier">
-                                    Supplier
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="roleCustomer">
-                                <label class="form-check-label" for="roleCustomer">
-                                    Customer
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="roleContractor">
-                                <label class="form-check-label" for="roleContractor">
-                                    3rd Party Worker
-                                </label>
-                            </div>
+                            <app-partner-role-selector [formField]="partnerForm.roles"/>
                         </div>
                     </div>
 
@@ -71,7 +94,8 @@ import { Component } from '@angular/core';
                         <div class="card-body">
 
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="flagSupplier">
+                                <input class="form-check-input" type="checkbox" id="flagSupplier"
+                                       [formField]="partnerForm.is_supplier">
                                 <label class="form-check-label" for="flagSupplier">
                                     Supplier Enabled
                                 </label>
@@ -145,9 +169,10 @@ import { Component } from '@angular/core';
                     <div class="card mt-4">
                         <div class="card-header">Notes</div>
                         <div class="card-body">
-                            <textarea class="form-control" rows="3" placeholder="Add initial note..."></textarea>
+                            <textarea disabled class="form-control" rows="3"
+                                      placeholder="Add initial note..."></textarea>
                             <div class="d-flex justify-content-end mt-2">
-                                <button class="btn btn-primary btn-sm">Add Note</button>
+                                <button disabled class="btn btn-primary btn-sm">Add Note</button>
                             </div>
                             <div class="text-muted mt-3">
                                 No notes yet
@@ -156,10 +181,46 @@ import { Component } from '@angular/core';
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     `,
 })
 export class PartnersCreatePage {
+    private store = inject(Store);
+    private router = inject(Router);
+    private actions$ = inject(Actions);
+    private destroyRef = inject(DestroyRef);
+
+    constructor() {
+        this.actions$.pipe(
+            ofType(actionPartnerCreateComplete),
+            takeUntilDestroyed(this.destroyRef)
+        ).subscribe(data => {
+            this.loading.set(false);
+            this.router.navigate(['/partners', data.partner.id]);
+        });
+
+        this.actions$.pipe(
+            ofType(actionPartnerCreateError),
+            tap(action => this.errors.set(action.errors)),
+            finalize(() => this.loading.set(false)),
+            takeUntilDestroyed(this.destroyRef),
+        ).subscribe();
+    }
+
+    errors = signal<ApiError[]>([]);
+    loading = signal(false);
+    partnerFormModel = signal<PartnerModel>(NewPartnerModel());
+
+    partnerForm = form(this.partnerFormModel, (schemaPath) => {
+        required(schemaPath.title, {message: "Role name is required"});
+    });
+
+    submit(event: Event): void {
+        event.preventDefault();
+        this.store.dispatch(actionPartnerCreate({payload: this.partnerFormModel()}));
+    }
+
+    protected readonly PartnerType = PartnerType;
 }
 
 

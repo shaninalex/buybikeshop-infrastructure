@@ -6,7 +6,7 @@ PROJECT_ROOT="$(cd "$(dirname "$0")" && pwd)"
 
 COMPOSE_MAIN=(
   -f "$PROJECT_ROOT/docker/docker-compose.base.yml"
-  -f "$PROJECT_ROOT/docker/datasource.docker.yml"
+#  -f "$PROJECT_ROOT/docker/datasource.docker.yml"
 #  -f "$PROJECT_ROOT/docker/warehouse.docker.yml"
 #  -f "$PROJECT_ROOT/docker/market.docker.yml"
   -f "$PROJECT_ROOT/docker/kratos.docker.yml"
