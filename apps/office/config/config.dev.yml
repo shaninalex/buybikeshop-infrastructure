@@ -7,3 +7,7 @@ kratos:
 
 grpc:
     host: "localhost:50051"
+
+keto:
+  read: "http://localhost:4466"
+  write: "http://localhost:4467"

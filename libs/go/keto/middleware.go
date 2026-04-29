@@ -9,9 +9,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func PermissionMiddleware(p PermissionCheck, object, action string) gin.HandlerFunc {
+func PermissionMiddleware(p PermissionCheck, namespace, object, action string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if p.Check(c.Request.Context(), config.MustIdentityId(c), object, action) {
+		if !p.Check(c.Request.Context(), config.MustIdentityId(c), namespace, object, action) {
 			transport.Error(c, http.StatusForbidden, errors.New("not allowed"))
 			c.Abort()
 			return
