@@ -27,15 +27,5 @@ func (s EmployeeController) handleCreate(ctx *gin.Context) {
 		return
 	}
 
-	// TODO:
-	// 	publish event instead
-	//go func(employee *models.Employee) {
-	id := empl.Id()
-	if err = s.permissionService.Assign(ctx, "manager", &id, nil); err != nil {
-		transport.Error(ctx, http.StatusInternalServerError, err)
-		return
-	}
-	//}(empl)
-
 	transport.Success(ctx, empl)
 }

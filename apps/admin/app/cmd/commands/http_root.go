@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"buybikeshop/libs/go/connector"
 	"buybikeshop/libs/go/keto"
 	"buybikeshop/libs/go/kratos"
 	"buybikeshop/libs/go/mock"
@@ -44,6 +45,7 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 			_ = c.Provide(config.ProvideConfig(configPath))
 			_ = c.Provide(persistance.ProvideDB)
 			_ = c.Provide(keto.ProvideManager)
+			_ = c.Provide(connector.ProvideDatasourceClient)
 
 			if isDevMode {
 				_ = c.Provide(mock.ProvideKratosApiClient)

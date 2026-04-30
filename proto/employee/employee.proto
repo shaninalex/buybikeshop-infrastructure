@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option go_package = "grpc-buybikeshop-go/employee";
+
+package employee;
+
+service EmployeeService {
+  rpc GetEmployee(GetEmployeeRequest) returns (GetEmployeeResponse) {}
+  rpc SaveEmployee(SaveEmployeeRequest) returns (SaveEmployeeResponse) {}
+}
+
+message Employee {
+  string id = 1;
+  uint64 department_id = 2;
+}
+
+message GetEmployeeRequest {
+  string employee_id = 1;
+}
+
+message GetEmployeeResponse {
+  Employee employee = 1;
+}
+
+message SaveEmployeeRequest {
+  string employee_id = 1;
+  string department = 2;
+}
+
+message SaveEmployeeResponse {
+  Employee employee = 1;
+}

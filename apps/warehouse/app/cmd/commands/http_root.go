@@ -2,6 +2,7 @@ package commands
 
 import (
 	"buybikeshop/apps/warehouse/app/pkg"
+	"buybikeshop/libs/go/connector"
 	"buybikeshop/libs/go/kratos"
 	"context"
 	"fmt"
@@ -43,6 +44,8 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 			_ = c.Provide(kratos.ProvideApiClient)
 			_ = c.Provide(kratos.ProvideKratos)
 			_ = c.Provide(auth.ProvideOAuthConfig)
+			_ = c.Provide(connector.ProvideDatasourceClient)
+
 			// init core warehouse modules ( grpc client, loggers, utilites )
 			_ = pkg.Module(c)
 

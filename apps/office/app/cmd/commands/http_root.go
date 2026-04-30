@@ -3,6 +3,7 @@ package commands
 import (
 	"buybikeshop/apps/office/app/api"
 	"buybikeshop/apps/office/app/pkg"
+	"buybikeshop/libs/go/connector"
 	"buybikeshop/libs/go/keto"
 	"buybikeshop/libs/go/kratos"
 	"context"
@@ -42,6 +43,7 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 			_ = c.Provide(kratos.ProvideApiClient)
 			_ = c.Provide(kratos.ProvideKratos)
 			_ = c.Provide(keto.ProvideManager)
+			_ = c.Provide(connector.ProvideDatasourceClient)
 
 			_ = pkg.Module(c)
 			_ = api.Module(c)
