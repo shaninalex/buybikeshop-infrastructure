@@ -59,7 +59,9 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 
 			_ = api.Module(c)
 			_ = services.Module(c)
-			_ = observers.Module(c)
+			if err := observers.Module(c); err != nil {
+				panic(err)
+			}
 
 			if err = c.Invoke(func(router *gin.Engine, config *config.Config, ctx context.Context) {
 				srv := &http.Server{

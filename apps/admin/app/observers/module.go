@@ -5,8 +5,12 @@ import (
 )
 
 func Module(c *dig.Container) error {
-	_ = c.Provide(ProvideEmployeeObserver)
-	_ = c.Provide(ProvidePermissionObserver)
+	if err := c.Provide(ProvideEmployeeObserver); err != nil {
+		return err
+	}
+	if err := c.Provide(ProvidePermissionObserver); err != nil {
+		return err
+	}
 
-	return nil
+	return c.Invoke(func(*EmployeeObserver, *PermissionObserver) {})
 }

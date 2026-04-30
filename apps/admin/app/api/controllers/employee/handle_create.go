@@ -16,6 +16,10 @@ func (s EmployeeController) handleCreate(ctx *gin.Context) {
 	}
 	data.ApplyDefaults()
 
+	// TODO: get from payload, not hardcode!
+	data.Group = "manager"
+	data.Department = "office"
+
 	if err := s.employeeService.Validate(ctx, data); err != nil {
 		transport.Error(ctx, http.StatusInternalServerError, err)
 		return

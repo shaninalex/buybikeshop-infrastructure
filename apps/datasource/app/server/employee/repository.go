@@ -86,18 +86,17 @@ func (s *Repository) DepartmentGet(ctx context.Context, title string) (*models.D
 	if err != nil {
 		return nil, err
 	}
-	rows, err := s.db.QueryContext(ctx, q)
+	row := s.db.QueryRowContext(ctx, q)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
-	var p models.Department
-	if err := rows.Scan(&p.Id, &p.Title); err != nil {
+	if err = row.Err(); err != nil {
 		return nil, err
 	}
 
-	if err = rows.Err(); err != nil {
+	var p models.Department
+	if err = row.Scan(&p.Id, &p.Title); err != nil {
 		return nil, err
 	}
 

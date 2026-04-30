@@ -8,6 +8,7 @@ import (
 	"errors"
 
 	"github.com/google/uuid"
+	client "github.com/ory/kratos-client-go"
 )
 
 type EmployeeCreate struct {
@@ -58,6 +59,13 @@ var (
 	ErrorCreate = errors.New("unable to create identity")
 )
 
+// CreateEmployeeAfter - payload for event bus (should be renamed)
+type CreateEmployeeAfter struct {
+	Identity   *client.Identity `json:"identity"`
+	Group      string           `json:"group"`
+	Department string           `json:"department"`
+}
+
 func (s serviceImpl) Create(ctx context.Context, data EmployeeCreate) (*models.Employee, error) {
 	identity, err := s.client.CreateIdentity(ctx, kratos.IdentityCreate{
 		Name:     data.Name,
@@ -71,7 +79,11 @@ func (s serviceImpl) Create(ctx context.Context, data EmployeeCreate) (*models.E
 		return nil, err
 	}
 
-	s.bus.Dispatch(ctx, bus.EmployeeCreatedEventType, data)
+	s.bus.Dispatch(ctx, bus.EmployeeCreatedEventType, CreateEmployeeAfter{
+		Identity:   identity,
+		Group:      data.Group,
+		Department: data.Department,
+	})
 
 	return &models.Employee{Identity: *identity}, nil
 }

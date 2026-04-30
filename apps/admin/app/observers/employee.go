@@ -1,13 +1,12 @@
 package observers
 
 import (
+	"buybikeshop/apps/admin/app/services/employee"
 	empl "buybikeshop/gen/grpc-buybikeshop-go/employee"
 	"buybikeshop/libs/go/bus"
 	"buybikeshop/libs/go/connector"
 	"context"
 	"errors"
-
-	"github.com/google/uuid"
 )
 
 var (
@@ -34,19 +33,14 @@ func (s *EmployeeObserver) init() {
 	s.bus.Subscribe(bus.EmployeeCreatedEventType, s.employeeCreatedHandler)
 }
 
-type EmployeeCreatedData struct {
-	EmployeeID uuid.UUID
-	Department string
-}
-
 func (s *EmployeeObserver) employeeCreatedHandler(ctx context.Context, data any) error {
-	dataT, ok := data.(EmployeeCreatedData)
+	dataT, ok := data.(employee.CreateEmployeeAfter)
 	if !ok {
 		return ErrorSaveEmployeeInvalidData
 	}
 
 	resp, err := s.datasource.EmployeeClient.SaveEmployee(ctx, &empl.SaveEmployeeRequest{
-		EmployeeId: dataT.EmployeeID.String(),
+		EmployeeId: dataT.Identity.GetId(),
 		Department: dataT.Department,
 	})
 	if err != nil {

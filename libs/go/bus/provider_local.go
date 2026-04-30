@@ -6,7 +6,9 @@ import (
 )
 
 func ProvideLocalBus() Bus {
-	return localBus{}
+	return localBus{
+		subscribers: make(map[EventType][]Callback),
+	}
 }
 
 type localBus struct {
@@ -21,7 +23,7 @@ func (r localBus) Dispatch(ctx context.Context, eventType EventType, data any) {
 		return
 	}
 	for _, cb := range callbacks {
-		if err := cb(ctx, eventType, data); err != nil {
+		if err := cb(ctx, data); err != nil {
 			// TODO: log error
 			fmt.Println(err)
 		}

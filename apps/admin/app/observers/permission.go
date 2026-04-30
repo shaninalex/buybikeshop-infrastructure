@@ -1,12 +1,11 @@
 package observers
 
 import (
+	"buybikeshop/apps/admin/app/services/employee"
 	"buybikeshop/libs/go/bus"
 	"buybikeshop/libs/go/keto"
 	"context"
 	"errors"
-
-	"github.com/google/uuid"
 )
 
 type PermissionObserver struct {
@@ -28,18 +27,13 @@ func (s *PermissionObserver) init() {
 	s.bus.Subscribe(bus.EmployeeCreatedEventType, s.employeeCreatedHandler)
 }
 
-type EmployeeCreatedPermissionData struct {
-	EmployeeID uuid.UUID
-	Group      string
-}
-
 func (s *PermissionObserver) employeeCreatedHandler(ctx context.Context, data any) error {
-	dataT, ok := data.(EmployeeCreatedPermissionData)
+	dataT, ok := data.(employee.CreateEmployeeAfter)
 	if !ok {
 		return errors.New("invalid employee permission data")
 	}
 
-	id := dataT.EmployeeID.String()
+	id := dataT.Identity.GetId()
 	if err := s.permissionService.Assign(ctx, dataT.Group, &id, nil); err != nil {
 		return err
 	}
