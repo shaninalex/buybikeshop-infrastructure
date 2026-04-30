@@ -1,7 +1,7 @@
 package partners
 
 import (
-	"buybikeshop/apps/office/app/pkg/connector"
+	"buybikeshop/libs/go/connector"
 	"buybikeshop/libs/go/keto"
 
 	"github.com/gin-gonic/gin"

@@ -2,9 +2,7 @@ package employee
 
 import (
 	"buybikeshop/apps/admin/app/models"
-	empl "buybikeshop/gen/grpc-buybikeshop-go/employee"
-	"buybikeshop/libs/go/connector"
-	"buybikeshop/libs/go/keto"
+	"buybikeshop/libs/go/bus"
 	"buybikeshop/libs/go/kratos"
 	"context"
 	"errors"
@@ -40,13 +38,11 @@ type Service interface {
 
 func ProvideEmployeeService(
 	c kratos.ApiClient,
-	ps *keto.Manager,
-	ds *connector.DatasourceClient,
+	bus bus.Bus,
 ) Service {
 	s := serviceImpl{
-		client:            c,
-		permissionService: ps,
-		datasource:        ds,
+		client: c,
+		bus:    bus,
 	}
 	return &s
 }
@@ -54,14 +50,12 @@ func ProvideEmployeeService(
 var _ Service = (*serviceImpl)(nil)
 
 type serviceImpl struct {
-	client            kratos.ApiClient
-	permissionService *keto.Manager
-	datasource        *connector.DatasourceClient
+	client kratos.ApiClient
+	bus    bus.Bus
 }
 
 var (
-	ErrorCreate                 = errors.New("unable to create identity")
-	ErrorSaveEmployeeDepartment = errors.New("unable to save employee department")
+	ErrorCreate = errors.New("unable to create identity")
 )
 
 func (s serviceImpl) Create(ctx context.Context, data EmployeeCreate) (*models.Employee, error) {
@@ -77,21 +71,7 @@ func (s serviceImpl) Create(ctx context.Context, data EmployeeCreate) (*models.E
 		return nil, err
 	}
 
-	// TODO: Too many responsibilities!
-	// TODO: Direct relation instead of interfaces.
-	if err = s.permissionService.Assign(ctx, data.Group, &identity.Id, nil); err != nil {
-		return nil, err
-	}
-
-	if resp, err := s.datasource.EmployeeClient.SaveEmployee(ctx, &empl.SaveEmployeeRequest{
-		EmployeeId: identity.Id,
-		Department: data.Department,
-	}); err != nil {
-		if resp.Employee == nil {
-			return nil, ErrorSaveEmployeeDepartment
-		}
-		return nil, err
-	}
+	s.bus.Dispatch(ctx, bus.EmployeeCreatedEventType, data)
 
 	return &models.Employee{Identity: *identity}, nil
 }

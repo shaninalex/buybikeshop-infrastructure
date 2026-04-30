@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"buybikeshop/apps/admin/app/observers"
+	"buybikeshop/libs/go/bus"
 	"buybikeshop/libs/go/connector"
 	"buybikeshop/libs/go/keto"
 	"buybikeshop/libs/go/kratos"
@@ -46,6 +48,7 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 			_ = c.Provide(persistance.ProvideDB)
 			_ = c.Provide(keto.ProvideManager)
 			_ = c.Provide(connector.ProvideDatasourceClient)
+			_ = c.Provide(bus.ProvideEventBus)
 
 			if isDevMode {
 				_ = c.Provide(mock.ProvideKratosApiClient)
@@ -54,9 +57,9 @@ func NewHttpRootCommand() (cmd *cobra.Command) {
 				_ = c.Provide(kratos.ProvideApiClient)
 			}
 
-			//_ = pkg.Module(c)
 			_ = api.Module(c)
 			_ = services.Module(c)
+			_ = observers.Module(c)
 
 			if err = c.Invoke(func(router *gin.Engine, config *config.Config, ctx context.Context) {
 				srv := &http.Server{
