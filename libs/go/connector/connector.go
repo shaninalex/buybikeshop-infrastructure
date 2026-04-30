@@ -2,6 +2,7 @@ package connector
 
 import (
 	"buybikeshop/gen/grpc-buybikeshop-go/catalog"
+	"buybikeshop/gen/grpc-buybikeshop-go/employee"
 	"buybikeshop/gen/grpc-buybikeshop-go/partners"
 	"buybikeshop/libs/go/config"
 	"log"
@@ -15,6 +16,7 @@ type DatasourceClient struct {
 
 	CatalogClient  catalog.CatalogClient
 	PartnersClient partners.PartnersClient
+	EmployeeClient employee.EmployeeServiceClient
 }
 
 func ProvideDatasourceClient(config *config.Config) *DatasourceClient {
@@ -28,6 +30,7 @@ func ProvideDatasourceClient(config *config.Config) *DatasourceClient {
 
 		CatalogClient:  catalog.NewCatalogClient(conn),
 		PartnersClient: partners.NewPartnersClient(conn),
+		EmployeeClient: employee.NewEmployeeServiceClient(conn),
 	}
 }
 

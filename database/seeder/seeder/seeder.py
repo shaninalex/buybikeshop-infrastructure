@@ -1,12 +1,12 @@
 from typing import Protocol, Dict, List
 
 from seeder.config import Config
-from seeder.entities.partners import PartnersSeeder
+from seeder.entities import PartnersSeeder, DepartmentSeeder
 from seeder.utils import create_connection
 
 
 class Seeder(Protocol):
-    name: str
+    def name(self) -> str: ...
 
     def seed(self, connection): ...
 
@@ -15,7 +15,7 @@ class Seeder(Protocol):
 
 class SeederRegistry:
     def __init__(self):
-        self._registry: Dict[Seeder] = {}
+        self._registry: Dict[str, Seeder] = {}
 
     def register(self, s: Seeder):
         self._registry[s.name] = s
@@ -24,7 +24,7 @@ class SeederRegistry:
         return self._registry.values()
 
 def log(s: Seeder, msg: str):
-    print(f"[{s.name}]: {msg}")
+    print(f"[{s.name()}]: {msg}")
 
 
 class Executor:
@@ -48,6 +48,7 @@ def start(config: Config):
     db = create_connection(config)
     registry = SeederRegistry()
     registry.register(PartnersSeeder())
+    registry.register(DepartmentSeeder())
 
     executor = Executor(config, registry)
     executor.clear(db)

@@ -26,3 +26,6 @@ CREATE SCHEMA inventory;
 
 -- products, categories, brands...
 CREATE SCHEMA catalog;
+
+-- administration entities (departments, salary, weekends, etc.)
+CREATE SCHEMA admin;

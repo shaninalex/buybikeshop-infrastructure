@@ -21,7 +21,7 @@ type PermissionManager interface {
 }
 
 type PermissionCheck interface {
-	Check(ctx context.Context, subjectId, object, rel string) bool
+	Check(ctx context.Context, subjectId, namespace, object, rel string) bool
 }
 
 type Manager struct {
@@ -88,16 +88,17 @@ func (m *Manager) Delete() {
 
 }
 
-func (m *Manager) Check(ctx context.Context, subjectId, object, rel string) bool {
-	body := m.readClient.PermissionApi.CheckPermission(ctx)
-	body.SubjectId(subjectId)
-	body.Object(object)
-	body.Relation(rel)
-
-	data, _, err := m.readClient.PermissionApi.CheckPermissionExecute(body)
-	if err != nil {
+func (m *Manager) Check(ctx context.Context, subjectId, namespace, object, rel string) bool {
+	data, resp, err := m.readClient.PermissionApi.CheckPermission(ctx).
+		Namespace(namespace).
+		Object(object).
+		Relation(rel).
+		SubjectId(subjectId).
+		Execute()
+	if err != nil || data == nil {
 		return false
 	}
+	defer resp.Body.Close()
 
 	return data.Allowed
 }

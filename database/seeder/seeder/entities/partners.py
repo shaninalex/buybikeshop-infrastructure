@@ -6,8 +6,6 @@ from seeder import utils
 
 
 class PartnersSeeder:
-    name = 'partners'
-
     _registry = []
 
     def __init__(self):
@@ -17,6 +15,9 @@ class PartnersSeeder:
             PartnerPartnerRoles(),
             PartnerSupplier(),
         ]
+
+    def name(self) -> str:
+        return "partners"
 
     def seed(self, connection):
         cursor = connection.cursor()
@@ -39,10 +40,13 @@ class PartnersSeeder:
 
 
 class PartnerRoles:
-    _sql = """
-        insert into partners.roles (role) values ('contractor'), ('supplier');
-    """
-    _sql_clear = "delete from partners.roles;"
+    def __init__(self):
+        self._sql = """
+               insert into partners.roles (role) \
+               values ('contractor'), \
+                      ('supplier'); \
+               """
+        self._sql_clear = "delete from partners.roles;"
 
     def seed(self, connection):
         cursor = connection.cursor()

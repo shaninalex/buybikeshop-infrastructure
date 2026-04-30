@@ -7,7 +7,8 @@ import (
 )
 
 type Employee struct {
-	Identity ory.Identity `json:"identity"`
+	Identity     ory.Identity `json:"identity"`
+	DepartmentId uint64       `json:"department_id"`
 }
 
 func (e *Employee) Id() string {

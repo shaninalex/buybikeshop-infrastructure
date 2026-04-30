@@ -18,7 +18,7 @@ type Server struct {
 	pb.UnimplementedCatalogServer
 }
 
-var _ pb.CatalogServer = &Server{}
+var _ pb.CatalogServer = (*Server)(nil)
 
 func (c *Server) ProductSave(ctx context.Context, request *pb.ProductSaveRequest) (*pb.ProductSaveReply, error) {
 	return c.adapter.ProductSave(ctx, request)

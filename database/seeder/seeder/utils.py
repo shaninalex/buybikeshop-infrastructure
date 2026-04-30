@@ -21,7 +21,6 @@ def get_random_media() -> List[str]:
 
 
 def create_connection(config: Config):
-    connection = None
     try:
         connection = psycopg2.connect(
             database=config.database.database,

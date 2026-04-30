@@ -19,7 +19,7 @@ func NewController(permissionService *keto.Manager, datasource *connector.Dataso
 	}
 }
 
-func (s *Controller) GetObject() string {
+func (s *Controller) GetNamespace() string {
 	return "Partner"
 }
 
@@ -33,5 +33,5 @@ func (s *Controller) Register(router *gin.RouterGroup) {
 }
 
 func (s *Controller) check(action string) gin.HandlerFunc {
-	return keto.PermissionMiddleware(s.permissionService, s.GetObject(), action)
+	return keto.PermissionMiddleware(s.permissionService, s.GetNamespace(), "*", action)
 }
